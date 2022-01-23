@@ -3,12 +3,18 @@ import 'package:albassel_version_1/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:albassel_version_1/model/log_in_info.dart';
+import 'package:albassel_version_1/my_model/customer.dart';
 import 'package:albassel_version_1/model/customer.dart';
+
+import '../my_model/address.dart';
 
 class Global{
   static String lang_code="en";
   static LogInInfo? logInInfo;
-  static Customer? customer;
+  static MyCustomer? customer;
+  static Address? address;
+  static bool remember_pass=false;
+  static String remember_password="non";
   static save_language(String locale){
     SharedPreferences.getInstance().then((prefs){
       prefs.setString("lang", locale);

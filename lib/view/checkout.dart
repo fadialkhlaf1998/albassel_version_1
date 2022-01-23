@@ -5,6 +5,7 @@ import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/checkout_controller.dart';
 import 'package:albassel_version_1/view/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:my_fatoorah/my_fatoorah.dart';
 
@@ -14,7 +15,12 @@ class Checkout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Obx(()=>Container(
             child:SingleChildScrollView(
@@ -129,7 +135,7 @@ class Checkout extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: (){
-              Get.offAll(()=>Home());
+              checkoutController.add_order_shopyfi(context);
             },
             child: Container(
               height: MediaQuery.of(context).size.height*0.06,
@@ -255,8 +261,28 @@ class Checkout extends StatelessWidget {
                 ),
               ],
             ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(App_Localization.of(context).translate("phone"),style: App.textNormal(Colors.grey, 12),),
+                Container(
+                  width: MediaQuery.of(context).size.width-60,
+                  height: 60,
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    controller: checkoutController.phone,
+                    maxLength: 9,
+                    decoration: InputDecoration(
+                        prefix: Text("+971"),
+                        enabledBorder: checkoutController.address_err.value&&checkoutController.phone.value.text.isEmpty?UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)):UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: App.midOrange))
+                    ),
+                    style: App.textNormal(Colors.black, 14),
+                  ),
+                ),
+              ],
+            ),
 
-            App.checkoutTextField(checkoutController.phone, "phone", context, MediaQuery.of(context).size.width-60, 40,checkoutController.address_err.value),
 
             SizedBox(height: 40,)
           ],
@@ -271,23 +297,48 @@ class Checkout extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: [
-                ListTile(
-                  onTap: (){
-                    checkoutController.selected_operation.value++;
-                    checkoutController.selected.value=true;
-                    checkoutController.is_paid.value=false;
-                    checkoutController.is_cod.value=true;
-                  },
-                  title: Text(App_Localization.of(context).translate("cod")),
-                  subtitle: Text(App_Localization.of(context).translate("cash")),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        App.box_shadow()
+                      ]
+                  ),
+                  child: ListTile(
+                    onTap: (){
+                      checkoutController.my_order.addAll(cartController.my_order.value);
+                      checkoutController.selected_operation.value++;
+                      checkoutController.selected.value=true;
+                      checkoutController.is_paid.value=false;
+                      checkoutController.is_cod.value=true;
+                    },
+                    leading: CircleAvatar(
+                      child: Icon(Icons.delivery_dining),
+                    ),
+                    title: Text(App_Localization.of(context).translate("cod")),
+                    subtitle: Text(App_Localization.of(context).translate("cash")),
+                  ),
                 ),
-                ListTile(
-                  onTap: (){
-                    checkoutController.selected.value=true;
-                    checkoutController.is_cod.value=false;
-                  },
-                  title: Text(App_Localization.of(context).translate("payment")),
-                  subtitle: Text(App_Localization.of(context).translate("c_card")),
+                SizedBox(height: 10,),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      App.box_shadow()
+                    ]
+                  ),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      child: Icon(Icons.credit_card),
+                    ),
+                    onTap: (){
+                      checkoutController.selected.value=true;
+                      checkoutController.is_cod.value=false;
+
+                    },
+                    title: Text(App_Localization.of(context).translate("payment")),
+                    subtitle: Text(App_Localization.of(context).translate("c_card")),
+                  ),
                 )
               ],
             ),
@@ -298,11 +349,12 @@ class Checkout extends StatelessWidget {
       child:MyFatoorah(
         onResult:(response){
           if(response.status==PaymentStatus.Success){
-            checkoutController.add_order_shopyfi();
-            checkoutController.selected_operation++;
             checkoutController.my_order.addAll(cartController.my_order);
+            checkoutController.add_order_payment(context);
+            checkoutController.selected_operation++;
             checkoutController.is_paid.value=true;
-            cartController.clear_cart();
+          }else{
+            checkoutController.selected.value=false;
           }
         },
         errorChild: Center(
@@ -333,51 +385,55 @@ class Checkout extends StatelessWidget {
     );
   }
   _summery(BuildContext context){
-    return GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: checkoutController.my_order.length,
-        itemBuilder: (context,index){
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              child: Column(
-                children: [
-                  Expanded(flex:3,
-                      child:Container(
-                        margin: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey),
-                          image: DecorationImage(
-                            image: NetworkImage(checkoutController.my_order[index].product.value.image!.src!),
-                            fit: BoxFit.cover
+    return Column(
+      children: [
+        GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: checkoutController.my_order.length,
+            itemBuilder: (context,index){
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Column(
+                    children: [
+                      Expanded(flex:3,
+                          child:Container(
+                            margin: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.grey),
+                              image: DecorationImage(
+                                image: NetworkImage(checkoutController.my_order[index].product.value.image),
+                                fit: BoxFit.cover
+                              )
+                            ),
                           )
-                        ),
-                      )
-                  ),
-                  Expanded(flex:1,
-                      child: Container(
-                        margin: EdgeInsets.only(left: 10,right: 10),
-                        child: Column(
-                          children: [
-                            Text(checkoutController.my_order[index].product.value.title!,style: TextStyle(fontSize: 8,overflow: TextOverflow.ellipsis),),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(App_Localization.of(context).translate("aed")+" "+checkoutController.my_order[index].price.value,style: TextStyle(fontSize: 10,overflow: TextOverflow.ellipsis,color: App.midOrange)),
-                                Text(App_Localization.of(context).translate("quantity")+": "+checkoutController.my_order[index].quantity.value.toString(),style: TextStyle(fontSize: 10,overflow: TextOverflow.ellipsis,color: Colors.black)),
-                              ],
-                            )
-                          ],
-                        ),
                       ),
+                      Expanded(flex:1,
+                          child: Container(
+                            margin: EdgeInsets.only(left: 10,right: 10),
+                            child: Column(
+                              children: [
+                                Text(checkoutController.my_order[index].product.value.title,style: TextStyle(fontSize: 8,overflow: TextOverflow.ellipsis),),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(App_Localization.of(context).translate("aed")+" "+checkoutController.my_order[index].price.value,style: TextStyle(fontSize: 10,overflow: TextOverflow.ellipsis,color: App.midOrange)),
+                                    Text(App_Localization.of(context).translate("quantity")+": "+checkoutController.my_order[index].quantity.value.toString(),style: TextStyle(fontSize: 10,overflow: TextOverflow.ellipsis,color: Colors.black)),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          );
-        });
+                ),
+              );
+            }),
+      ],
+    );
   }
 }
 

@@ -1,10 +1,15 @@
 import 'package:albassel_version_1/app_localization.dart';
+import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
+import 'package:albassel_version_1/view/chat_view.dart';
+import 'package:albassel_version_1/view/policy_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class App{
   static Color orange = Color(0XFFFA5C00);
@@ -41,11 +46,32 @@ class App{
         Container(
           width: width,
           height: height,
-          child: TextField(
-            controller: controller,
+    child: TextField(
+           controller: controller,
             decoration: InputDecoration(
               enabledBorder: err&&controller.value.text.isEmpty?UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)):UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
               focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: midOrange))
+            ),
+            style: textNormal(Colors.black, 14),
+          ),
+        ),
+      ],
+    );
+  }
+  static checkoutTextFieldphone(TextEditingController controller,String translate,BuildContext context,double width,double height,bool err){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(App_Localization.of(context).translate(translate),style: textNormal(Colors.grey, 12),),
+        Container(
+          width: width,
+          height: height,
+          child: TextField(
+            keyboardType: TextInputType.number,
+            controller: controller,
+            decoration: InputDecoration(
+                enabledBorder: err&&controller.value.text.isEmpty?UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)):UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: midOrange))
             ),
             style: textNormal(Colors.black, 14),
           ),
@@ -66,7 +92,24 @@ class App{
   static box_shadow(){
     return  BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10);
   }
-
+  static live_chate(){
+    return FloatingActionButton(
+      onPressed: (){
+        Get.to(()=>ChatView());
+      },
+      child: Icon(Icons.chat),
+    );
+  }
+  static void _launchURL(BuildContext context,String url) async {
+    if (!await launch(url)){
+      App.error_msg(context, App_Localization.of(context).translate("wrong"));
+    }
+  }
+  static void launchURL(BuildContext context,String url) async {
+    if (!await launch(url)){
+      App.error_msg(context, App_Localization.of(context).translate("wrong"));
+    }
+  }
   static Drawer get_drawer(BuildContext context,HomeController homeController){
     return Drawer(
       backgroundColor: Color(0xffE37B2F).withOpacity(0.8),
@@ -117,7 +160,8 @@ class App{
                     GestureDetector(onTap: (){homeController.nave_to_wishlist();},child: Icon(Icons.favorite_border,color: Colors.white,)),
                     GestureDetector(onTap: (){homeController.nave_to_setting();},child: Icon(Icons.settings,color: Colors.white,)),
                     GestureDetector(onTap: (){homeController.nave_to_about_us();},child: Icon(Icons.info_outline,color: Colors.white,)),
-                    GestureDetector(onTap: (){homeController.nave_to_logout();},child: Icon(Icons.logout,color: Colors.white,)),
+                    Global.customer!=null? GestureDetector(onTap: (){homeController.nave_to_logout();},child: Icon(Icons.logout,color: Colors.white,)):Center(),
+
                   ],
                 ),
                 SizedBox(width: 15,),
@@ -129,7 +173,7 @@ class App{
                     GestureDetector(onTap: (){homeController.nave_to_wishlist();},child: Text(App_Localization.of(context).translate("wishlist"),style: App.textBlod(Colors.white, 16),)),
                     GestureDetector(onTap: (){homeController.nave_to_setting();},child: Text(App_Localization.of(context).translate("setting"),style: App.textBlod(Colors.white, 16),)),
                     GestureDetector(onTap: (){homeController.nave_to_about_us();},child: Text(App_Localization.of(context).translate("about_us"),style: App.textBlod(Colors.white, 16),)),
-                    GestureDetector(onTap: (){homeController.nave_to_logout();},child: Text(App_Localization.of(context).translate("logout"),style: App.textBlod(Colors.white, 16),)),
+                    Global.customer!=null? GestureDetector(onTap: (){homeController.nave_to_logout();},child: Text(App_Localization.of(context).translate("logout"),style: App.textBlod(Colors.white, 16),)):Center(),
                   ],
                 )
               ],
@@ -144,30 +188,28 @@ class App{
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    SvgPicture.asset("assets/icon/insta.svg"),
-                    SvgPicture.asset("assets/icon/twitter.svg"),
-                    SvgPicture.asset("assets/icon/facebook.svg"),
-                    SvgPicture.asset("assets/icon/youtube.svg"),
+                    GestureDetector(onTap: (){_launchURL(context,"https://www.instagram.com/albasel.co/");},child: SvgPicture.asset("assets/icon/insta.svg")),
+                    GestureDetector(onTap: (){_launchURL(context,"https://www.facebook.com/albasel.co/");},child: SvgPicture.asset("assets/icon/facebook.svg")),
+                    GestureDetector(onTap: (){_launchURL(context,"https://www.youtube.com/channel/UCVEa7VQ0kT7K_54u2ouTVVg");},child: SvgPicture.asset("assets/icon/youtube.svg")),
+
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(App_Localization.of(context).translate("policy"),style: App.textNormal(Colors.white, 10),),
+                    
+                    GestureDetector(onTap:(){Get.to(PolicyPage(App_Localization.of(context).translate("policy"), App_Localization.of(context).translate("privacy_policy_content")));},child: Text(App_Localization.of(context).translate("policy"),style: App.textNormal(Colors.white, 10),)),
                     Text(".",style: App.textNormal(Colors.white, 10),),
-                    Text(App_Localization.of(context).translate("terms_sale"),style: App.textNormal(Colors.white, 10),),
+                    GestureDetector(onTap:(){Get.to(PolicyPage(App_Localization.of(context).translate("terms_sale"), App_Localization.of(context).translate("term_of_service_content")));},child: Text(App_Localization.of(context).translate("terms_sale"),style: App.textNormal(Colors.white, 10),)),
                     Text(".",style: App.textNormal(Colors.white, 10),),
-                    Text(App_Localization.of(context).translate("terms"),style: App.textNormal(Colors.white, 10),),
+                    GestureDetector(onTap:(){Get.to(PolicyPage(App_Localization.of(context).translate("return_p"), App_Localization.of(context).translate("return_content")));},child: Text(App_Localization.of(context).translate("return_p"),style: App.textNormal(Colors.white, 10),)),
                   ],
                 ),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(".",style: App.textNormal(Colors.transparent, 10),),
-                    Text(App_Localization.of(context).translate("return_p"),style: App.textNormal(Colors.white, 10),),
-                    Text(".",style: App.textNormal(Colors.white, 10),),
-                    Text(App_Localization.of(context).translate("warranty_policy"),style: App.textNormal(Colors.white, 10),),
-                    Text(".",style: App.textNormal(Colors.transparent, 10),),
+                    GestureDetector(onTap: (){Get.to(PolicyPage(App_Localization.of(context).translate("shipping-policy"), App_Localization.of(context).translate("shipping_policy_content")));},child: Text(App_Localization.of(context).translate("shipping-policy"),style: App.textNormal(Colors.white, 10),)),
                   ],
                 )
               ],
@@ -185,7 +227,7 @@ class App{
       CustomSnackBar.success(
         message:
         msg,
-        backgroundColor: orange,
+        backgroundColor: midOrange,
       ),
     );
   }

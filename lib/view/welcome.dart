@@ -2,8 +2,10 @@ import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/view/home.dart';
 import 'package:albassel_version_1/view/sign_in.dart';
+import 'package:albassel_version_1/view/sign_up.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class Welcome extends StatelessWidget {
@@ -11,7 +13,12 @@ class Welcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Scaffold(
+      backgroundColor: App.midOrange,
       body: SafeArea(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -64,24 +71,49 @@ class Welcome extends StatelessWidget {
               SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width*0.5,
                     height: 40,
-                    child: Text(App_Localization.of(context).translate("have_account"),style: App.textNormal(Colors.white, 16),),
+                    child: Text(App_Localization.of(context).translate("have_account"),style: App.textNormal(Colors.white, 14),),
                   ),
                   GestureDetector(
                     onTap: (){
-                      Get.to(() => SignIn());
+                      Get.to(() => SignIn(false));
                     },
                     child: Container(
                       width: 80,
                       height: 40,
-                      child: Text(App_Localization.of(context).translate("sign_in"),style: App.textBlod(App.midOrange, 16)),
+                      child: Text(App_Localization.of(context).translate("sign_in"),style: App.textBlod(App.midOrange, 14)),
                     ),
                   ),
                 ],
-              )
+              ),
+              // Text(App_Localization.of(context).translate("or"),style: App.textNormal(Colors.grey, 16),),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.5,
+                    height: 40,
+                    child: Text(App_Localization.of(context).translate("not_have_account"),style: App.textNormal(Colors.white, 14),),
+                  ),
+                  GestureDetector(
+                    onTap: (){
+                      Get.to(() => SignUp());
+                    },
+                    child: Container(
+                      width: 80,
+                      height: 40,
+                      child: Text(App_Localization.of(context).translate("Sign_up"),style: App.textBlod(App.midOrange, 14)),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 20,)
             ],
           ),
         ),

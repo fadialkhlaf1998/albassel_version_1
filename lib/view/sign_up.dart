@@ -2,6 +2,7 @@ import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/controler/sign_up_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class SignUp extends StatelessWidget{
@@ -15,7 +16,12 @@ class SignUp extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Scaffold(
+      backgroundColor: App.midOrange,
       body: Obx((){
         return SafeArea(
           child: SingleChildScrollView(

@@ -4,6 +4,7 @@ import 'package:albassel_version_1/controler/sign_up_controller.dart';
 import 'package:albassel_version_1/controler/verification_code_controller.dart';
 import 'package:albassel_version_1/view/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class VerificationCode extends StatelessWidget{
@@ -15,7 +16,12 @@ class VerificationCode extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Scaffold(
+      backgroundColor: App.midOrange,
         body: Obx((){
           return SafeArea(
             child: SingleChildScrollView(
@@ -128,6 +134,9 @@ class VerificationCode extends StatelessWidget{
           height: 40,
           width: MediaQuery.of(context).size.width*0.9,
           child: TextField(
+            onSubmitted: (q){
+              verificationCodeController.verificate(context, code.value.text);
+            },
             controller: controller,
             decoration: InputDecoration(
               enabledBorder: UnderlineInputBorder(

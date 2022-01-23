@@ -1,11 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.albassel_version_1">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <queries>
+        <!-- If your app opens https URLs -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
    <application
        android:usesCleartextTraffic="true"
-        android:label="albassel_version_1"
+        android:label="Albasel"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

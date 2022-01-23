@@ -4,6 +4,7 @@ import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/helper/api.dart';
 import 'package:albassel_version_1/helper/log_in_api.dart';
 import 'package:albassel_version_1/helper/store.dart';
+import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:albassel_version_1/view/home.dart';
 import 'package:albassel_version_1/view/no_internet.dart';
 import 'package:albassel_version_1/view/verification_code.dart';
@@ -16,42 +17,48 @@ class SignInController extends GetxController{
   var loading = false.obs;
   var email_vaildate = true.obs;
   var pass_vaildate = true.obs;
+  var remember_value = Global.remember_pass.obs;
 
   void change_visibilty(){
     hide_passeord.value = !hide_passeord.value;
   }
 
-  signIn(BuildContext context,String email,String pass){
+  signIn(BuildContext context,String email,String pass,bool is_home){
     try{
-      if(email.isEmpty||pass.isEmpty){
-        if(email.isEmpty){
+      if(email.isEmpty||pass.isEmpty||!RegExp(r'\S+@\S+\.\S+').hasMatch(email)){
+        if(email.isEmpty||!RegExp(r'\S+@\S+\.\S+').hasMatch(email)){
           email_vaildate.value=false;
         }
         if(pass.isEmpty){
           pass_vaildate.value=false;
         }
       }else{
-        Api.check_internet().then((net) {
+        MyApi.check_internet().then((net) {
           if(net){
             loading.value=true;
-            LogInApi.login(email, pass).then((value) {
-              if(value.succses){
+            MyApi.login(email, pass).then((value) {
+              if(value.state==200){
                 Store.saveLoginInfo(email, pass);
-                App.sucss_msg(context, value.message);
-                Api.login_customers(email).then((customer){
+                App.sucss_msg(context,App_Localization.of(context).translate("login_succ"));
+                MyApi.login(email,pass).then((result){
                   loading.value=false;
-                  Global.customer=customer;
-                  Get.to(()=>Home());
+                  Global.customer=result.data.first;
+                  if(is_home){
+                    Get.offAll(()=>Home());
+                  }else{
+                    Get.offAll(()=>Home());
+                  }
+
                 });
 
               }else{
                 loading.value=false;
-                App.error_msg(context, value.message);
+                App.error_msg(context, App_Localization.of(context).translate("wrong_mail"));
               }
             });
           }else{
             Get.to(()=>NoInternet())!.then((value) {
-              signIn(context,email,pass);
+              signIn(context,email,pass,is_home);
             });
           }
         });
@@ -59,6 +66,7 @@ class SignInController extends GetxController{
       }
 
     }catch (e){
+      print(e.toString());
       loading.value=false;
       App.error_msg(context, App_Localization.of(context).translate("wrong"));
     }
@@ -67,20 +75,26 @@ class SignInController extends GetxController{
 
   forget_pass(BuildContext context,String email){
     try{
-      if(email.isEmpty){
+      if(email.isEmpty||!RegExp(r'\S+@\S+\.\S+').hasMatch(email)){
+        if(email.isEmpty){
+          App.error_msg(context, App_Localization.of(context).translate("enter_mail"));
+        }
         email_vaildate.value=false;
       } else{
-        Api.check_internet().then((net) {
+        MyApi.check_internet().then((net) {
           if(net){
             email_vaildate.value=true;
             loading.value=true;
-            LogInApi.forget_password(email).then((value) {
+            MyApi.forget_password(email).then((value) {
               loading.value=false;
               if(value.succses){
-                App.sucss_msg(context, value.message);
+                App.sucss_msg(context, App_Localization.of(context).translate("resend_pass_succ"));
               }else{
-                App.error_msg(context, value.message);
+                App.error_msg(context, App_Localization.of(context).translate("wrong"));
               }
+            })
+            .catchError((value){
+              loading.value=false;
             });
           }else{
             Get.to(()=>NoInternet())!.then((value) {

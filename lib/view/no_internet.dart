@@ -1,13 +1,20 @@
 import 'package:albassel_version_1/helper/api.dart';
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
+import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class NoInternet extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Scaffold(
+      backgroundColor: App.midOrange,
       body: SafeArea(
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -42,14 +49,13 @@ class NoInternet extends StatelessWidget{
               ),
               RaisedButton(
                 onPressed: (){
-                  Api.check_internet().then((value) {
+                  MyApi.check_internet().then((value) {
                     if(value){
                       Get.back();
                     }
                   });
                 },
                 elevation: 2,
-
                 color: Colors.white,
                 child:Text(App_Localization.of(context).translate("reload"),style: App.textBlod(App.orange, 16),),
               ),

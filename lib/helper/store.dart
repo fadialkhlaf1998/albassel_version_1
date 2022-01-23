@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/model/log_in_info.dart';
 import 'package:albassel_version_1/model/my_order.dart';
 import 'package:albassel_version_1/model/order.dart';
 import 'package:albassel_version_1/model/product.dart';
+import 'package:albassel_version_1/my_model/address.dart';
+import 'package:albassel_version_1/my_model/my_product.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,51 +15,110 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Store{
   static save_order(List<MyOrder> myOrder){
-    Order order= Order();
-    order.lineItems=<OrderLineItem>[];
-    for(var elm in myOrder){
-      bool shipping=false;
-      if(double.parse(elm.shipping.value)>0){
-        shipping = true;
-      }
-      order.lineItems!.add(OrderLineItem(product: Product.fromJson(elm.product.value.toJson()),quantity: elm.quantity.value,price: elm.price.value,productId: elm.product.value.id,requiresShipping: shipping));
-    }
+    String myjson = json.encode(List<dynamic>.from(myOrder.map((x) => x.toMap())));
     SharedPreferences.getInstance().then((prefs) {
-      prefs.setString("my_order", order.toJson());
+      prefs.setString("my_order", myjson);
     });
   }
 
   static Future<List<MyOrder>> load_order()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String json = prefs.getString("my_order")??"non";
-    if(json=="non"){
+    String myjson = prefs.getString("my_order")??"non";
+    if(myjson=="non"){
       return <MyOrder>[];
     }else{
-      List<MyOrder> myorder=<MyOrder>[];
-      Order order = Order.fromJson(json);
-      for(var elm in order.lineItems!){
-        myorder.add(MyOrder(elm.product!.obs,elm.quantity!.obs,elm.price!.obs,"0.00".obs));
+      var jsonlist = jsonDecode(myjson) as List;
+      List<MyOrder> list = <MyOrder>[];
+      for(int i=0;i<jsonlist.length;i++){
+        list.add(MyOrder.fromMap(jsonlist[i]));
       }
-      return myorder;
+      return list;
     }
   }
 
-  static save_wishlist(List<Product> _products){
+  static save_wishlist(List<MyProduct> _products){
     SharedPreferences.getInstance().then((prefs) {
-      Products products = Products();
-      products.products=_products;
-      prefs.setString("wishlist", products.toJson());
+      String myjson = json.encode(List<dynamic>.from(_products.map((x) => x.toMap())));
+      prefs.setString("wishlist", myjson);
+      load_wishlist();
     });
   }
 
-  static Future<List<Product>> load_wishlist()async{
+  static save_recently(List<MyProduct> _products){
+    SharedPreferences.getInstance().then((prefs) {
+      String myjson = json.encode(List<dynamic>.from(_products.map((x) => x.toMap())));
+      prefs.setString("recently", myjson);
+      load_wishlist();
+    });
+  }
+
+  static save_rate(List<MyProduct> _products){
+    SharedPreferences.getInstance().then((prefs) {
+      String myjson = json.encode(List<dynamic>.from(_products.map((x) => x.toMap())));
+      prefs.setString("rate", myjson);
+      load_wishlist();
+    });
+  }
+  static save_remember(bool val){
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setBool("remember", val);
+      Global.remember_pass=val;
+    });
+  }
+
+  static Future<bool> load_remember()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String json = prefs.getString("wishlist")??"non";
-    if(json=="non"){
-      return <Product>[];
+    bool val = prefs.getBool("remember")??false;
+    String pass = prefs.getString("remember_pass")??"non";
+    Global.remember_password=pass;
+    Global.remember_pass=val;
+    return val;
+  }
+
+  static Future<List<MyProduct>> load_recently()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String jsonString = prefs.getString("recently")??"non";
+    if(jsonString=="non"){
+      return <MyProduct>[];
     }else{
-      Products _products = Products.fromJson(json);
-      return _products.products!;
+      var jsonlist = jsonDecode(jsonString) as List;
+      List<MyProduct> list = <MyProduct>[];
+      for(int i=0;i<jsonlist.length;i++){
+        list.add(MyProduct.fromMap(jsonlist[i]));
+      }
+      return list;
+    }
+  }
+
+  static Future<List<MyProduct>> load_rate()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String jsonString = prefs.getString("rate")??"non";
+    if(jsonString=="non"){
+      return <MyProduct>[];
+    }else{
+      var jsonlist = jsonDecode(jsonString) as List;
+      List<MyProduct> list = <MyProduct>[];
+      for(int i=0;i<jsonlist.length;i++){
+        list.add(MyProduct.fromMap(jsonlist[i]));
+      }
+      return list;
+    }
+  }
+
+
+
+  static Future<List<MyProduct>> load_wishlist()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String jsonString = prefs.getString("wishlist")??"non";
+    if(jsonString=="non"){
+      return <MyProduct>[];
+    }else{
+      var jsonlist = jsonDecode(jsonString) as List;
+      List<MyProduct> list = <MyProduct>[];
+      for(int i=0;i<jsonlist.length;i++){
+        list.add(MyProduct.fromMap(jsonlist[i]));
+      }
+      return list;
     }
   }
 
@@ -63,6 +126,7 @@ class Store{
     SharedPreferences.getInstance().then((prefs) {
       prefs.setString("email", email);
       prefs.setString("pass", pass);
+      prefs.setString("remember_pass", pass);
     });
   }
 
@@ -71,6 +135,7 @@ class Store{
       prefs.remove("email");
       prefs.remove("pass");
       prefs.remove("verificat");
+      Global.customer=null;
     });
   }
 
@@ -91,4 +156,20 @@ class Store{
     bool val = prefs.getBool("verificat")??false;
     return val;
   }
+
+  static save_address(Address address){
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setString("addresses", address.toJson());
+      Global.address=address;
+    });
+  }
+
+  static load_address()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? val = prefs.getString("addresses")??null;
+    if(val!=null){
+      Global.address=Address.fromJson(val);
+    }
+  }
+
 }

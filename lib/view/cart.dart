@@ -1,10 +1,13 @@
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
+import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
 import 'package:albassel_version_1/view/checkout.dart';
+import 'package:albassel_version_1/view/sign_in.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class Cart extends StatelessWidget {
@@ -17,6 +20,10 @@ class Cart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
   return Obx((){
      return SafeArea(
        child: Stack(
@@ -24,6 +31,7 @@ class Cart extends StatelessWidget {
            Container(height: MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top,),
            SingleChildScrollView(
              child: Container(
+               color: Colors.white,
                width: MediaQuery.of(context).size.width,
                child: Column(
                  children: [
@@ -34,6 +42,7 @@ class Cart extends StatelessWidget {
                ),
              ),
            ),
+           Positioned(child: _header(context),top: 0,),
            Positioned(bottom:-1,child:  _check_out(context))
          ],
        ),
@@ -62,7 +71,7 @@ class Cart extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color:Colors.grey,width: 2),
                     image: DecorationImage(
-                      image: NetworkImage( cartController.my_order.value[index].product.value.image==null?"https://st2.depositphotos.com/1491329/8004/i/950/depositphotos_80041516-stock-photo-girl-with-healthy-brown-hair.jpg":cartController.my_order.value[index].product.value.image!.src!),
+                      image: NetworkImage( cartController.my_order.value[index].product.value.image==null?"https://st2.depositphotos.com/1491329/8004/i/950/depositphotos_80041516-stock-photo-girl-with-healthy-brown-hair.jpg":cartController.my_order.value[index].product.value.image),
                       fit: BoxFit.cover
                     )
                   ),
@@ -74,7 +83,7 @@ class Cart extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Text(cartController.my_order.value[index].product.value.title!,style: TextStyle(color: Colors.black,fontSize: 14,overflow: TextOverflow.clip,),textAlign: TextAlign.left,),
+                       Text(cartController.my_order.value[index].product.value.title,style: TextStyle(color: Colors.black,fontSize: 14,overflow: TextOverflow.clip,),textAlign: TextAlign.left,),
                        Container(
                         height: 40,
                         width: MediaQuery.of(context).size.width*0.3,
@@ -87,6 +96,7 @@ class Cart extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               IconButton(onPressed: (){
+
                                 cartController.increase(cartController.my_order[index],index);
                               }, icon: Icon(Icons.add,)),
                               Text(cartController.my_order.value[index].quantity.value.toString()),
@@ -134,12 +144,17 @@ class Cart extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 20),
       child: Container(
         height: 60,
+        width: MediaQuery.of(context).size.width,
+        color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(onPressed: (){
-              homeController.openDrawer();
-            }, icon: Icon(Icons.list)),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2),
+              child: IconButton(onPressed: (){
+                homeController.selected_bottom_nav_bar.value=0;
+              }, icon: Icon(Icons.arrow_back_ios,size: 30,)),
+            ),
             Text(App_Localization.of(context).translate("cart_title"),style: App.textBlod(Colors.black, 24),),
             IconButton(onPressed: (){
 
@@ -152,7 +167,7 @@ class Cart extends StatelessWidget {
   _check_out(BuildContext context){
     return Container(
       
-      height: MediaQuery.of(context).size.height*0.35,
+      height: MediaQuery.of(context).size.height*0.3,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -193,37 +208,37 @@ class Cart extends StatelessWidget {
                 Text("AED "+ cartController.shipping.value)
               ],
             ),
-            Row(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width*0.9,
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border.all(width: 1,color: Colors.grey)
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15,right: 15),
-                    child: TextField(
-                      style: App.textBlod(Colors.grey, 14),
-                      textAlignVertical: TextAlignVertical.center,
-                      controller: controller,
-                      decoration: InputDecoration(
-                        focusedBorder:  UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent)
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent)
-                        ),
-                        hintText: App_Localization.of(context).translate("voucher_code"),
-                        hintStyle: App.textBlod(Colors.grey, 14),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Container(
+            //       width: MediaQuery.of(context).size.width*0.9,
+            //       height: 45,
+            //       decoration: BoxDecoration(
+            //         color: Colors.white,
+            //         borderRadius: BorderRadius.circular(50),
+            //         border: Border.all(width: 1,color: Colors.grey)
+            //       ),
+            //       child: Padding(
+            //         padding: const EdgeInsets.only(left: 15,right: 15),
+            //         child: TextField(
+            //           style: App.textBlod(Colors.grey, 14),
+            //           textAlignVertical: TextAlignVertical.center,
+            //           controller: controller,
+            //           decoration: InputDecoration(
+            //             focusedBorder:  UnderlineInputBorder(
+            //               borderSide: BorderSide(color: Colors.transparent)
+            //             ),
+            //             enabledBorder: UnderlineInputBorder(
+            //                 borderSide: BorderSide(color: Colors.transparent)
+            //             ),
+            //             hintText: App_Localization.of(context).translate("voucher_code"),
+            //             hintStyle: App.textBlod(Colors.grey, 14),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
             Padding(
               padding: const EdgeInsets.only(top: 0.0),
               child: Row(
@@ -231,17 +246,27 @@ class Cart extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: (){
-                      Get.to(()=>Checkout());
+                      if(cartController.my_order.value.isNotEmpty){
+                        if(Global.customer!=null){
+                          Get.to(()=>Checkout());
+                        }else{
+                          // App.error_msg(context, App_Localization.of(context).translate("login_first"));
+                          Get.to(SignIn(true));
+                        }
+                      }else{
+                        App.error_msg(context, App_Localization.of(context).translate("cart_empty"));
+                      }
+                      
                     },
                     child: Container(
-                      width: MediaQuery.of(context).size.width*0.3,
+                      width: MediaQuery.of(context).size.width*0.7,
                       height: 50,
                       decoration: BoxDecoration(
                         color: App.orange,
                         borderRadius: BorderRadius.circular(25)
                       ),
                       child: Center(
-                        child: Text(App_Localization.of(context).translate("checkout").toUpperCase(),style: App.textNormal(Colors.white, 14),),
+                        child: Text(App_Localization.of(context).translate("p_checkout").toUpperCase(),style: App.textNormal(Colors.white, 14),),
                       ),
                     ),
                   )
@@ -253,4 +278,5 @@ class Cart extends StatelessWidget {
       ),
     );
   }
+
 }

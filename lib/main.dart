@@ -43,6 +43,7 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         _locale= Locale(language);
       });
+      Get.updateLocale(Locale(language));
     });
 
   }

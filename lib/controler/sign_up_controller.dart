@@ -4,6 +4,7 @@ import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/helper/api.dart';
 import 'package:albassel_version_1/helper/log_in_api.dart';
 import 'package:albassel_version_1/helper/store.dart';
+import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:albassel_version_1/view/no_internet.dart';
 import 'package:albassel_version_1/view/verification_code.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,14 +23,19 @@ class SignUpController extends GetxController{
  }
  signUp(BuildContext context,String email,String pass,String fname,String lname){
   try{
-   if(email.isEmpty||pass.isEmpty||fname.isEmpty||lname.isEmpty){
-    if(email.isEmpty){
+   if(!RegExp(r'\S+@\S+\.\S+').hasMatch(email)||email.isEmpty||pass.isEmpty||fname.isEmpty||lname.isEmpty||pass.length<6){
+    if(email.isEmpty||!RegExp(r'\S+@\S+\.\S+').hasMatch(email)){
      email_vaildate.value=false;
     }else{
      email_vaildate.value=true;
     }
-    if(pass.isEmpty){
+    if(pass.isEmpty||pass.length<6){
+     if(pass.length<6&&pass.isNotEmpty){
+      App.error_msg(context, App_Localization.of(context).translate("small_pass"));
+      pass_vaildate.value=false;
+     }
      pass_vaildate.value=false;
+
     }else{
      pass_vaildate.value=true;
     }
@@ -45,26 +51,23 @@ class SignUpController extends GetxController{
      lname_vaildate.value=true;
     }
    }else{
-    Api.check_internet().then((net) {
+    MyApi.check_internet().then((net) {
      if(net){
       loading.value=true;
-      LogInApi.sign_up(email, pass).then((value) {
-
-       if(value.succses){
+      MyApi.sign_up(email, pass,fname,lname).then((value) {
+       print(value.state);
+        if(value.state==200){
         Store.saveLoginInfo(email, pass);
-        Api.add_customer(fname,lname,email).then((customer){
-         print('*************');
-         print(customer!.email!);
-         Global.customer=customer;
-         App.sucss_msg(context, value.message);
+
+         // Global.customer=value.data.first;
+         App.sucss_msg(context, App_Localization.of(context).translate("sign_up_succ"));
          loading.value=false;
          Get.offAll(() => VerificationCode());
-        });
         //verrification code
         //Get.to(() => Home());
        }else{
         loading.value=false;
-        App.error_msg(context, value.message);
+        App.error_msg(context, App_Localization.of(context).translate("wrong_signup_msg"));
        }
       });
      }else{

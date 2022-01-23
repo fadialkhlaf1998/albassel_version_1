@@ -5,6 +5,7 @@ import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/settting_controller.dart';
 import 'package:albassel_version_1/controler/wish_list_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class Setting extends StatelessWidget {
@@ -15,12 +16,18 @@ class Setting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // return Obx((){
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
 
       return Scaffold(
+        floatingActionButton: App.live_chate(),
+        backgroundColor: Colors.white,
         body: Obx((){
           return SafeArea(child: SingleChildScrollView(
             child: Container(
+              color: Colors.white,
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                   children: [
@@ -87,16 +94,34 @@ class Setting extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(onPressed: (){Get.back();}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,))
+              IconButton(onPressed: (){Get.back();}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+
+              IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios,color: Colors.transparent,)),
             ],
           ),
-          SizedBox(),
-          SizedBox(),
+          GestureDetector(
+            onTap: (){
+              // homeController.selected_bottom_nav_bar.value=0;
+              Get.back();
+              Get.back();
+            },
+            child: Container(
+              width: 90,
+              height: 90,
+
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/logo/logo.png")
+                  )
+              ),
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(App_Localization.of(context).translate("setting"),style: App.textBlod(Colors.white, 40),)
+              Text(App_Localization.of(context).translate("setting"),style: App.textBlod(Colors.white, 30),)
             ],
           )
         ],

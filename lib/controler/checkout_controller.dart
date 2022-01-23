@@ -1,7 +1,10 @@
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/const/global.dart';
+import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/model/my_order.dart';
+import 'package:albassel_version_1/my_model/my_api.dart';
+import 'package:albassel_version_1/view/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:my_fatoorah/my_fatoorah.dart';
@@ -13,7 +16,24 @@ class CheckoutController extends GetxController{
   var is_paid=false.obs;
   var selected=false.obs;
   var is_cod=false.obs;
+  List<LineItem> lineItems = <LineItem>[];
+  CartController cartController = Get.find();
 
+
+  @override
+  void onInit() {
+    firstName.text=Global.customer!.firstname;
+    lastName.text=Global.customer!.lastname;
+    if(Global.address!=null){
+      address.text=Global.address!.address;
+      apartment.text=Global.address!.apartment;
+      city.text=Global.address!.city;
+      phone.text=Global.address!.phone;
+      emirate.value=Global.address!.Emirate;
+      country.value=Global.address!.country;
+    }
+
+  }
 
   /**address controllers*/
   TextEditingController firstName = TextEditingController();
@@ -50,6 +70,8 @@ class CheckoutController extends GetxController{
     selected.value=false;
     if(selected_operation==0){
       Get.back();
+    }else if(selected.value){
+      selected.value=false;
     }
     else if(selected_operation==1){
         address_err.value=false;
@@ -75,9 +97,34 @@ class CheckoutController extends GetxController{
       print(e);
     });
   }
+  add_order_payment(BuildContext context){
+    //todo add order to shpify
+    MyApi.add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value,lineItems);
+    cartController.clear_cart();
+    App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
+  }
+  add_order_shopyfi(BuildContext context){
+    if(is_paid.value){
+      cartController.clear_cart();
+      App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
+      Get.offAll(()=>Home());
+    }else{
+      //todo add order to shpify
+      MyApi.add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value,lineItems);
+      cartController.clear_cart();
+      App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
+      Get.offAll(()=>Home());
+    }
+  }
 
-  add_order_shopyfi(){
-    //todo order
+  String get_details(){
+    String text="";
+    lineItems = <LineItem>[];
+    for(int i=0;i<my_order.length;i++){
+      lineItems.add(LineItem(id: my_order[i].product.value.id, quantity: my_order[i].quantity.value));
+      text+=my_order[i].product.value.title+" X "+my_order[i].quantity.value.toString()+"\n";
+    }
+    return text;
   }
 
 }
