@@ -630,10 +630,23 @@ class Home extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(homeController.topCategory[index].mainImage.replaceAll("localhost", "10.0.2.2"),),
-                        )
+                        // image: DecorationImage(
+                        //   fit: BoxFit.cover,
+                        //   image: NetworkImage(homeController.topCategory[index].mainImage.replaceAll("localhost", "10.0.2.2"),),
+                        // )
+                      ),
+                      child: CachedNetworkImage(
+                        // placeholder: (context, url) => const CircularProgressIndicator(),
+                        imageUrl: homeController.topCategory[index].mainImage,
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
                       ),
                       // child: Align(
                       //   alignment: Alignment.centerRight,
@@ -734,13 +747,23 @@ class Home extends StatelessWidget {
                     MediaQuery.of(context).size.width * 0.48,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                            image: CachedNetworkImageProvider(e.image),
-                            fit: BoxFit.cover)),
-                    // child: CachedNetworkImage(
-                    //   placeholder: (context, url) => const CircularProgressIndicator(),
-                    //   imageUrl: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg',
-                    // ),
+                        // image: DecorationImage(
+                        //     image: CachedNetworkImageProvider(e.image),
+                        //     fit: BoxFit.cover)
+                    ),
+                    child: CachedNetworkImage(
+                      // placeholder: (context, url) => const CircularProgressIndicator(),
+                      imageUrl: e.image,
+                        imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.fill,
+                          ),
+                        ),
+                    ),
+                    )
                   ),
                 );
               }).toList(),

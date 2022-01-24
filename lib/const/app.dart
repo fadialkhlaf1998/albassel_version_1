@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
@@ -6,6 +8,7 @@ import 'package:albassel_version_1/view/policy_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/parser.dart';
 import 'package:get/get.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -160,6 +163,7 @@ class App{
                     GestureDetector(onTap: (){homeController.nave_to_wishlist();},child: Icon(Icons.favorite_border,color: Colors.white,)),
                     GestureDetector(onTap: (){homeController.nave_to_setting();},child: Icon(Icons.settings,color: Colors.white,)),
                     GestureDetector(onTap: (){homeController.nave_to_about_us();},child: Icon(Icons.info_outline,color: Colors.white,)),
+                    GestureDetector(onTap: (){openwhatsapp(context, App_Localization.of(context).translate("whatsapp_info"));},child: SvgPicture.asset("assets/icon/whatsapp.svg",height: 21,)),
                     Global.customer!=null? GestureDetector(onTap: (){homeController.nave_to_logout();},child: Icon(Icons.logout,color: Colors.white,)):Center(),
 
                   ],
@@ -173,6 +177,7 @@ class App{
                     GestureDetector(onTap: (){homeController.nave_to_wishlist();},child: Text(App_Localization.of(context).translate("wishlist"),style: App.textBlod(Colors.white, 16),)),
                     GestureDetector(onTap: (){homeController.nave_to_setting();},child: Text(App_Localization.of(context).translate("setting"),style: App.textBlod(Colors.white, 16),)),
                     GestureDetector(onTap: (){homeController.nave_to_about_us();},child: Text(App_Localization.of(context).translate("about_us"),style: App.textBlod(Colors.white, 16),)),
+                    GestureDetector(onTap: (){openwhatsapp(context, App_Localization.of(context).translate("whatsapp_info"));},child: Text(App_Localization.of(context).translate("whatsapp"),style: App.textBlod(Colors.white, 16),)),
                     Global.customer!=null? GestureDetector(onTap: (){homeController.nave_to_logout();},child: Text(App_Localization.of(context).translate("logout"),style: App.textBlod(Colors.white, 16),)):Center(),
                   ],
                 )
@@ -240,5 +245,35 @@ class App{
       ),
     );
   }
+
+  static openwhatsapp(BuildContext context,String msg) async{
+    var whatsapp ="+1 (202) 773-4834";
+    var whatsappURl_android = "whatsapp://send?phone="+whatsapp+"&text=$msg";
+    var whatappURL_ios ="https://wa.me/$whatsapp?text=${Uri.parse(msg)}";
+    if(Platform.isIOS){
+      // for iOS phone only
+      if( await canLaunch(whatappURL_ios)){
+        await launch(whatappURL_ios, forceSafariVC: false);
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: new Text("whatsapp no installed")));
+
+      }
+
+    }else{
+      // android , web
+      if( await canLaunch(whatsappURl_android)){
+        await launch(whatsappURl_android);
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: new Text("whatsapp no installed")));
+
+      }
+
+
+    }
+
+  }
+
 
 }

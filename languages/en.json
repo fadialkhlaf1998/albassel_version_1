@@ -152,5 +152,7 @@
   "mail_verificated": "Account has been certificated successfully",
   "sign_up_succ": "Sign up has been Successfully",
   "resend_succ": "Resend code has been Successfully",
-  "resend_pass_succ":"Password send to Email Successfully"
+  "resend_pass_succ":"Password send to Email Successfully",
+  "whatsapp": "Whatsapp",
+  "whatsapp_info": "I need some information"
 }
