@@ -155,5 +155,6 @@
   "resend_pass_succ":"Password send to Email Successfully",
   "whatsapp": "Whatsapp",
   "whatsapp_info": "I need some information",
-  "conf_eq_pass": "Password not same confirm password"
+  "conf_eq_pass": "Password not same confirm password",
+  "l_c_title": "AlBasel Live Support"
 }

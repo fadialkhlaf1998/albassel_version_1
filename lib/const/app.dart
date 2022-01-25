@@ -279,7 +279,7 @@ class App{
   }
 
   static openwhatsapp(BuildContext context,String msg) async{
-    var whatsapp ="+1 (202) 773-4834";
+    var whatsapp ="00971526924021";
     var whatsappURl_android = "whatsapp://send?phone="+whatsapp+"&text=$msg";
     var whatappURL_ios ="https://wa.me/$whatsapp?text=${Uri.parse(msg)}";
     if(Platform.isIOS){
