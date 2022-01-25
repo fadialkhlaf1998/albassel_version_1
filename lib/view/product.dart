@@ -291,10 +291,14 @@ class ProductView extends StatelessWidget {
                   Text(App_Localization.of(context).translate("aed")+" "+productController.myProduct!.price.toString(),style: TextStyle(color: App.orange,fontSize: 24,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
                   Container(
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Icon(Icons.star,color: App.orange,size: 28,),
+                        Text(productController.myProduct!.rate.toStringAsFixed(2),style: TextStyle(color: App.orange,fontSize: 28,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
                         SizedBox(width: 7,),
-                        Text(productController.myProduct!.rate.toStringAsFixed(2),style: TextStyle(color: App.orange,fontSize: 24,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Icon(Icons.star,color: App.orange,size: 18,),
+                        ),
                       ],
                     ),
                   )

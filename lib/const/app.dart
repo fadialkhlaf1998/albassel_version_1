@@ -115,7 +115,7 @@ class App{
   }
   static Drawer get_drawer(BuildContext context,HomeController homeController){
     return Drawer(
-      backgroundColor: Color(0xffE37B2F).withOpacity(0.8),
+      backgroundColor: midOrange.withOpacity(0.8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -159,12 +159,7 @@ class App{
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    GestureDetector(onTap: (){homeController.nave_to_home();},child: Icon(Icons.home,color: Colors.white,)),
-                    GestureDetector(onTap: (){homeController.nave_to_wishlist();},child: Icon(Icons.favorite_border,color: Colors.white,)),
-                    GestureDetector(onTap: (){homeController.nave_to_setting();},child: Icon(Icons.settings,color: Colors.white,)),
-                    GestureDetector(onTap: (){homeController.nave_to_about_us();},child: Icon(Icons.info_outline,color: Colors.white,)),
-                    GestureDetector(onTap: (){openwhatsapp(context, App_Localization.of(context).translate("whatsapp_info"));},child: SvgPicture.asset("assets/icon/whatsapp.svg",height: 21,)),
-                    Global.customer!=null? GestureDetector(onTap: (){homeController.nave_to_logout();},child: Icon(Icons.logout,color: Colors.white,)):Center(),
+
 
                   ],
                 ),
@@ -173,12 +168,49 @@ class App{
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    GestureDetector(onTap: (){homeController.nave_to_home();},child: Text(App_Localization.of(context).translate("home"),style: App.textBlod(Colors.white, 16),)),
-                    GestureDetector(onTap: (){homeController.nave_to_wishlist();},child: Text(App_Localization.of(context).translate("wishlist"),style: App.textBlod(Colors.white, 16),)),
-                    GestureDetector(onTap: (){homeController.nave_to_setting();},child: Text(App_Localization.of(context).translate("setting"),style: App.textBlod(Colors.white, 16),)),
-                    GestureDetector(onTap: (){homeController.nave_to_about_us();},child: Text(App_Localization.of(context).translate("about_us"),style: App.textBlod(Colors.white, 16),)),
-                    GestureDetector(onTap: (){openwhatsapp(context, App_Localization.of(context).translate("whatsapp_info"));},child: Text(App_Localization.of(context).translate("whatsapp"),style: App.textBlod(Colors.white, 16),)),
-                    Global.customer!=null? GestureDetector(onTap: (){homeController.nave_to_logout();},child: Text(App_Localization.of(context).translate("logout"),style: App.textBlod(Colors.white, 16),)):Center(),
+                    Row(
+                      children: [
+                        GestureDetector(onTap: (){homeController.nave_to_home();},child: Icon(Icons.home,color: Colors.white,size: 25,)),
+                        SizedBox(width: 15,),
+                        GestureDetector(onTap: (){homeController.nave_to_home();},child: Text(App_Localization.of(context).translate("home"),style: App.textBlod(Colors.white, 14),)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        GestureDetector(onTap: (){homeController.nave_to_wishlist();},child: Icon(Icons.favorite_border,color: Colors.white,size: 25)),
+                        SizedBox(width: 15,),
+                        GestureDetector(onTap: (){homeController.nave_to_wishlist();},child: Text(App_Localization.of(context).translate("wishlist"),style: App.textBlod(Colors.white, 14),)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        GestureDetector(onTap: (){homeController.nave_to_setting();},child: Icon(Icons.settings,color: Colors.white,size: 25)),
+                        SizedBox(width: 15,),
+                        GestureDetector(onTap: (){homeController.nave_to_setting();},child: Text(App_Localization.of(context).translate("setting"),style: App.textBlod(Colors.white, 14),)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        GestureDetector(onTap: (){homeController.nave_to_about_us();},child: Icon(Icons.info_outline,color: Colors.white,size: 25)),
+                        SizedBox(width: 15,),
+                        GestureDetector(onTap: (){homeController.nave_to_about_us();},child: Text(App_Localization.of(context).translate("about_us"),style: App.textBlod(Colors.white, 14),)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        GestureDetector(onTap: (){openwhatsapp(context, App_Localization.of(context).translate("whatsapp_info"));},child: SvgPicture.asset("assets/icon/whatsapp.svg",height: 23,)),
+                        SizedBox(width: 15,),
+                        GestureDetector(onTap: (){openwhatsapp(context, App_Localization.of(context).translate("whatsapp_info"));},child: Text(App_Localization.of(context).translate("whatsapp"),style: App.textBlod(Colors.white, 14),)),
+                      ],
+                    ),
+
+                    Row(
+                      children: [
+                        Global.customer!=null? GestureDetector(onTap: (){homeController.nave_to_logout();},child: Icon(Icons.logout,color: Colors.white,size: 25)):Center(),
+                        SizedBox(width: 10,),
+                        Global.customer!=null? GestureDetector(onTap: (){homeController.nave_to_logout();},child: Text(App_Localization.of(context).translate("logout"),style: App.textBlod(Colors.white, 14),)):Center(),
+                      ],
+                    ),
                   ],
                 )
               ],
