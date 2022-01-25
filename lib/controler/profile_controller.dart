@@ -37,9 +37,9 @@ class ProfileController extends GetxController{
             MyApi.change_password(Global.customer!.email, pass).then((result) {
               loading.value=false;
               if(result.succses){
-                App.sucss_msg(context, result.message);
+                App.sucss_msg(context, App_Localization.of(context).translate("pass"));
               }else{
-                App.error_msg(context, result.message);
+                App.error_msg(context, App_Localization.of(context).translate("wrong"));
               }
             });
           }else{
@@ -52,9 +52,12 @@ class ProfileController extends GetxController{
         if(pass.length<6){
           App.error_msg(
               context, App_Localization.of(context).translate("small_pass"));
+        }else if(confPass.length<6){
+          App.error_msg(
+          context, App_Localization.of(context).translate("small_pass"));
         }else {
           App.error_msg(
-              context, App_Localization.of(context).translate("pass"));
+              context, App_Localization.of(context).translate("conf_eq_pass"));
         }
       }
     }

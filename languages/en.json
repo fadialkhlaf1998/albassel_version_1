@@ -154,5 +154,6 @@
   "resend_succ": "Resend code has been Successfully",
   "resend_pass_succ":"Password send to Email Successfully",
   "whatsapp": "Whatsapp",
-  "whatsapp_info": "I need some information"
+  "whatsapp_info": "I need some information",
+  "conf_eq_pass": "Password not same confirm password"
 }
