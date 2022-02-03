@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/const/global.dart';
@@ -17,6 +19,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
+
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
   static void set_local(BuildContext context , Locale locale){

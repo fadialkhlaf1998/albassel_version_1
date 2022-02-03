@@ -23,7 +23,7 @@ import 'dart:async';
 class MyApi {
 
   // static String url = "https://phpstack-715372-2373312.cloudwaysapps.com/";
-  static String url = "https://phpstack-548447-2376864.cloudwaysapps.com/";
+  static String url = "https://app.albaselco.com/";
   // static String url = "http://10.0.2.2:3000/";
   static Future<List<Brand>> getBrands()async{
 
