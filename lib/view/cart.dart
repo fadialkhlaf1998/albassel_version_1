@@ -36,7 +36,37 @@ class Cart extends StatelessWidget {
                child: Column(
                  children: [
                    _header(context),
-                   _product_list(context),
+                   cartController.my_order.isEmpty
+                   ?Container(
+                     width: MediaQuery.of(context).size.width,
+                     height: 90,
+                     child: Column(
+                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                       children: [
+                         Row(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: [
+                              Icon(Icons.remove_shopping_cart_outlined,color: App.midOrange,size: 28,)
+                           ],
+                         ),
+                         Row(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: [
+                             Text(App_Localization.of(context).translate("dont_have_order"),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),)
+                           ],
+                         ),
+
+                         Row(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: [
+                             Text(App_Localization.of(context).translate("order_no_data"),style: TextStyle(color: Colors.grey,fontWeight: FontWeight.normal),),
+                             GestureDetector(onTap: (){homeController.selected_bottom_nav_bar.value=0;},child: Text(App_Localization.of(context).translate("start_shopping"),style: TextStyle(color: App.midOrange,fontWeight: FontWeight.bold),)),
+                           ],
+                         ),
+                       ],
+                     ),
+                   )
+                   :_product_list(context),
                    Container(height: MediaQuery.of(context).size.height*0.35,)
                  ],
                ),
@@ -115,7 +145,7 @@ class Cart extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("AED "+cartController.my_order[index].price.value.toString(),style: App.textNormal(App.orange, 14),),
+                      Text(App_Localization.of(context).translate("aed")+" "+double.parse(cartController.my_order[index].price.value).toStringAsFixed(2),style: App.textNormal(App.orange, 14),),
                       IconButton(onPressed: (){
                         cartController.remove_from_cart(cartController.my_order[index]);
                       }, icon: Icon(Icons.delete,size: 25,color: Colors.grey,))
@@ -165,7 +195,7 @@ class Cart extends StatelessWidget {
     );
   }
   _check_out(BuildContext context){
-    return Container(
+    return cartController.my_order.isEmpty?Center():Container(
       
       height: MediaQuery.of(context).size.height*0.3,
       width: MediaQuery.of(context).size.width,
@@ -194,7 +224,7 @@ class Cart extends StatelessWidget {
                  dashColor: Colors.grey,
                   lineLength: MediaQuery.of(context).size.width*0.5,
                 ),
-                Text("AED "+cartController.sub_total.value)
+                Text(App_Localization.of(context).translate("aed")+" "+double.parse(cartController.sub_total.value).toStringAsFixed(2))
               ],
             ),
             Row(
@@ -205,7 +235,7 @@ class Cart extends StatelessWidget {
                   dashColor: Colors.grey,
                   lineLength: MediaQuery.of(context).size.width*0.5,
                 ),
-                Text("AED "+ cartController.shipping.value)
+                Text(App_Localization.of(context).translate("aed")+" "+ double.parse(cartController.shipping.value).toStringAsFixed(2))
               ],
             ),
             // Row(
@@ -248,7 +278,7 @@ class Cart extends StatelessWidget {
                     onTap: (){
                       if(cartController.my_order.value.isNotEmpty){
                         if(Global.customer!=null){
-                          Get.to(()=>Checkout());
+                          Get.to(()=>Checkout(cartController.sub_total.value,cartController.shipping.value,(double.parse(cartController.sub_total.value)+double.parse(cartController.shipping.value)).toString()));
                         }else{
                           // App.error_msg(context, App_Localization.of(context).translate("login_first"));
                           Get.to(SignIn(true));

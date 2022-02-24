@@ -1,5 +1,6 @@
 import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/category_view_nav_controller.dart';
+import 'package:albassel_version_1/controler/wish_list_controller.dart';
 import 'package:albassel_version_1/helper/api.dart';
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
@@ -20,17 +21,26 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:new_version/new_version.dart';
 
 class Home extends StatelessWidget {
 
   HomeController homeController=Get.put(HomeController());
   CartController cartController=Get.find();
+  WishListController wishListController=Get.find();
   CategoryViewNavController categoryViewNavController=Get.put(CategoryViewNavController());
   TextEditingController search_controller = TextEditingController();
 
   Home(){
     homeController.scaffoldKey = GlobalKey<ScaffoldState>();
   }
+
+
+
+  basicStatusCheck(NewVersion newVersion,BuildContext context) {
+    newVersion.showAlertIfNecessary(context: context);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +50,14 @@ class Home extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    Future.delayed(Duration(milliseconds: 300)).then((value) {
+      final newVersion = NewVersion(
+        iOSId: 'com.Maxart.AlbasselVesrion4',
+        androidId: 'com.maxart.albassel_version_1',
+      );
+      basicStatusCheck(newVersion,context);
+
+    });
     return Obx((){
       return Scaffold(
         key: homeController.scaffoldKey,
@@ -149,7 +167,6 @@ class Home extends StatelessWidget {
                               IconButton(
                                   onPressed: (){
                                     homeController.openDrawer();
-
                                   },
                                   icon: Icon(Icons.list,size: 35,color: Colors.white,),
                               ),
@@ -475,7 +492,7 @@ class Home extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Text(homeController.bestSellers[index].title,style: TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
-                                        Text(App_Localization.of(context).translate("aed")+" "+homeController.bestSellers[index].price.toString(),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
+                                        Text(App_Localization.of(context).translate("aed")+" "+homeController.bestSellers[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
                                         GestureDetector(
                                           onTap: (){
                                             cartController.add_to_cart(homeController.bestSellers[index], 1);
@@ -501,18 +518,18 @@ class Home extends StatelessWidget {
                             ],
                           ),
                         ),
-                        // Positioned(child: IconButton(onPressed: (){
-                        //   if(productsController.my_products[index].favorite.value){
-                        //     productsController.my_products[index].favorite.value=false;
-                        //     wishListController.delete_from_wishlist(productsController.my_products[index]);
-                        //   }else{
-                        //     productsController.my_products[index].favorite.value=true;
-                        //     wishListController.add_to_wishlist(productsController.my_products[index]);
-                        //   }
-                        //
-                        // }, icon: Obx((){
-                        //   return Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
-                        // })))
+                        Positioned(child: IconButton(onPressed: (){
+                          if(homeController.bestSellers[index].favorite.value){
+                            homeController.bestSellers[index].favorite.value=false;
+                            wishListController.delete_from_wishlist(homeController.bestSellers[index]);
+                          }else{
+                            homeController.bestSellers[index].favorite.value=true;
+                            wishListController.add_to_wishlist(homeController.bestSellers[index],context);
+                          }
+
+                        }, icon: Obx((){
+                          return Icon(homeController.bestSellers[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
+                        })))
                       ],
                     ),
                   ),
@@ -739,7 +756,7 @@ class Home extends StatelessWidget {
               items: homeController.slider.map((e){
                 return GestureDetector(
                   onTap: (){
-                    homeController.go_to_product_page(e.product_id);
+                    homeController.go_to_product_page(e);
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,

@@ -278,7 +278,7 @@ class App{
     );
   }
   static openwhatsapp(BuildContext context,String msg) async{
-    var whatsapp ="+971 52 692 4021";
+    var whatsapp ="971526924021";
     var whatsappURl_android = "whatsapp://send?phone="+whatsapp+"&text=$msg";
     var whatappURL_ios ="https://wa.me/$whatsapp?text=${Uri.parse(msg)}";
     if( await canLaunch(whatappURL_ios)){

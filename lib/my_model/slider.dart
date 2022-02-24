@@ -10,13 +10,17 @@ class MySlider {
     required this.id,
     required this.title,
     required this.image,
-    required this.product_id
+    required this.product_id,
+    required this.sub_category_id,
+    required this.brand_id
   });
 
   int id;
   String title;
   String image;
-  int product_id;
+  int? product_id;
+  int? sub_category_id;
+  int? brand_id;
 
   factory MySlider.fromJson(String str) => MySlider.fromMap(json.decode(str));
 
@@ -27,6 +31,8 @@ class MySlider {
     title: json["title"],
     image: json["image"],
     product_id: json["product_id"],
+    sub_category_id: json["sub_category_id"],
+    brand_id: json["brand_id"],
   );
 
   Map<String, dynamic> toMap() => {
@@ -34,5 +40,7 @@ class MySlider {
     "title": title,
     "image": image,
     "product_id": product_id,
+    "sub_category_id":sub_category_id,
+    "brand_id":brand_id
   };
 }

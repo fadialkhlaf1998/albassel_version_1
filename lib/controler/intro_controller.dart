@@ -144,6 +144,7 @@ class IntroController extends GetxController{
   // }
 
   get_nav(){
+    Store.load_remember();
     Store.loadLogInInfo().then((info) {
       if(info.email=="non"){
         Get.offAll(()=>Welcome());

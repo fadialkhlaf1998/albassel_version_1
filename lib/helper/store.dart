@@ -72,6 +72,9 @@ class Store{
     String pass = prefs.getString("remember_pass")??"non";
     Global.remember_password=pass;
     Global.remember_pass=val;
+    print("remember");
+    print(Global.remember_password);
+    print(Global.remember_pass);
     return val;
   }
 

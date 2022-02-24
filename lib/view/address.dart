@@ -17,7 +17,6 @@ class AddressView extends StatelessWidget {
         child: Obx((){
           return Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
             child: Column(
               children: [
                 _header(context),
@@ -41,7 +40,8 @@ class AddressView extends StatelessWidget {
                         child: Text(App_Localization.of(context).translate("submit"),style: App.textNormal(Colors.white, 14),),
                       ),
                     )
-                )
+                ),
+                SizedBox(height: 20,),
               ],
             ),
           );

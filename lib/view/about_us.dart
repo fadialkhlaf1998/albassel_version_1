@@ -47,11 +47,11 @@ class AboutUs extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.05),
-                    child: Text(App_Localization.of(context).translate("about_us_content_top"),style: TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.bold,),textAlign: TextAlign.center,),
+                    child: Text(App_Localization.of(context).translate("about_us_content_top"),style: TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.bold,),textAlign: TextAlign.left,),
                   ),
                   Padding(
                     padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.05),
-                    child: Text(App_Localization.of(context).translate("about_us_content_bottom"),style:TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.normal,),textAlign: TextAlign.center,),
+                    child: Text(App_Localization.of(context).translate("about_us_content_bottom"),style:TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.normal,),textAlign: TextAlign.left,),
                   ),
                 ],
               )

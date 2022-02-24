@@ -156,5 +156,14 @@
   "whatsapp": "Whatsapp",
   "whatsapp_info": "I need some information",
   "conf_eq_pass": "Password not same confirm password",
-  "l_c_title": "AlBasel Live Support"
+  "l_c_title": "AlBasel Live Support",
+  "oreder_id": "Order ID",
+  "completed": "Completed",
+  "process":"Processing" ,
+  "canceled": "Canceled",
+  "view_order": "View Order",
+  "count": "Count",
+  "dont_have_order": "You don't have any orders yet",
+  "order_no_data": "What are you waiting for? ",
+  "start_shopping": "Start shopping"
 }

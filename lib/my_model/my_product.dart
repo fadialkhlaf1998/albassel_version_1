@@ -19,6 +19,7 @@ class MyProduct {
     required this.image,
     required this.ratingCount,
     required this.availability,
+    this.count
   });
 
   int id;
@@ -33,6 +34,7 @@ class MyProduct {
   int ratingCount;
   int availability;
   var favorite=false.obs;
+  int? count;
 
   factory MyProduct.fromJson(String str) => MyProduct.fromMap(json.decode(str));
 
@@ -50,6 +52,7 @@ class MyProduct {
     image: json["image"],
     ratingCount: json["rating_count"],
     availability: json["availability"]==null?0:json["availability"],
+    count: json["count"]==null?1:json["count"]
   );
 
   Map<String, dynamic> toMap() => {

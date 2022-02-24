@@ -21,6 +21,9 @@ class CustomerOrder {
     required this.shipping,
     required this.total,
     required this.isPaid,
+    required this.deliver,
+    required this.date,
+    required this.code,
   });
 
   int id;
@@ -37,6 +40,9 @@ class CustomerOrder {
   int shipping;
   int total;
   int isPaid;
+  int deliver;
+  var date ;
+  String code;
 
   factory CustomerOrder.fromJson(String str) => CustomerOrder.fromMap(json.decode(str));
 
@@ -57,6 +63,9 @@ class CustomerOrder {
     shipping: json["shipping"],
     total: json["total"],
     isPaid: json["is_paid"],
+    deliver: json["deliver"],
+    date: DateTime.parse(json["created_at"]),
+    code: json["code"]
   );
 
   Map<String, dynamic> toMap() => {

@@ -8,6 +8,7 @@ import 'package:albassel_version_1/controler/wish_list_controller.dart';
 import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:albassel_version_1/my_model/my_product.dart';
 import 'package:albassel_version_1/my_model/product_info.dart';
+import 'package:albassel_version_1/view/image_show.dart';
 import 'package:albassel_version_1/view/no_internet.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -184,14 +185,22 @@ class ProductView extends StatelessWidget {
             child: CarouselSlider(
               items:
               productController.myProduct!.images.map((e) {
-                return Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      borderRadius:  BorderRadius.only(bottomRight: Radius.circular(25),bottomLeft: Radius.circular(25)),
-                      image: DecorationImage(
-                          image: NetworkImage(
-                              e.link),
-                          fit: BoxFit.contain)),
+                return Hero(
+                  tag: e.link,
+                  child: GestureDetector(
+                    onTap: (){
+                      Get.to(()=>ImageShow(e.link));
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          borderRadius:  BorderRadius.only(bottomRight: Radius.circular(25),bottomLeft: Radius.circular(25)),
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  e.link),
+                              fit: BoxFit.contain)),
+                    ),
+                  ),
                 );
               }).toList(),
 
@@ -288,7 +297,7 @@ class ProductView extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(App_Localization.of(context).translate("aed")+" "+productController.myProduct!.price.toString(),style: TextStyle(color: App.orange,fontSize: 24,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
+                  Text(App_Localization.of(context).translate("aed")+" "+productController.myProduct!.price.toStringAsFixed(2),style: TextStyle(color: App.orange,fontSize: 24,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
                   Container(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -560,7 +569,7 @@ class ProductView extends StatelessWidget {
                   children: [
                     Text(App_Localization.of(context).translate("cart_total")+": ",style: App.textBlod(Colors.black, 10),),
                     Text(App_Localization.of(context).translate("aed")+" ",style: App.textNormal(Colors.black, 10),),
-                    Text(productController.cartController.total.value,style: App.textNormal(Colors.black, 10),),
+                    Text(double.parse(productController.cartController.total.value).toStringAsFixed(2),style: App.textNormal(Colors.black, 10),),
                   ],
                 ),
                 SizedBox(height: 20,),

@@ -85,6 +85,11 @@ class CartController extends GetxController{
         // y += double.parse(elm.shipping.value);
       }
       sub_total.value=x.toString();
+      if(x>250){
+        shipping.value="0.00";
+      }else{
+        shipping.value="10.00";
+      }
       // shipping.value = y.toString();
       total.value = (x + y).toString();
       Store.save_order(my_order.value);

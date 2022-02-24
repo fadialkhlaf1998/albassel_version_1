@@ -38,7 +38,14 @@ class PolicyPage extends StatelessWidget {
                 // ),
                 Padding(
                   padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.05),
-                  child:Html(data: this.content,),
+                  child:Html(data: this.content,
+                  //   style: {
+                  //   "p": Style(
+                  //       textAlign: TextAlign.left
+                  //   ),
+                  // },
+                  //
+                  ),
                 ),
               ],
             )

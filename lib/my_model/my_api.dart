@@ -45,6 +45,34 @@ class MyApi {
     }
 
   }
+  static Future<List<MyProduct>> getOrderItems(int order_id)async{
+
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('POST', Uri.parse(url+'api/order_item'));
+    request.body = json.encode({
+      "id": order_id
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var json = await response.stream.bytesToString();
+      var jsonlist = jsonDecode(json) as List;
+      List<MyProduct> list = <MyProduct>[];
+
+      for(int i=0;i<jsonlist.length;i++){
+        list.add(MyProduct.fromMap(jsonlist[i]));
+      }
+      return list;
+    }
+    else {
+      return <MyProduct>[];
+    }
+
+  }
   static Future<List<MySlider>> getSlider()async{
 
     var request = http.Request('GET', Uri.parse(url+'api/slider'));

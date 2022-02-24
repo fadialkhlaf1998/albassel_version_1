@@ -16,6 +16,7 @@ class CheckoutController extends GetxController{
   var is_paid=false.obs;
   var selected=false.obs;
   var is_cod=false.obs;
+  double total=0.0;
   List<LineItem> lineItems = <LineItem>[];
   CartController cartController = Get.find();
 
@@ -99,7 +100,7 @@ class CheckoutController extends GetxController{
   }
   add_order_payment(BuildContext context){
     //todo add order to shpify
-    MyApi.add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value,lineItems);
+    MyApi.add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.shipping.value)+double.parse(cartController.sub_total.value), is_paid.value,lineItems);
     cartController.clear_cart();
     App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
   }
@@ -110,7 +111,7 @@ class CheckoutController extends GetxController{
       Get.offAll(()=>Home());
     }else{
       //todo add order to shpify
-      MyApi.add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value,lineItems);
+      MyApi.add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value),  double.parse(cartController.shipping.value)+double.parse(cartController.sub_total.value), is_paid.value,lineItems);
       cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
       Get.offAll(()=>Home());
