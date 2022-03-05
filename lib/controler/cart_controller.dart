@@ -1,8 +1,11 @@
+import 'package:albassel_version_1/app_localization.dart';
+import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/helper/store.dart';
 import 'package:albassel_version_1/model/my_order.dart';
 import 'package:albassel_version_1/model/order.dart';
 import 'package:albassel_version_1/model/product.dart';
 import 'package:albassel_version_1/my_model/my_product.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class CartController extends GetxController{
@@ -13,23 +16,32 @@ class CartController extends GetxController{
 
   //todo save when do any thing
 
-  add_to_cart(MyProduct product , int count){
+  bool add_to_cart(MyProduct product , int count,BuildContext context){
     if(product.availability>0){
       for(int i=0;i<my_order.length;i++){
         if(my_order[i].product.value.id==product.id){
-          my_order[i].quantity.value = my_order[i].quantity.value + count;
-          double x = (my_order[i].quantity.value * double.parse(product.price.toString())) as double;
-          my_order[i].price.value = x.toString();
-          get_total();
-          return ;
+          if(my_order[i].quantity.value+count<=product.availability){
+            App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
+            my_order[i].quantity.value = my_order[i].quantity.value + count;
+            double x = (my_order[i].quantity.value * double.parse(product.price.toString())) as double;
+            my_order[i].price.value = x.toString();
+            get_total();
+            return true;
+          }else{
+            return false;
+          }
         }
       }
+      App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
       double x = (count * double.parse(product.price.toString())) as double;
       MyOrder myOrder = MyOrder(product:product.obs,quantity:count.obs,price:x.toString().obs);
       my_order.add(myOrder);
       get_total();
+      return true;
+    }else{
+      App.error_msg(context, App_Localization.of(context).translate("out_of_stock"));
+      return false;
     }
-
   }
 
   add_to_rate(MyProduct product , int count){

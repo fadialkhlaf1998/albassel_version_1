@@ -1,4 +1,5 @@
 import 'package:albassel_version_1/const/global.dart';
+import 'package:albassel_version_1/controler/wish_list_controller.dart';
 import 'package:albassel_version_1/helper/api.dart';
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
@@ -22,6 +23,7 @@ class CategoryView extends StatelessWidget {
 
   HomeController homeController=Get.find();
   CartController cartController=Get.find();
+  WishListController wishListController=Get.find();
   TextEditingController search_controller = TextEditingController();
 
 
@@ -314,6 +316,7 @@ class CategoryView extends StatelessWidget {
               itemBuilder: (context,index){
                 return GestureDetector(
                   onTap: (){
+                    homeController.selected_category.value=index;
                     homeController.get_sub_category(homeController.category[index].id,context);
                   },
                   child: Padding(padding: EdgeInsets.all(4),
@@ -340,7 +343,7 @@ class CategoryView extends StatelessWidget {
                               ),
 
                             ),
-                            Text(homeController.category[index].title,style: App.textNormal(Colors.black, 8))
+                            Text(homeController.category[index].title,style: App.textNormal(homeController.selected_category.value==index?App.midOrange:Colors.black, 8))
                           ],
                         )
                     ),
@@ -504,8 +507,8 @@ class CategoryView extends StatelessWidget {
                                         Text(App_Localization.of(context).translate("aed")+" "+homeController.bestSellers[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
                                         GestureDetector(
                                           onTap: (){
-                                            cartController.add_to_cart(homeController.bestSellers[index], 1);
-                                            App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
+                                            cartController.add_to_cart(homeController.bestSellers[index], 1,context);
+
                                           },
                                           child: Container(
                                             width: MediaQuery.of(context).size.width*0.4,
@@ -527,18 +530,18 @@ class CategoryView extends StatelessWidget {
                             ],
                           ),
                         ),
-                        // Positioned(child: IconButton(onPressed: (){
-                        //   if(productsController.my_products[index].favorite.value){
-                        //     productsController.my_products[index].favorite.value=false;
-                        //     wishListController.delete_from_wishlist(productsController.my_products[index]);
-                        //   }else{
-                        //     productsController.my_products[index].favorite.value=true;
-                        //     wishListController.add_to_wishlist(productsController.my_products[index]);
-                        //   }
-                        //
-                        // }, icon: Obx((){
-                        //   return Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
-                        // })))
+                        Positioned(child: IconButton(onPressed: (){
+                          if(homeController.bestSellers[index].favorite.value){
+                            homeController.bestSellers[index].favorite.value=false;
+                            wishListController.delete_from_wishlist(homeController.bestSellers[index]);
+                          }else{
+                            homeController.bestSellers[index].favorite.value=true;
+                            wishListController.add_to_wishlist(homeController.bestSellers[index],context);
+                          }
+
+                        }, icon: Obx((){
+                          return Icon(homeController.bestSellers[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
+                        })))
                       ],
                     ),
                   ),

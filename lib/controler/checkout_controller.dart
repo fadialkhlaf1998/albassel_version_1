@@ -99,31 +99,48 @@ class CheckoutController extends GetxController{
     });
   }
   add_order_payment(BuildContext context){
+    get_details();
     //todo add order to shpify
-    MyApi.add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.shipping.value)+double.parse(cartController.sub_total.value), is_paid.value,lineItems);
+    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.shipping.value)+double.parse(cartController.sub_total.value), is_paid.value,lineItems);
     cartController.clear_cart();
     App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
   }
   add_order_shopyfi(BuildContext context){
+    get_details();
     if(is_paid.value){
       cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
       Get.offAll(()=>Home());
     }else{
       //todo add order to shpify
-      MyApi.add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value),  double.parse(cartController.shipping.value)+double.parse(cartController.sub_total.value), is_paid.value,lineItems);
+      add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value),  double.parse(cartController.shipping.value)+double.parse(cartController.sub_total.value), is_paid.value,lineItems);
       cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
       Get.offAll(()=>Home());
     }
   }
 
+  add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems){
+    MyApi.add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems).then((succ) {
+      if(!succ){
+        add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems);
+      }
+    }).catchError((err){
+      add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems);
+    });
+  }
+
   String get_details(){
     String text="";
     lineItems = <LineItem>[];
     for(int i=0;i<my_order.length;i++){
-      lineItems.add(LineItem(id: my_order[i].product.value.id, quantity: my_order[i].quantity.value));
-      text+=my_order[i].product.value.title+" X "+my_order[i].quantity.value.toString()+"\n";
+      if(my_order[i].quantity.value>0){
+        lineItems.add(LineItem(id: my_order[i].product.value.id, quantity: my_order[i].quantity.value));
+        text+=my_order[i].product.value.title+" X "+my_order[i].quantity.value.toString()+"\n";
+      }else{
+        my_order.removeAt(i);
+      }
+
     }
     return text;
   }

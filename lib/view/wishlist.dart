@@ -127,9 +127,10 @@ class Wishlist extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: (){
-                          cartController.add_to_cart(wishListController.wishlist[index], 1);
-                          wishListController.wishlist.removeAt(index);
-                          App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
+                          if(cartController.add_to_cart(wishListController.wishlist[index], 1,context)){
+                            wishListController.wishlist[index].favorite.value=false;
+                            wishListController.wishlist.removeAt(index);
+                          }
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width*0.2,

@@ -32,6 +32,7 @@ class ProductView extends StatelessWidget {
 
   ProductView(this.myProduct){
     productController.myProduct=this.myProduct;
+    // productController.myProduct!.availability=0;
     for(int i=0;i<wishListController.rate.length;i++){
       if(myProduct.id==wishListController.rate[i].id){
         product_rating=wishListController.rate[i].rate;
@@ -153,7 +154,6 @@ class ProductView extends StatelessWidget {
                     MyProduct myProduct1 = MyProduct(id: myProduct.id, subCategoryId: myProduct.subCategoryId, brandId: myProduct.brandId, title: myProduct.title, subTitle: myProduct.subTitle, description: myProduct.description, price: myProduct.price, rate: myProduct.rate, image: myProduct.image, ratingCount: myProduct.ratingCount,availability: myProduct.availability);
                     wishListController.add_to_rate(myProduct1, rating);
                     MyApi.rate(productController.myProduct!, rating);
-
                   },
 
                 )
@@ -299,16 +299,23 @@ class ProductView extends StatelessWidget {
                 children: [
                   Text(App_Localization.of(context).translate("aed")+" "+productController.myProduct!.price.toStringAsFixed(2),style: TextStyle(color: App.orange,fontSize: 24,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
                   Container(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(productController.myProduct!.rate.toStringAsFixed(2),style: TextStyle(color: App.orange,fontSize: 28,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
-                        SizedBox(width: 7,),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: Icon(Icons.star,color: App.orange,size: 18,),
-                        ),
-                      ],
+                    decoration: BoxDecoration(
+                      color: App.midOrange,
+                      borderRadius: BorderRadius.circular(5)
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(productController.myProduct!.rate.toStringAsFixed(1),style: TextStyle(color: Colors.white,fontSize: 28,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
+                          SizedBox(width: 7,),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Icon(Icons.star,color: Colors.white,size: 18,),
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 ],
@@ -360,11 +367,29 @@ class ProductView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05),
-            child: GestureDetector(
+            child:
+            productController.myProduct!.availability==0?
+            Container(
+              height: 40,
+              width: MediaQuery.of(context).size.width*0.3,
+              decoration: BoxDecoration(
+                  color: App.midOrange,
+                  borderRadius: BorderRadius.circular(20)
+              ),
+              child: Center(
+                child: Text(App_Localization.of(context).translate("out_of_stock"),style: App.textNormal(Colors.white, 14),),
+              ),
+            )
+                :GestureDetector(
               onTap: (){
-                productController.add_to_cart();
-                App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
-                showAlertDialog(context,productController.myProduct!);
+                // if(productController.myProduct!.availability>0)
+                if( productController.add_to_cart(context)){
+                  showAlertDialog(context,productController.myProduct!);
+                }
+
+                // App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
+
+
               },
               child: Container(
                 height: 40,
@@ -379,7 +404,9 @@ class ProductView extends StatelessWidget {
               ),
             ),
           ),
-          Padding(padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05),
+          productController.myProduct!.availability==0?
+          Center()
+              :Padding(padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05),
             child: Container(
               height: 40,
               width: MediaQuery.of(context).size.width*0.3,
@@ -392,12 +419,13 @@ class ProductView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(onPressed: (){
-                      productController.increase();
-                    }, icon: Icon(Icons.add,)),
+                      productController.decrease();
+                    }, icon: Icon(Icons.remove,)),
                     Text(productController.cart_count.toString()),
                     IconButton(onPressed: (){
-                      productController.decrease();
-                    }, icon: Icon(Icons.remove,))
+                      productController.increase();
+                    }, icon: Icon(Icons.add,)),
+
                   ],
                 ),
               ),
@@ -433,6 +461,7 @@ class ProductView extends StatelessWidget {
                         List<Review> reviews=<Review>[];
                         reviews.add(Review(customerName: Global.customer!.firstname,body: reviewController.text,customerId: Global.customer!.id,id: -1,priductId: productController.myProduct!.id));
                         reviews.addAll(productController.myProduct!.reviews);
+                        productController.loading.value=false;
                         productController.myProduct!.reviews=reviews;
                         productController.add_review(reviewController.text, productController.myProduct!.id, context);
                         reviewController.text="";
@@ -477,6 +506,7 @@ class ProductView extends StatelessWidget {
                   children: [
                     Text(productController.myProduct!.reviews[index].customerName,style: App.textBlod(Colors.black, 16),),
                     Text(productController.myProduct!.reviews[index].body,style: TextStyle(fontSize: 12,color: Colors.grey),),
+                    Divider(height: 2,color: Colors.black,)
                   ],
                 ),
             ),

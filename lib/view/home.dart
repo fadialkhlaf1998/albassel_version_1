@@ -300,6 +300,7 @@ class Home extends StatelessWidget {
               itemBuilder: (context,index){
             return GestureDetector(
               onTap: (){
+                homeController.selected_category.value=index;
                 homeController.get_sub_categoryPage(homeController.category[index].id,context);
               },
               child: Padding(padding: EdgeInsets.all(4),
@@ -495,8 +496,8 @@ class Home extends StatelessWidget {
                                         Text(App_Localization.of(context).translate("aed")+" "+homeController.bestSellers[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
                                         GestureDetector(
                                           onTap: (){
-                                            cartController.add_to_cart(homeController.bestSellers[index], 1);
-                                            App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
+                                            cartController.add_to_cart(homeController.bestSellers[index], 1,context);
+
                                           },
                                           child: Container(
                                             width: MediaQuery.of(context).size.width*0.4,

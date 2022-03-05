@@ -101,31 +101,37 @@ class CustomerOrderView extends StatelessWidget {
                                         Text(myOrderController.my_order[index].code.toString(),style: TextStyle(color: Colors.grey,fontSize: 13),),
                                       ],
                                     ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
+                                    FittedBox(
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        child: Row(
 
-                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(App_Localization.of(context).translate("sub_total")+": ",style: TextStyle(color: Colors.black,fontSize: 13,fontWeight: FontWeight.bold),),
-                                            Text(myOrderController.my_order[index].subTotal.toString(),style: TextStyle(color: Colors.grey,fontSize: 13),),
+
+                                            Row(
+                                              children: [
+                                                Text(App_Localization.of(context).translate("sub_total")+": ",style: TextStyle(color: Colors.black,fontSize: 13,fontWeight: FontWeight.bold),),
+                                                Text(myOrderController.my_order[index].subTotal.toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: TextStyle(color: Colors.grey,fontSize: 13),),
+                                              ],
+                                            ),
+
+                                            Row(
+                                              children: [
+                                                Text(App_Localization.of(context).translate("shipping")+": ",style: TextStyle(color: Colors.black,fontSize: 13,fontWeight: FontWeight.bold),),
+                                                Text(myOrderController.my_order[index].shipping.toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: TextStyle(color: Colors.grey,fontSize: 13),),
+                                              ],
+                                            ),
+
+                                            Row(
+                                              children: [
+                                                Text(App_Localization.of(context).translate("total")+": ",style: TextStyle(color: Colors.black,fontSize: 13,fontWeight: FontWeight.bold),),
+                                                Text(myOrderController.my_order[index].total.toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: TextStyle(color: Colors.grey,fontSize: 13),),
+                                              ],
+                                            ),
                                           ],
                                         ),
-
-                                        Row(
-                                          children: [
-                                            Text(App_Localization.of(context).translate("shipping")+": ",style: TextStyle(color: Colors.black,fontSize: 13,fontWeight: FontWeight.bold),),
-                                            Text(myOrderController.my_order[index].shipping.toString(),style: TextStyle(color: Colors.grey,fontSize: 13),),
-                                          ],
-                                        ),
-
-                                        Row(
-                                          children: [
-                                            Text(App_Localization.of(context).translate("total")+": ",style: TextStyle(color: Colors.black,fontSize: 13,fontWeight: FontWeight.bold),),
-                                            Text(myOrderController.my_order[index].total.toString(),style: TextStyle(color: Colors.grey,fontSize: 13),),
-                                          ],
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                     SizedBox(height: 1,),
                                     Row(
@@ -174,7 +180,7 @@ class CustomerOrderView extends StatelessWidget {
 
      final format = DateFormat('yyyy-MMM-dd hh:mm');
      final clockString = format.format(dateTime);
-     return clockString;
+     return clockString.replaceAll(" ", ",");
    }
    _header(BuildContext context){
      return Container(
@@ -193,9 +199,12 @@ class CustomerOrderView extends StatelessWidget {
          children: [
            Row(
              children: [
-               IconButton(onPressed: (){
-                 Get.back();
-               }, icon: Icon(Icons.arrow_back_ios,color: Colors.white,size: 25,))
+               Padding(
+                 padding: const EdgeInsets.only(top: 15),
+                 child: IconButton(onPressed: (){
+                   Get.back();
+                 }, icon: Icon(Icons.arrow_back_ios,color: Colors.white,size: 25,)),
+               )
              ],
            ),
            SizedBox(),

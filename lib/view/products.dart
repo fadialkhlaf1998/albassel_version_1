@@ -435,8 +435,8 @@ backgroundColor: App.midOrange,
                                    Text(App_Localization.of(context).translate("aed")+" "+productsController.my_products[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
                                    GestureDetector(
                                      onTap: (){
-                                       cartController.add_to_cart(productsController.my_products[index], 1);
-                                       App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
+                                       cartController.add_to_cart(productsController.my_products[index], 1,context);
+                                       // App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
                                      },
                                      child: Container(
                                        width: MediaQuery.of(context).size.width*0.4,

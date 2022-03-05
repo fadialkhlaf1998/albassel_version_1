@@ -7,6 +7,7 @@ import 'package:albassel_version_1/model/my_order.dart';
 import 'package:albassel_version_1/model/order.dart';
 import 'package:albassel_version_1/model/product.dart';
 import 'package:albassel_version_1/my_model/address.dart';
+import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:albassel_version_1/my_model/my_product.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -29,9 +30,31 @@ class Store{
     }else{
       var jsonlist = jsonDecode(myjson) as List;
       List<MyOrder> list = <MyOrder>[];
+      List<MyOrder> finallist = <MyOrder>[];
+      List<int> arr = <int>[];
       for(int i=0;i<jsonlist.length;i++){
-        list.add(MyOrder.fromMap(jsonlist[i]));
+        MyOrder order = MyOrder.fromMap(jsonlist[i]);
+        list.add(order);
+        arr.add(order.product.value.id);
       }
+      List<MyProduct> prods = await MyApi.getCart(arr);
+      for(int i=0 ; i<prods.length;i++){
+        for(int j=0;j<list.length;j++){
+          if(prods[i].id==list[j].product.value.id){
+            list[j].product.value.availability=prods[i].availability;
+            if(prods[i].availability==0){
+              list[j].price.value="0.00";
+            }
+            if(list[j].quantity.value>prods[i].availability&&prods[i].availability!=0){
+              list[j].quantity.value=prods[i].availability;
+              list[j].price.value=(list[j].quantity.value*list[j].product.value.price).toString();
+            }else if(prods[i].availability!=0){
+              list[j].price.value=(list[j].quantity.value*list[j].product.value.price).toString();
+            }
+          }
+        }
+      }
+      save_order(list);
       return list;
     }
   }

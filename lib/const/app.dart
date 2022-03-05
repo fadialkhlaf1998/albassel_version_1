@@ -281,12 +281,25 @@ class App{
     var whatsapp ="971526924021";
     var whatsappURl_android = "whatsapp://send?phone="+whatsapp+"&text=$msg";
     var whatappURL_ios ="https://wa.me/$whatsapp?text=${Uri.parse(msg)}";
-    if( await canLaunch(whatappURL_ios)){
-      await launch(whatappURL_ios);
+
+    String url = WA_url(whatsapp,msg);
+
+    if( await canLaunch(url)){
+      await launch(url);
     }else{
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: new Text("whatsapp no installed")));
+          SnackBar(content: Text("Can not open whatsapp")));
 
+    }
+  }
+
+  static String WA_url(String phone,String message) {
+    if (Platform.isAndroid) {
+      // add the [https]
+      return "https://wa.me/$phone/?text=${Uri.parse(message)}"; // new line
+    } else {
+      // add the [https]
+      return "https://api.whatsapp.com/send?phone=$phone=${Uri.parse(message)}"; // new line
     }
   }
 

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/wish_list_controller.dart';
 import 'package:albassel_version_1/helper/store.dart';
@@ -94,7 +93,7 @@ class MyApi {
 
   }
 
-  static Future<List<MyProduct>> getBestSellers()async{
+  static Future<List<MyProduct>> getBestSellers(List<MyProduct> wishlist)async{
 
     var request = http.Request('GET', Uri.parse(url+'api/best_sellers_mobile'));
 
@@ -109,7 +108,7 @@ class MyApi {
       for(int i=0;i<jsonlist.length;i++){
         list.add(MyProduct.fromMap(jsonlist[i]));
       }
-      return list;
+      return get_favorite(wishlist, list);
     }
     else {
       return <MyProduct>[];
@@ -264,12 +263,41 @@ class MyApi {
 
   }
 
+  static Future<List<MyProduct>> getCart(List<int> arr)async{
+
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('POST', Uri.parse(url+'api/cart_info'));
+    request.body = json.encode({
+      "arr": arr
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var json = await response.stream.bytesToString();
+      var jsonlist = jsonDecode(json) as List;
+      List<MyProduct> list = <MyProduct>[];
+
+      for(int i=0;i<jsonlist.length;i++){
+        list.add(MyProduct.fromMap(jsonlist[i]));
+      }
+      return list;
+    }
+    else {
+      return <MyProduct>[];
+    }
+  }
+
   static List<MyProduct> get_favorite(List<MyProduct> wishlist,List<MyProduct> prods){
 
     for(int i=0 ; i<wishlist.length;i++){
       for(int j=0 ; j<prods.length;j++){
         if(prods[j].id==wishlist[i].id){
           prods[j].favorite.value=true;
+          wishlist[i]=prods[j];
         }
       }
     }
@@ -570,7 +598,7 @@ class MyApi {
     }
   }
 
-  static add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems)async{
+  static Future<bool> add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems)async{
     var headers = {
       'Content-Type': 'application/json',
     };
@@ -598,9 +626,11 @@ class MyApi {
 
     if (response.statusCode == 200) {
       print(await response.stream.bytesToString());
+      return true;
     }
     else {
       print(response.reasonPhrase);
+      return false;
     }
 
   }

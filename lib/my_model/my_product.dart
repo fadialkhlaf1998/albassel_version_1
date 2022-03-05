@@ -52,6 +52,7 @@ class MyProduct {
     image: json["image"],
     ratingCount: json["rating_count"],
     availability: json["availability"]==null?0:json["availability"],
+    // availability: 0,
     count: json["count"]==null?1:json["count"]
   );
 

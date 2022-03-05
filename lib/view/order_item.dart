@@ -93,6 +93,7 @@ class OrderItems extends StatelessWidget {
                                           Container(
                                             width: MediaQuery.of(context).size.width-155,
                                             child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(products[index].title,style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis,),maxLines: 2,),
                                               ],

@@ -47,11 +47,11 @@ class AboutUs extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.05),
-                    child: Text(App_Localization.of(context).translate("about_us_content_top"),style: TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.bold,),textAlign: TextAlign.left,),
+                    child: Text(App_Localization.of(context).translate("about_us_content_top"),style: TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.bold,),textAlign: TextAlign.justify,),
                   ),
                   Padding(
                     padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.05),
-                    child: Text(App_Localization.of(context).translate("about_us_content_bottom"),style:TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.normal,),textAlign: TextAlign.left,),
+                    child: Text(App_Localization.of(context).translate("about_us_content_bottom"),style:TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.normal,),textAlign: TextAlign.justify,),
                   ),
                 ],
               )
@@ -102,7 +102,7 @@ class AboutUs extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(App_Localization.of(context).translate("about_us"),style: App.textBlod(Colors.white, 30),)
+              Text(App_Localization.of(context).translate("about_us"),style: App.textBlod(Colors.white, 30,),)
             ],
           )
         ],

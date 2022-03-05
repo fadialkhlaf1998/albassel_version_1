@@ -114,7 +114,20 @@ class Cart extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                        Text(cartController.my_order.value[index].product.value.title,style: TextStyle(color: Colors.black,fontSize: 14,overflow: TextOverflow.clip,),textAlign: TextAlign.left,),
-                       Container(
+                      cartController.my_order[index].product.value.availability==0?
+                      Container(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width*0.3,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.red),
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: Center(
+                          child: Text(App_Localization.of(context).translate("out_of_stock"),style: TextStyle(color: Colors.red,fontSize: 12),),
+                        ),
+                      )
+                      : Container(
                         height: 40,
                         width: MediaQuery.of(context).size.width*0.3,
                         decoration: BoxDecoration(
@@ -126,13 +139,15 @@ class Cart extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               IconButton(onPressed: (){
+                                cartController.decrease(cartController.my_order[index],index);
+                              }, icon: Icon(Icons.remove,)),
+
+                              Text(cartController.my_order.value[index].quantity.value.toString()),
+
+                              IconButton(onPressed: (){
 
                                 cartController.increase(cartController.my_order[index],index);
                               }, icon: Icon(Icons.add,)),
-                              Text(cartController.my_order.value[index].quantity.value.toString()),
-                              IconButton(onPressed: (){
-                                cartController.decrease(cartController.my_order[index],index);
-                              }, icon: Icon(Icons.remove,))
                             ],
                           ),
                         ),
@@ -145,7 +160,7 @@ class Cart extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(App_Localization.of(context).translate("aed")+" "+double.parse(cartController.my_order[index].price.value).toStringAsFixed(2),style: App.textNormal(App.orange, 14),),
+                      FittedBox(child:Text(App_Localization.of(context).translate("aed")+" "+double.parse(cartController.my_order[index].price.value).toStringAsFixed(2),style: App.textNormal(App.orange, 14),),),
                       IconButton(onPressed: (){
                         cartController.remove_from_cart(cartController.my_order[index]);
                       }, icon: Icon(Icons.delete,size: 25,color: Colors.grey,))

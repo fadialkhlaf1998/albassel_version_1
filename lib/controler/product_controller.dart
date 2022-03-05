@@ -24,6 +24,7 @@ class ProductController extends GetxController{
 
 
   increase(){
+    if(cart_count<myProduct!.availability)
     cart_count.value++;
   }
 
@@ -32,9 +33,9 @@ class ProductController extends GetxController{
     cart_count.value--;
   }
 
-  add_to_cart(){
+  bool add_to_cart(BuildContext context){
     MyProduct myProduct1 = MyProduct(id: myProduct!.id, subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount,availability: myProduct!.availability);
-    cartController.add_to_cart(myProduct1, cart_count.value);
+    return cartController.add_to_cart(myProduct1, cart_count.value,context);
   }
 
   favorite(ProductInfo product,BuildContext context){

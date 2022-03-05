@@ -67,7 +67,7 @@ class IntroController extends GetxController{
                sliders.clear();
                sliders.addAll(value);
              });
-             MyApi.getBestSellers().then((value) {
+             MyApi.getBestSellers(wishListController.wishlist).then((value) {
                bestSellers.clear();
                bestSellers.addAll(value);
              });

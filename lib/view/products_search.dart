@@ -49,7 +49,6 @@ class ProductsSearchView extends StatelessWidget {
                     child: Column(
                       children: [
                         _header(context),
-                        // _sub_category(context),
                         productsController.my_products.isEmpty?
                         Container(height:MediaQuery.of(context).size.height*0.8,color: Colors.transparent,child: Center(child: Column(
                           children: [
@@ -94,7 +93,7 @@ class ProductsSearchView extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.of(context).size.width*0.95,
                   height: MediaQuery.of(context).size.height*0.18,
                   color: Colors.transparent,
                   child: Column(
@@ -103,6 +102,7 @@ class ProductsSearchView extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+
                           IconButton(
                             onPressed: (){
                               Get.back();
@@ -319,8 +319,8 @@ class ProductsSearchView extends StatelessWidget {
                                     Text(App_Localization.of(context).translate("aed")+" "+productsController.my_products[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
                                     GestureDetector(
                                       onTap: (){
-                                        productsController.cartController.add_to_cart(productsController.my_products[index], 1);
-                                        App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
+                                        productsController.cartController.add_to_cart(productsController.my_products[index], 1,context);
+                                        // App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
                                       },
                                       child: Container(
                                         width: MediaQuery.of(context).size.width*0.4,

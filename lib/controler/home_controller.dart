@@ -48,6 +48,7 @@ class HomeController extends GetxController{
   var product_loading=true.obs;
   var loading=true.obs;
   var selder_selected=0.obs;
+  var selected_category=0.obs;
   var bottom_selected=0.obs;
   List<ImageProvider> imageProvider = <ImageProvider>[];
 

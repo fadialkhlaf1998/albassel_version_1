@@ -96,7 +96,7 @@
   "re_send": "Resend code",
   "cancel": "Cancel",
   "send": "Send",
-  "s_order": "Your order is saved successfully",
+  "s_order": "Your order is successfully placed",
 
   "comment_11": "*********** setting page ***********",
   "language": "Language",
@@ -165,5 +165,6 @@
   "count": "Count",
   "dont_have_order": "You don't have any orders yet",
   "order_no_data": "What are you waiting for? ",
-  "start_shopping": "Start shopping"
+  "start_shopping": "Start shopping",
+  "out_of_stock": "Out Of Stock"
 }

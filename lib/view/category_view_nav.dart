@@ -372,10 +372,22 @@ class CategoryViewnave extends StatelessWidget {
                                   children: [
                                     Text(productsController.my_products[index].title,style: TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
                                     Text(App_Localization.of(context).translate("aed")+" "+productsController.my_products[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
-                                    GestureDetector(
+                                    productsController.my_products[index].availability==0?
+                                    Container(
+                                      width: MediaQuery.of(context).size.width*0.4,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5),
+                                          border: Border.all(color:Colors.red)
+                                      ),
+                                      child: Center(
+                                        child: Text(App_Localization.of(context).translate("out_of_stock"),style: App.textNormal(Colors.red, 12),),
+                                      ),
+                                    )
+                                    :GestureDetector(
                                       onTap: (){
-                                        productsController.cartController.add_to_cart(productsController.my_products[index], 1);
-                                        App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
+                                        productsController.cartController.add_to_cart(productsController.my_products[index], 1,context);
+                                        // App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
                                       },
                                       child: Container(
                                         width: MediaQuery.of(context).size.width*0.4,
