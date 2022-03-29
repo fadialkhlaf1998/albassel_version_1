@@ -26,9 +26,7 @@ class MyFatoraahPage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyFatoraahPage> {
 
-  _MyHomePageState(this.amount){
-    amount="1";
-  }
+  _MyHomePageState(this.amount);
 
   CheckoutController checkoutController = Get.find();
   CartController cartController = Get.find();
@@ -506,14 +504,15 @@ class _MyHomePageState extends State<MyFatoraahPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TextField(
-                  keyboardType: TextInputType.number,
-                  controller: TextEditingController(text: amount),
-                  decoration: InputDecoration(labelText: "Payment Amount"),
-                  onChanged: (value) {
-                    amount = value;
-                  },
-                ),
+                // TextField(
+                //   keyboardType: TextInputType.number,
+                //   controller: TextEditingController(text: amount),
+                //   decoration: InputDecoration(labelText: "Payment Amount"),
+                //   onChanged: (value) {
+                //     amount = value;
+                //   },
+                // ),
+                Text(amount.toString()),
                 Padding(
                   padding: EdgeInsets.all(5.0),
                 ),
