@@ -253,6 +253,17 @@ class Cart extends StatelessWidget {
                 Text(App_Localization.of(context).translate("aed")+" "+ double.parse(cartController.shipping.value).toStringAsFixed(2))
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(App_Localization.of(context).translate("total"),style: App.textNormal(Colors.black, 14),),
+                DottedLine(
+                  dashColor: Colors.grey,
+                  lineLength: MediaQuery.of(context).size.width*0.5,
+                ),
+                Text(App_Localization.of(context).translate("aed")+" "+(double.parse(cartController.sub_total.value)+double.parse(cartController.shipping.value)).toStringAsFixed(2))
+              ],
+            ),
             // Row(
             //   children: [
             //     Container(

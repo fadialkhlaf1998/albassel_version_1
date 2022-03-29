@@ -49,6 +49,7 @@ class CheckoutController extends GetxController{
   List<String> emirates=["abu_dhabi","ajman","dubai","fujairah","ras_al_Khaimah","sharjah","umm_al_Quwain"];
 
   next(BuildContext context){
+
     if(selected_operation==0){
 
       if(firstName.value.text.isEmpty||lastName.value.text.isEmpty||address.value.text.isEmpty||

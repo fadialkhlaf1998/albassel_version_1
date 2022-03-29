@@ -43,6 +43,13 @@ class PolicyPage extends StatelessWidget {
                     "p": Style(
                         textAlign: TextAlign.justify
                     ),
+                      "*": Style(
+                          textDecoration: TextDecoration.none,
+                          textAlign: TextAlign.justify
+                      ),
+                      "a": Style(
+                          color: Colors.black
+                      ),
                   },
                   //
                   ),

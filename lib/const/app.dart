@@ -196,6 +196,15 @@ class App{
                         GestureDetector(onTap: (){homeController.nave_to_about_us();},child: Text(App_Localization.of(context).translate("about_us"),style: App.textBlod(Colors.white, 14),)),
                       ],
                     ),
+
+                    Row(
+                      children: [
+                        GestureDetector(onTap: (){Get.to(PolicyPage(App_Localization.of(context).translate("faqs"), App_Localization.of(context).translate("faqs_content")));},child: Icon(Icons.question_answer_outlined,color: Colors.white,size: 25)),
+                        SizedBox(width: 15,),
+                        GestureDetector(onTap: (){Get.to(PolicyPage(App_Localization.of(context).translate("faqs"), App_Localization.of(context).translate("faqs_content")));},child: Text(App_Localization.of(context).translate("faqs"),style: App.textBlod(Colors.white, 14),)),
+                      ],
+                    ),
+
                     Row(
                       children: [
                         GestureDetector(onTap: (){openwhatsapp(context, App_Localization.of(context).translate("whatsapp_info"));},child: SvgPicture.asset("assets/icon/whatsapp.svg",height: 23,)),
@@ -203,6 +212,8 @@ class App{
                         GestureDetector(onTap: (){openwhatsapp(context, App_Localization.of(context).translate("whatsapp_info"));},child: Text(App_Localization.of(context).translate("whatsapp"),style: App.textBlod(Colors.white, 14),)),
                       ],
                     ),
+
+
 
                     Row(
                       children: [

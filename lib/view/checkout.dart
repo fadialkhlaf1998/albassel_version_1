@@ -4,6 +4,7 @@ import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/checkout_controller.dart';
 import 'package:albassel_version_1/view/home.dart';
+import 'package:albassel_version_1/view/my_fatoraah.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -24,21 +25,27 @@ class Checkout extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Obx(()=>Container(
-            child:SingleChildScrollView(
-              physics: checkoutController.selected_operation.value==1?NeverScrollableScrollPhysics():null,
-              child: Column(
-                children: [
-                  _header(context),
-                  checkoutController.selected_operation==0?_address(context):checkoutController.selected_operation==1?_payment(context):_summery(context),
-                  _footer(context)
-                ],
-              ),
-            )
-        ),),
+    return WillPopScope(
+      onWillPop: (){
+        checkoutController.back();
+        return Future.value(false);
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Obx(()=>Container(
+              child:SingleChildScrollView(
+                physics: checkoutController.selected_operation.value==1?NeverScrollableScrollPhysics():null,
+                child: Column(
+                  children: [
+                    _header(context),
+                    checkoutController.selected_operation==0?_address(context):checkoutController.selected_operation==1?_payment(context):_summery(context),
+                    _footer(context)
+                  ],
+                ),
+              )
+          ),),
+        ),
       ),
     );
   }
@@ -339,7 +346,6 @@ class Checkout extends StatelessWidget {
                     onTap: (){
                       checkoutController.selected.value=true;
                       checkoutController.is_cod.value=false;
-
                     },
                     title: Text(App_Localization.of(context).translate("payment")),
                     subtitle: Text(App_Localization.of(context).translate("c_card")),
@@ -351,43 +357,47 @@ class Checkout extends StatelessWidget {
         :Container(
       height: MediaQuery.of(context).size.height*0.7-MediaQuery.of(context).padding.top,
       width: MediaQuery.of(context).size.width,
-      child: MyFatoorah(
-        onResult:(response){
-          if(response.status==PaymentStatus.Success){
-            checkoutController.my_order.addAll(cartController.my_order);
-            checkoutController.add_order_payment(context);
-            checkoutController.selected_operation++;
-            checkoutController.is_paid.value=true;
-          }else{
-            checkoutController.selected.value=false;
-          }
-        },
-        errorChild: Center(
-          child: Icon(
-            Icons.error,
-            color: Colors.redAccent,
-            size: 50,
-          ),
-        ),
-        succcessChild: Center(
-          child: Icon(
-            Icons.done_all,
-            color: Colors.greenAccent,
-            size: 50,
-          ),
-        ),
-        request: MyfatoorahRequest.test(
-          currencyIso: Country.UAE,
-          successUrl:
-          'https://assets.materialup.com/uploads/473ef52c-8b96-46f7-9771-cac4b112ae28/preview.png',
-          errorUrl:
-          'https://www.digitalpaymentguru.com/wp-content/uploads/2019/08/Transaction-Failed.png',
-          invoiceAmount: double.parse(cartController.total.value),
-          language: Global.lang_code=="en"?ApiLanguage.English:ApiLanguage.Arabic,
-          token: "rLtt6JWvbUHDDhsZnfpAhpYk4dxYDQkbcPTyGaKp2TYqQgG7FGZ5Th_WD53Oq8Ebz6A53njUoo1w3pjU1D4vs_ZMqFiz_j0urb_BH9Oq9VZoKFoJEDAbRZepGcQanImyYrry7Kt6MnMdgfG5jn4HngWoRdKduNNyP4kzcp3mRv7x00ahkm9LAK7ZRieg7k1PDAnBIOG3EyVSJ5kK4WLMvYr7sCwHbHcu4A5WwelxYK0GMJy37bNAarSJDFQsJ2ZvJjvMDmfWwDVFEVe_5tOomfVNt6bOg9mexbGjMrnHBnKnZR1vQbBtQieDlQepzTZMuQrSuKn-t5XZM7V6fCW7oP-uXGX-sMOajeX65JOf6XVpk29DP6ro8WTAflCDANC193yof8-f5_EYY-3hXhJj7RBXmizDpneEQDSaSz5sFk0sV5qPcARJ9zGG73vuGFyenjPPmtDtXtpx35A-BVcOSBYVIWe9kndG3nclfefjKEuZ3m4jL9Gg1h2JBvmXSMYiZtp9MR5I6pvbvylU_PP5xJFSjVTIz7IQSjcVGO41npnwIxRXNRxFOdIUHn0tjQ-7LwvEcTXyPsHXcMD8WtgBh-wxR8aKX7WPSsT1O8d8reb2aR7K3rkV3K82K_0OgawImEpwSvp9MNKynEAJQS6ZHe_J_l77652xwPNxMRTMASk1ZsJL",
-        ),
-      ),
-    );
+      child:MyFatoraahPage("title",total.toString()));
+
+    //   MyFatoorah(
+    //     onResult:(response){
+    //       if(response.status==PaymentStatus.Success){
+    //         checkoutController.my_order.addAll(cartController.my_order);
+    //         checkoutController.add_order_payment(context);
+    //         checkoutController.selected_operation++;
+    //         checkoutController.is_paid.value=true;
+    //       }else{
+    //         checkoutController.selected.value=false;
+    //       }
+    //     },
+    //     errorChild: Center(
+    //       child: Icon(
+    //         Icons.error,
+    //         color: Colors.redAccent,
+    //         size: 50,
+    //       ),
+    //     ),
+    //     succcessChild: Center(
+    //       child: Icon(
+    //         Icons.done_all,
+    //         color: Colors.greenAccent,
+    //         size: 50,
+    //       ),
+    //     ),
+    //     request: MyfatoorahRequest.test(
+    //       currencyIso: Country.UAE,
+    //       successUrl:
+    //       'https://assets.materialup.com/uploads/473ef52c-8b96-46f7-9771-cac4b112ae28/preview.png',
+    //       errorUrl:
+    //       'https://www.digitalpaymentguru.com/wp-content/uploads/2019/08/Transaction-Failed.png',
+    //       invoiceAmount: double.parse(cartController.total.value),
+    //       language: Global.lang_code=="en"?ApiLanguage.English:ApiLanguage.Arabic,
+    //
+    //
+    //       token: "rLtt6JWvbUHDDhsZnfpAhpYk4dxYDQkbcPTyGaKp2TYqQgG7FGZ5Th_WD53Oq8Ebz6A53njUoo1w3pjU1D4vs_ZMqFiz_j0urb_BH9Oq9VZoKFoJEDAbRZepGcQanImyYrry7Kt6MnMdgfG5jn4HngWoRdKduNNyP4kzcp3mRv7x00ahkm9LAK7ZRieg7k1PDAnBIOG3EyVSJ5kK4WLMvYr7sCwHbHcu4A5WwelxYK0GMJy37bNAarSJDFQsJ2ZvJjvMDmfWwDVFEVe_5tOomfVNt6bOg9mexbGjMrnHBnKnZR1vQbBtQieDlQepzTZMuQrSuKn-t5XZM7V6fCW7oP-uXGX-sMOajeX65JOf6XVpk29DP6ro8WTAflCDANC193yof8-f5_EYY-3hXhJj7RBXmizDpneEQDSaSz5sFk0sV5qPcARJ9zGG73vuGFyenjPPmtDtXtpx35A-BVcOSBYVIWe9kndG3nclfefjKEuZ3m4jL9Gg1h2JBvmXSMYiZtp9MR5I6pvbvylU_PP5xJFSjVTIz7IQSjcVGO41npnwIxRXNRxFOdIUHn0tjQ-7LwvEcTXyPsHXcMD8WtgBh-wxR8aKX7WPSsT1O8d8reb2aR7K3rkV3K82K_0OgawImEpwSvp9MNKynEAJQS6ZHe_J_l77652xwPNxMRTMASk1ZsJL",
+    //     ),
+    //   ),
+    // );
   }
   _summery(BuildContext context){
     return Column(
