@@ -37,10 +37,18 @@ class Home extends StatelessWidget {
 
 
 
-  basicStatusCheck(NewVersion newVersion,BuildContext context) {
-    newVersion.showAlertIfNecessary(context: context);
-  }
 
+  _checkVersion(BuildContext context)async{
+    //todo change IDS
+    final newVersion = NewVersion(
+      iOSId: 'com.Maxart.AlbasselVesrion4',
+      androidId: 'com.maxart.albassel_version_1',
+    );
+    final state = await newVersion.getVersionStatus();
+    if(state!.canUpdate){
+      newVersion.showUpdateDialog(context: context, versionStatus: state);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +59,7 @@ class Home extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     Future.delayed(Duration(milliseconds: 300)).then((value) {
-      final newVersion = NewVersion(
-        iOSId: 'com.Maxart.AlbasselVesrion4',
-        androidId: 'com.maxart.albassel_version_1',
-      );
-      basicStatusCheck(newVersion,context);
-
+      _checkVersion(context);
     });
     return Obx((){
       return Scaffold(
