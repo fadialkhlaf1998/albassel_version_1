@@ -1,9 +1,8 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
-import 'package:albassel_version_1/const/global.dart';
-import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/settting_controller.dart';
-import 'package:albassel_version_1/controler/wish_list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -12,6 +11,8 @@ class Setting extends StatelessWidget {
   SettingController settingController = Get.put(SettingController());
 
   List<String> view = ["English","العربية"];
+
+  Setting({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class Setting extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(App_Localization.of(context).translate("language"),style: App.textBlod(Colors.black, 14),),
-                          Container(
+                          SizedBox(
                             width: MediaQuery.of(context).size.width*0.3,
                             child: DropdownButton<String>(
                               isExpanded: true,
@@ -84,7 +85,7 @@ class Setting extends StatelessWidget {
       height: MediaQuery.of(context).size.height*0.3,
       decoration: BoxDecoration(
         color: App.midOrange,
-        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(25),bottomRight:Radius.circular(25)),
+        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(25),bottomRight:Radius.circular(25)),
 
         boxShadow: [
           App.box_shadow()
@@ -96,9 +97,9 @@ class Setting extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(onPressed: (){Get.back();}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+              IconButton(onPressed: (){Get.back();}, icon: const Icon(Icons.arrow_back_ios,color: Colors.white,)),
 
-              IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios,color: Colors.transparent,)),
+              IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_back_ios,color: Colors.transparent,)),
             ],
           ),
           GestureDetector(
@@ -111,7 +112,7 @@ class Setting extends StatelessWidget {
               width: 90,
               height: 90,
 
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("assets/logo/logo.png")
                   )

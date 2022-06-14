@@ -8,6 +8,7 @@ class MyOrder {
   Rx<MyProduct> product;
   Rx<int> quantity;
   Rx<String> price;
+  Rx<String> discount="0.0".obs;
 
   MyOrder({required this.product,required this.quantity,required this.price});
   factory MyOrder.fromJson(String str) => MyOrder.fromMap(json.decode(str));
@@ -15,7 +16,7 @@ class MyOrder {
   String toJson() => json.encode(toMap());
 
   factory MyOrder.fromMap(Map<String, dynamic> json) => MyOrder(
-    product: MyProduct.fromJson(json["product"]).obs,
+    product: MyProduct.fromJsonForCart(json["product"]).obs,
     quantity: int.parse(json["quantity"].toString()).obs,
     price: json["price"].toString().obs,
   );

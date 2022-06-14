@@ -15,6 +15,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Store{
+
+  static save_discount_code(String code){
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setString("discount_code", code);
+    });
+  }
+
+  static Future<String> load_discount_code()async{
+    var prefs = await SharedPreferences.getInstance();
+    String code=prefs.getString("discount_code")??"non";
+
+    return code;
+  }
+
   static save_order(List<MyOrder> myOrder){
     String myjson = json.encode(List<dynamic>.from(myOrder.map((x) => x.toMap())));
     SharedPreferences.getInstance().then((prefs) {
@@ -93,7 +107,9 @@ class Store{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool val = prefs.getBool("remember")??false;
     String pass = prefs.getString("remember_pass")??"non";
+    String email = prefs.getString("remember_email")??"non";
     Global.remember_password=pass;
+    Global.remember_email=email;
     Global.remember_pass=val;
     print("remember");
     print(Global.remember_password);
@@ -153,6 +169,9 @@ class Store{
       prefs.setString("email", email);
       prefs.setString("pass", pass);
       prefs.setString("remember_pass", pass);
+      prefs.setString("remember_email", email);
+      Global.remember_password=pass;
+      Global.remember_email=email;
     });
   }
 
@@ -161,8 +180,25 @@ class Store{
       prefs.remove("email");
       prefs.remove("pass");
       prefs.remove("verificat");
+      prefs.remove("wishlist");
+      prefs.remove("my_order");
+      Global.customer_type = 0;
+      print(Global.customer_type);
       Global.customer=null;
     });
+  }
+
+  static save_customer_type(int type){
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setInt("customer_type", type);
+    });
+  }
+
+  static Future<int> load_customer_type()async{
+    var prefs = await SharedPreferences.getInstance();
+    int type=prefs.getInt("customer_type")??0;
+    Global.customer_type = type;
+    return type;
   }
 
   static Future<LogInInfo> loadLogInInfo()async{

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, must_be_immutable
+
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/const/global.dart';
@@ -10,14 +12,13 @@ import 'package:albassel_version_1/my_model/my_product.dart';
 import 'package:albassel_version_1/my_model/product_info.dart';
 import 'package:albassel_version_1/view/image_show.dart';
 import 'package:albassel_version_1/view/no_internet.dart';
+import 'package:albassel_version_1/view/sign_in.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 
 
 class ProductView extends StatelessWidget {
@@ -30,15 +31,15 @@ class ProductView extends StatelessWidget {
   TextEditingController reviewController = TextEditingController();
   double product_rating=0;
 
-  ProductView(this.myProduct){
-    productController.myProduct=this.myProduct;
+  ProductView(this.myProduct, {Key? key}) : super(key: key){
+    productController.myProduct=myProduct;
     // productController.myProduct!.availability=0;
     for(int i=0;i<wishListController.rate.length;i++){
       if(myProduct.id==wishListController.rate[i].id){
         product_rating=wishListController.rate[i].rate;
       }
     }
-    MyProduct myProduct1 = MyProduct(id: myProduct.id, subCategoryId: myProduct.subCategoryId, brandId: myProduct.brandId, title: myProduct.title, subTitle: myProduct.subTitle, description: myProduct.description, price: myProduct.price, rate: myProduct.rate, image: myProduct.image, ratingCount: myProduct.ratingCount,availability: myProduct.availability);
+    MyProduct myProduct1 = MyProduct(id: myProduct.id, subCategoryId: myProduct.subCategoryId, brandId: myProduct.brandId, title: myProduct.title, subTitle: myProduct.subTitle, description: myProduct.description, price: myProduct.price, rate: myProduct.rate, image: myProduct.image, ratingCount: myProduct.ratingCount,availability: myProduct.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
     wishListController.add_to_recently(myProduct1);
     productController.myProduct!.is_favoirite.value=wishListController.is_favorite(myProduct1);
   }
@@ -56,13 +57,13 @@ class ProductView extends StatelessWidget {
             }
           }
           productController.myProduct=value;
-          MyProduct myProduct1 = MyProduct(id: productController.myProduct!.id, subCategoryId: productController.myProduct!.subCategoryId, brandId: productController.myProduct!.brandId, title: productController.myProduct!.title, subTitle: productController.myProduct!.subTitle, description: productController.myProduct!.description, price: productController.myProduct!.price, rate: productController.myProduct!.rate, image: productController.myProduct!.image, ratingCount: productController.myProduct!.ratingCount,availability: productController.myProduct!.availability);
+          MyProduct myProduct1 = MyProduct(id: productController.myProduct!.id, subCategoryId: productController.myProduct!.subCategoryId, brandId: productController.myProduct!.brandId, title: productController.myProduct!.title, subTitle: productController.myProduct!.subTitle, description: productController.myProduct!.description, price: productController.myProduct!.price, rate: productController.myProduct!.rate, image: productController.myProduct!.image, ratingCount: productController.myProduct!.ratingCount,availability: productController.myProduct!.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
           productController.myProduct!.is_favoirite.value=wishListController.is_favorite(myProduct1);
         }).catchError((err){
           productController.loading.value=false;
         });
       }else{
-        Get.to(()=>NoInternet())!.then((value) {
+        Get.to(()=>const NoInternet())!.then((value) {
           go_to_product(index);
         });
       }
@@ -80,37 +81,37 @@ class ProductView extends StatelessWidget {
       body: Obx((){
         return SafeArea(child: SingleChildScrollView(
 
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width,
 
             child: productController.loading.value?
-            Container(color: Colors.white,width: MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height,child: Center(child: CircularProgressIndicator(),))
+            Container(color: Colors.white,width: MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height,child: const Center(child: CircularProgressIndicator(),))
                 :SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               child: Column(
                   children: [
                     _slider(context),
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Column(
                         children: [
-                          SizedBox(height: 30,),
+                          const SizedBox(height: 30,),
                           _title(context),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           _price_avalibilty(context),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           _desc(context),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           _add_to_cart(context),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           _rate(context),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           _add_review(context),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           _review(context),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           _recently(context),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                         ],
                       ),
                     )
@@ -125,7 +126,7 @@ class ProductView extends StatelessWidget {
   }
 
   _rate(BuildContext context){
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height*0.1,
       child: Padding(
         padding:  EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*0.05),
@@ -145,13 +146,13 @@ class ProductView extends StatelessWidget {
                   itemSize: 35,
                   // allowHalfRating: true,
                   itemCount: 5,
-                  itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
                   itemBuilder: (context, _) => Icon(
                     Icons.star,
                     color: App.midOrange,
                   ),
                   onRatingUpdate: (rating) {
-                    MyProduct myProduct1 = MyProduct(id: myProduct.id, subCategoryId: myProduct.subCategoryId, brandId: myProduct.brandId, title: myProduct.title, subTitle: myProduct.subTitle, description: myProduct.description, price: myProduct.price, rate: myProduct.rate, image: myProduct.image, ratingCount: myProduct.ratingCount,availability: myProduct.availability);
+                    MyProduct myProduct1 = MyProduct(id: myProduct.id, subCategoryId: myProduct.subCategoryId, brandId: myProduct.brandId, title: myProduct.title, subTitle: myProduct.subTitle, description: myProduct.description, price: myProduct.price, rate: myProduct.rate, image: myProduct.image, ratingCount: myProduct.ratingCount,availability: myProduct.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
                     wishListController.add_to_rate(myProduct1, rating);
                     MyApi.rate(productController.myProduct!, rating);
                   },
@@ -176,7 +177,7 @@ class ProductView extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.only(bottomRight: Radius.circular(25),bottomLeft: Radius.circular(25)),
+                borderRadius: const BorderRadius.only(bottomRight: Radius.circular(25),bottomLeft: Radius.circular(25)),
                 boxShadow: [
                   App.box_shadow()
                 ]
@@ -185,21 +186,18 @@ class ProductView extends StatelessWidget {
             child: CarouselSlider(
               items:
               productController.myProduct!.images.map((e) {
-                return Hero(
-                  tag: e.link,
-                  child: GestureDetector(
-                    onTap: (){
-                      Get.to(()=>ImageShow(e.link));
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          borderRadius:  BorderRadius.only(bottomRight: Radius.circular(25),bottomLeft: Radius.circular(25)),
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                  e.link),
-                              fit: BoxFit.contain)),
-                    ),
+                return GestureDetector(
+                  onTap: (){
+                    Get.to(()=>ImageShow(e.link));
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        borderRadius:  const BorderRadius.only(bottomRight: Radius.circular(25),bottomLeft: Radius.circular(25)),
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                e.link),
+                            fit: BoxFit.contain)),
                   ),
                 );
               }).toList(),
@@ -222,7 +220,7 @@ class ProductView extends StatelessWidget {
           top: MediaQuery.of(context).size.height * 0.35,
           left: 20,
           right: 20,
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width-20,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -248,7 +246,7 @@ class ProductView extends StatelessWidget {
         Positioned(
           left: 10,
           top: 10,
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width-10,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -259,12 +257,39 @@ class ProductView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    IconButton(onPressed: (){
+                      productController.favorite(productController.myProduct!,context);
+                    }, icon: Icon(productController.myProduct!.is_favoirite.value?Icons.favorite:Icons.favorite_border,color: App.orange,)),
 
+
+                    Stack(
+                      children: [
+                        IconButton(onPressed: (){
+                          Get.back();
+                          Get.back();
+                          Get.back();
+                          Get.back();
+                          homeController.selected_bottom_nav_bar.value=2;
+                        }, icon: Icon(Icons.shopping_cart_outlined,color: App.orange,)),
+                        Positioned(
+                            top: 5,
+                            right: 5,
+                            child:  cartController.my_order.isEmpty?Center():Container(
+                          width: 15,
+                          height: 15,
+                          decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle
+                          ),
+                          child: Center(
+                            child:Text(cartController.my_order.length.toString(),style: TextStyle(color: Colors.white,fontSize: 10),),
+                          ),
+                        ))
+                      ],
+                    ),
                   ],
                 ),
-                IconButton(onPressed: (){
-                  productController.favorite(productController.myProduct!,context);
-                }, icon: Icon(productController.myProduct!.is_favoirite.value?Icons.favorite:Icons.favorite_border,color: App.orange,))
+
               ],
             )
           ),
@@ -278,9 +303,9 @@ class ProductView extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05),
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width*0.9,
-            child: Text(productController.myProduct!.title,style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold,overflow: TextOverflow.clip,),textAlign: TextAlign.left,),
+            child: Text(productController.myProduct!.title,style: const TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold,overflow: TextOverflow.clip,),textAlign: TextAlign.left,),
           ),
         ),
       ],
@@ -292,12 +317,27 @@ class ProductView extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width*0.9,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(App_Localization.of(context).translate("aed")+" "+productController.myProduct!.price.toStringAsFixed(2),style: TextStyle(color: App.orange,fontSize: 24,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
+                  // Text(App_Localization.of(context).translate("aed")+" "+productController.myProduct!.price.toStringAsFixed(2),style: TextStyle(color: App.orange,fontSize: 24,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
+                 // App.price(context, productController.myProduct!.price, productController.myProduct!.offer_price),
+
+                  productController.myProduct!.offer_price==null?
+                  Text(App_Localization.of(context).translate("aed")+" "+productController.myProduct!.price.toStringAsFixed(2),style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis)
+                      :Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(App_Localization.of(context).translate("aed")+" "+productController.myProduct!.price.toStringAsFixed(2),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: const TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),),
+                        const SizedBox(width: 10,),
+                        Text(App_Localization.of(context).translate("aed")+" "+productController.myProduct!.offer_price!.toStringAsFixed(2),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.grey[700], fontSize: 9, fontWeight: FontWeight.bold,decoration: TextDecoration.lineThrough),),
+                      ],
+                    ),
+                  ),
                   Container(
                     decoration: BoxDecoration(
                       color: App.midOrange,
@@ -308,10 +348,10 @@ class ProductView extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text(productController.myProduct!.rate.toStringAsFixed(1),style: TextStyle(color: Colors.white,fontSize: 28,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
-                          SizedBox(width: 7,),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
+                          Text(productController.myProduct!.rate.toStringAsFixed(1),style: const TextStyle(color: Colors.white,fontSize: 28,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
+                          const SizedBox(width: 7,),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 5),
                             child: Icon(Icons.star,color: Colors.white,size: 18,),
                           ),
                         ],
@@ -328,13 +368,13 @@ class ProductView extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width*0.9,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(App_Localization.of(context).translate("availability")+": ",style: TextStyle(color: Colors.black,fontSize: 14,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
-                    Text(productController.myProduct!.availability<0?"0":productController.myProduct!.availability.toString(),style: TextStyle(color: Colors.black,fontSize: 14,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
+                    Text(App_Localization.of(context).translate("availability")+": ",style: const TextStyle(color: Colors.black,fontSize: 14,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
+                    Text(productController.myProduct!.availability<0?"0":productController.myProduct!.availability.toString(),style: const TextStyle(color: Colors.black,fontSize: 14,overflow: TextOverflow.clip,),textAlign: TextAlign.center,),
                   ],
                 ),
               ),
@@ -360,7 +400,7 @@ class ProductView extends StatelessWidget {
     );
   }
   _add_to_cart(BuildContext context){
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 80,
       child: Row(
@@ -405,7 +445,7 @@ class ProductView extends StatelessWidget {
             ),
           ),
           productController.myProduct!.availability==0?
-          Center()
+          const Center()
               :Padding(padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05),
             child: Container(
               height: 40,
@@ -420,11 +460,11 @@ class ProductView extends StatelessWidget {
                   children: [
                     IconButton(onPressed: (){
                       productController.decrease();
-                    }, icon: Icon(Icons.remove,)),
+                    }, icon: const Icon(Icons.remove,)),
                     Text(productController.cart_count.toString()),
                     IconButton(onPressed: (){
                       productController.increase();
-                    }, icon: Icon(Icons.add,)),
+                    }, icon: const Icon(Icons.add,)),
 
                   ],
                 ),
@@ -436,7 +476,7 @@ class ProductView extends StatelessWidget {
     );
   }
   _add_review(BuildContext context){
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height*0.1,
       child: Padding(
         padding:  EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*0.05),
@@ -448,7 +488,7 @@ class ProductView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width*0.6,
                     child: App.textField(reviewController, "write_yours", context,validate:reviewController.text.isNotEmpty),
                 ),
@@ -467,7 +507,8 @@ class ProductView extends StatelessWidget {
                         reviewController.text="";
                       }
                     }else{
-                      App.error_msg(context, App_Localization.of(context).translate("login_first"));
+                      // App.error_msg(context, App_Localization.of(context).translate("login_first"));
+                      Get.to(()=>SignIn(true));
                     }
 
                   },
@@ -490,29 +531,24 @@ class ProductView extends StatelessWidget {
   _review(BuildContext context){
     return Padding(
       padding:  EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*0.05),
-      child: Container(
-        child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-            itemCount: productController.myProduct!.reviews.length,
-            itemBuilder: (context,index){
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 15),
-            child: Container(
-
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(productController.myProduct!.reviews[index].customerName,style: App.textBlod(Colors.black, 16),),
-                    Text(productController.myProduct!.reviews[index].body,style: TextStyle(fontSize: 12,color: Colors.grey),),
-                    Divider(height: 2,color: Colors.black,)
-                  ],
-                ),
-            ),
-          );
-        }),
-      ),
+      child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+          itemCount: productController.myProduct!.reviews.length,
+          itemBuilder: (context,index){
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(productController.myProduct!.reviews[index].customerName,style: App.textBlod(Colors.black, 16),),
+              Text(productController.myProduct!.reviews[index].body,style: const TextStyle(fontSize: 12,color: Colors.grey),),
+              const Divider(height: 2,color: Colors.black,)
+            ],
+          ),
+        );
+      }),
     );
   }
 
@@ -523,7 +559,7 @@ class ProductView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(App_Localization.of(context).translate("recently_view"),style: App.textBlod(Colors.black, 16)),
-          Container(
+          SizedBox(
             height: MediaQuery.of(context).size.height*0.2,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -535,7 +571,7 @@ class ProductView extends StatelessWidget {
                   productController.selected_slider.value=0;
                  go_to_product(index);
                 },
-                child: Container(
+                child: SizedBox(
                   height: MediaQuery.of(context).size.height*0.2,
                   width: MediaQuery.of(context).size.height*0.2,
                   child: Column(
@@ -547,7 +583,7 @@ class ProductView extends StatelessWidget {
                               image: NetworkImage(wishListController.recently[index].image)
                             )
                           ),),),
-                      Expanded(flex:1,child: Container(child: Text(wishListController.recently[index].title,textAlign: TextAlign.center,style: App.textNormal(Colors.black, 10),maxLines: 2,)))
+                      Expanded(flex:1,child: Text(wishListController.recently[index].title,textAlign: TextAlign.center,style: App.textNormal(Colors.black, 10),maxLines: 2,))
                     ],
                   ),
                 ),
@@ -563,7 +599,7 @@ class ProductView extends StatelessWidget {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      content: Container(
+      content: SizedBox(
         height: 180,
         width: MediaQuery.of(context).size.width,
         child: Column(
@@ -571,14 +607,14 @@ class ProductView extends StatelessWidget {
           children: [
             Row(
               children: [
-                CircleAvatar(radius: 18,child: Icon(Icons.check),backgroundColor: App.midOrange,),
-                SizedBox(width: 20,),
+                CircleAvatar(radius: 18,child: const Icon(Icons.check),backgroundColor: App.midOrange,),
+                const SizedBox(width: 20,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        Container(width: MediaQuery.of(context).size.width*0.5,child: Text(product.title,style: App.textBlod(Colors.black, 12),)),
+                        SizedBox(width: MediaQuery.of(context).size.width*0.5,child: Text(product.title,style: App.textBlod(Colors.black, 12),)),
                       ],
                     ),
                     Row(
@@ -594,7 +630,7 @@ class ProductView extends StatelessWidget {
             ),
             Column(
               children: [
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 Row(
                   children: [
                     Text(App_Localization.of(context).translate("cart_total")+": ",style: App.textBlod(Colors.black, 10),),
@@ -602,7 +638,7 @@ class ProductView extends StatelessWidget {
                     Text(double.parse(productController.cartController.total.value).toStringAsFixed(2),style: App.textNormal(Colors.black, 10),),
                   ],
                 ),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

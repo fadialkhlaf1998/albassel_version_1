@@ -24,6 +24,7 @@ class CategoryViewNavController extends GetxController{
   IntroController introController = Get.find();
   WishListController wishListController = Get.find();
   CartController cartController = Get.find();
+  var productCountShow = 10.obs;
 
   @override
   void onInit() {
@@ -39,6 +40,15 @@ class CategoryViewNavController extends GetxController{
     });
 
   }
+
+  showMore(){
+    if(productCountShow.value+10<=my_products.length){
+      productCountShow.value += 10;
+    }else{
+      productCountShow.value = my_products.length;
+    }
+  }
+
   update_sub_category(int index){
     loading.value=true;
     MyApi.check_internet().then((internet) {
@@ -46,8 +56,8 @@ class CategoryViewNavController extends GetxController{
         selected_category.value=index;
         MyApi.getSubCategory(categories[index].id).then((value) {
           selected_sub_category=0.obs;
-          sub_categories.clear();
-          sub_categories.addAll(value);
+          sub_categories=value;
+          // sub_categories.addAll(value);
           loading.value=false;
           update_product(0);
         }).catchError((err){
@@ -55,12 +65,13 @@ class CategoryViewNavController extends GetxController{
         });
       }else{
         Get.to(()=>NoInternet())!.then((value) {
-          update_product(index);
+          update_sub_category(index);
         });
       }
     });
   }
   update_product(int index){
+
     loading.value=true;
     MyApi.check_internet().then((internet) {
       if (internet) {
@@ -69,6 +80,11 @@ class CategoryViewNavController extends GetxController{
           my_products.clear();
           my_products.addAll(value);
           loading.value=false;
+          if(my_products.length>10){
+            productCountShow.value = 10;
+          }else{
+            productCountShow.value = my_products.length;
+          }
         }).catchError((err){
           loading.value=false;
         });

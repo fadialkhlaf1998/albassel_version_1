@@ -3,7 +3,6 @@ import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/view/home.dart';
 import 'package:albassel_version_1/view/sign_in.dart';
 import 'package:albassel_version_1/view/sign_up.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -23,7 +22,7 @@ class Welcome extends StatelessWidget {
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
               image:AssetImage("assets/background/welcom.png"),
               fit: BoxFit.cover
@@ -32,25 +31,25 @@ class Welcome extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: MediaQuery.of(context).size.height*0.1,),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width*0.3,
                 child: Image.asset("assets/logo/logo.png",fit: BoxFit.cover,),
               ),
               SizedBox(height: MediaQuery.of(context).size.height*0.2,),
               Text(App_Localization.of(context).translate("welcome"),style: App.textBlod(Colors.white, 32),),
               SizedBox(height: MediaQuery.of(context).size.height*0.03,),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width*0.8,
                 child: Center(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(App_Localization.of(context).translate("signup_msg"),style: TextStyle(fontSize: 18,color: Colors.white,overflow: TextOverflow.clip),textAlign: TextAlign.center)
+                      Text(App_Localization.of(context).translate("signup_msg"),style: const TextStyle(fontSize: 18,color: Colors.white,overflow: TextOverflow.clip),textAlign: TextAlign.center)
                     ],
                   ),
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               GestureDetector(
                 onTap: (){
                   Get.offAll(() => Home());
@@ -68,12 +67,12 @@ class Welcome extends StatelessWidget {
                   )
                 ),
               ),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width*0.5,
                     height: 40,
                     child: Text(App_Localization.of(context).translate("have_account"),style: App.textNormal(Colors.white, 14),),
@@ -82,7 +81,7 @@ class Welcome extends StatelessWidget {
                     onTap: (){
                       Get.to(() => SignIn(false));
                     },
-                    child: Container(
+                    child: SizedBox(
                       width: 80,
                       height: 40,
                       child: Text(App_Localization.of(context).translate("sign_in"),style: App.textBlod(App.midOrange, 14)),
@@ -95,7 +94,7 @@ class Welcome extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width*0.5,
                     height: 40,
                     child: Text(App_Localization.of(context).translate("not_have_account"),style: App.textNormal(Colors.white, 14),),
@@ -104,7 +103,7 @@ class Welcome extends StatelessWidget {
                     onTap: (){
                       Get.to(() => SignUp());
                     },
-                    child: Container(
+                    child: SizedBox(
                       width: 80,
                       height: 40,
                       child: Text(App_Localization.of(context).translate("Sign_up"),style: App.textBlod(App.midOrange, 14)),
@@ -113,7 +112,7 @@ class Welcome extends StatelessWidget {
                 ],
               ),
 
-              SizedBox(height: 20,)
+              const SizedBox(height: 20,)
             ],
           ),
         ),

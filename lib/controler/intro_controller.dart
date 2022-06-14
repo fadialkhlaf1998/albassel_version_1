@@ -1,14 +1,13 @@
+import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/wish_list_controller.dart';
-import 'package:albassel_version_1/helper/api.dart';
 import 'package:albassel_version_1/helper/store.dart';
-import 'package:albassel_version_1/model/collection.dart';
-import 'package:albassel_version_1/my_model/best_sellers.dart';
 import 'package:albassel_version_1/my_model/brand.dart';
 import 'package:albassel_version_1/my_model/category.dart';
 import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:albassel_version_1/my_model/my_product.dart';
 import 'package:albassel_version_1/my_model/slider.dart';
+import 'package:albassel_version_1/my_model/start_up.dart';
 import 'package:albassel_version_1/my_model/sub_category.dart';
 import 'package:albassel_version_1/view/home.dart';
 import 'package:albassel_version_1/view/no_internet.dart';
@@ -16,7 +15,6 @@ import 'package:albassel_version_1/view/verification_code.dart';
 import 'package:albassel_version_1/view/welcome.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-
 import '../my_model/top_category.dart';
 
 class IntroController extends GetxController{
@@ -36,7 +34,8 @@ class IntroController extends GetxController{
     get_data();
   }
 
-  get_data(){
+  get_data()async{
+    Store.load_customer_type();
     Store.load_order().then((my_order) {
       cartController.my_order.value = my_order;
     });
@@ -51,54 +50,35 @@ class IntroController extends GetxController{
     });
     Store.load_remember();
     Store.load_address();
-   MyApi.check_internet().then((internet) {
+    var t = await get_customer_type();
+    MyApi.check_internet().then((internet) async {
+      MyApi.getShipping();
      if(internet){
        if(category.isEmpty)
        {
-          MyApi.getCategory().then((value) {
-           if(value.isNotEmpty){
-             category.clear();
-             category.addAll(value);
-             MyApi.getTopCategory().then((value) {
-               topCategory.clear();
-               topCategory.addAll(value);
-             });
-             MyApi.getSlider().then((value) {
-               sliders.clear();
-               sliders.addAll(value);
-             });
-             MyApi.getBestSellers(wishListController.wishlist).then((value) {
-               bestSellers.clear();
-               bestSellers.addAll(value);
-             });
-             MyApi.getBrands().then((value) {
-               brands.clear();
-               brands.addAll(value);
-             });
-             // MyApi.getSubCategory(value.first.id).then((value) {
-             //   sub_Category.clear();
-             //   sub_Category.addAll(value);
-             // });
-
-             Future.delayed(Duration(milliseconds: 2500),(){
-                 get_nav();
-             });
-           }else{
-             Future.delayed(Duration(milliseconds: 2500),(){
-                 get_nav();
-             });
-           }
-         }).catchError((err){
-           category=<Category>[];
-           sub_Category=<SubCategory>[];
+         MyApi.getAutoDiscount().then((value) {
+           Global.auto_discounts = value ;
+           Store.load_discount_code().then((code) {
+             if(code!="non"){
+               MyApi.discountCode(code).then((value) {
+                 if(value!=null){
+                   cartController.discountCode = value;
+                   cartController.discount.value  = value.persent.toString();
+                   cartController.get_total();
+                 }
+               });
+             }
+           });
+           cartController.get_total();
          });
+
+         var val = await getHomeData();
+
+         Future.delayed(Duration(milliseconds: 2000),(){
+           get_nav();
+         });
+
        }
-       // Store.load_order().then((my_order) {
-       //   cartController.my_order.value = my_order;
-       // });
-       // Store.load_wishlist().then((wishlist) {
-       //   wishListController.wishlist.addAll(wishlist);
-       // });
      }else{
        Future.delayed(Duration(milliseconds: 1000),(){
           Get.to(()=>NoInternet())!.then((value) {
@@ -108,6 +88,20 @@ class IntroController extends GetxController{
 
      }
    });
+  }
+
+
+  Future<bool> getHomeData()async{
+    StartUp? value = await MyApi.startUp();
+    if(value == null){
+      return await getHomeData();
+    }
+    category = value.category;
+    brands = value.brand;
+    sliders = value.slider;
+    topCategory = value.topCategories;
+    bestSellers = value.bestSellers;
+    return true;
   }
 
   // get_data(){
@@ -160,7 +154,6 @@ class IntroController extends GetxController{
                   }else{
                     Get.offAll(()=>Welcome());
                   }
-
                 });
 
               }else{
@@ -171,10 +164,37 @@ class IntroController extends GetxController{
             });
 
           }else{
-            Get.offAll(VerificationCode());
+            MyApi.login(info.email,info.pass).then((value) {
+              print(value.message);
+              if(value.state==200){
+                Store.save_verificat();
+                Get.offAll(()=>Home());
+              }else{
+                //todo check customer type
+                // Get.offAll(()=>Welcome());
+                if(Global.customer_type==0){
+                  Get.offAll(()=>VerificationCode());
+                }else{
+                  Get.offAll(()=>Home());
+                }
+
+              }
+            });
+
           }
         });
       }
     });
+  }
+
+  get_customer_type()async{
+    var info = await Store.loadLogInInfo();
+    if(info.email=="non"){
+      // Get.offAll(()=>Welcome());
+      return;
+    }else{
+      var temp = await MyApi.login(info.email,info.pass);
+      return;
+    }
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, non_constant_identifier_names
+
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/const/global.dart';
@@ -8,10 +10,10 @@ import 'package:albassel_version_1/view/address.dart';
 import 'package:albassel_version_1/view/customer_order.dart';
 import 'package:albassel_version_1/view/no_internet.dart';
 import 'package:albassel_version_1/view/sign_in.dart';
-import 'package:albassel_version_1/view/welcome.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:albassel_version_1/view/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class Profile extends StatelessWidget {
@@ -19,6 +21,8 @@ class Profile extends StatelessWidget {
   TextEditingController newpass = TextEditingController();
   TextEditingController confNewpass = TextEditingController();
   HomeController homeController = Get.find();
+
+  Profile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,57 +37,102 @@ class Profile extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white
               ),
-              child: profileController.loading.value?Center(
+              child: profileController.loading.value?const Center(
                 child: CircularProgressIndicator(),
               ):Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _header(context),
                   //
-                  Global.customer==null?Container(
+                  Global.customer==null?
+                  SizedBox(
                     height: MediaQuery.of(context).size.height*0.6-MediaQuery.of(context).padding.top,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    child:  Column(
                       children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.2,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 70,
+                              height: 70,
+                              child: SvgPicture.asset("assets/logo/black_logo.svg",color: App.midOrange,),
 
-                        Text(App_Localization.of(context).translate("login_first"),style: App.textNormal(Colors.black, 18),),
-                        SizedBox(height: 20,),
-                        GestureDetector(
-                          onTap: (){
-                            Get.to(()=>SignIn(true));
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width*0.3,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                color: App.midOrange,
-                                borderRadius: BorderRadius.circular(20)
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 10,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(App_Localization.of(context).translate("welcom_albasel"),
+                              style: const TextStyle(
+                                  fontSize: 18
+                              ),
                             ),
-                            child: Center(
-                              child: Text(App_Localization.of(context).translate("sign_in"),style: App.textNormal(Colors.white, 14),),
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => SignIn(true));
+                              },
+                              child: Text(
+                                App_Localization.of(context).translate("sign_in"),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    decoration:
+                                    TextDecoration.underline,
+                                    color: App.midOrange
+                                ),
+                              ),
                             ),
-                          ),
-                        )
 
+                            const SizedBox(width: 10,),
+                            Text(App_Localization.of(context).translate("or"),style: const TextStyle(fontSize: 16,color: Colors.grey),),
+                            const SizedBox(width: 10,),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => SignUp());
+                              },
+                              child: Text(
+                                App_Localization.of(context).translate("Sign_up"),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    decoration:
+                                    TextDecoration.underline,
+                                    color: App.midOrange
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                        const SizedBox(height: 20,),
                       ],
                     ),
-                  ):Container(
+                  ):SizedBox(
                     height: MediaQuery.of(context).size.height*0.7-MediaQuery.of(context).padding.top,
                     child: Column(
                       children: [
-                        SizedBox(height: 20,),
+                        const SizedBox(height: 20,),
                         _account_info(context),
                         Column(
                   children: [
-                  SizedBox(height: 20,),
-                  AnimatedContainer(duration: Duration(milliseconds: 300),
+                  const SizedBox(height: 20,),
+                  AnimatedContainer(duration: const Duration(milliseconds: 300),
                     width:MediaQuery.of(context).size.width*0.8,
                     height: profileController.openNewPass.value?100:0,
                     child: SingleChildScrollView(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -93,7 +142,7 @@ class Profile extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   GestureDetector(
                     onTap:(){
                       if(profileController.openNewPass.value){
@@ -114,7 +163,7 @@ class Profile extends StatelessWidget {
                       ),
                     ),
                   ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
                   _adress(context),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
@@ -134,14 +183,14 @@ class Profile extends StatelessWidget {
                 ],
               ),
             ),
-            Positioned(top: 0,child: homeController.product_loading.value?Container(height:MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,color: Colors.grey.withOpacity(0.4),child: Center(child: CircularProgressIndicator()),):Center())
+            Positioned(top: 0,child: homeController.product_loading.value?Container(height:MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,color: Colors.grey.withOpacity(0.4),child: const Center(child: CircularProgressIndicator()),):const Center())
           ],
         ),
       ));
     });
   }
   _account_info(BuildContext context){
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width*0.9,
       child: Column(
         children: [
@@ -152,9 +201,9 @@ class Profile extends StatelessWidget {
             child:Row(
 
               children: [
-                SizedBox(width: 10,),
+                const SizedBox(width: 10,),
                 Text(App_Localization.of(context).translate("account_info"),style: App.textBlod(Colors.black, 14)),
-                SizedBox(width: 10,),
+                const SizedBox(width: 10,),
               ],
             )
           ),
@@ -196,11 +245,11 @@ class Profile extends StatelessWidget {
         child: Center(
           child: Row(
             children: [
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Text(App_Localization.of(context).translate("address"),style: App.textBlod(Colors.black, 14),),
-              Spacer(),
+              const Spacer(),
               Text(App_Localization.of(context).translate("edit"),style: App.textNormal(Colors.black, 14),),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
             ],
           ),
         ),
@@ -262,7 +311,7 @@ class Profile extends StatelessWidget {
             children: [
               IconButton(onPressed: (){
                 homeController.selected_bottom_nav_bar.value=0;
-              }, icon: Icon(Icons.arrow_back_ios,color: Colors.white,size: 25,)),
+              }, icon: const Icon(Icons.arrow_back_ios,color: Colors.white,size: 25,)),
 
               GestureDetector(
                 onTap: (){
@@ -272,7 +321,7 @@ class Profile extends StatelessWidget {
                   width: 70,
                   height: 70,
 
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage("assets/logo/logo.png")
                       )
@@ -282,49 +331,22 @@ class Profile extends StatelessWidget {
 
               IconButton(onPressed: (){
 
-              }, icon: Icon(Icons.arrow_back_ios,color: Colors.transparent,size: 25,))
+              }, icon: const Icon(Icons.arrow_back_ios,color: Colors.transparent,size: 25,))
             ],
           ),
-          SizedBox(),
-          SizedBox(),
+          const SizedBox(),
+          const SizedBox(),
           Global.customer==null?
-              Center()
+              const Center()
               :Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Text(App_Localization.of(context).translate("hello")+" ",style: App.textBlod(Colors.white, 16),),
               Text(Global.customer!.firstname+" "+Global.customer!.lastname,style: App.textNormal(Colors.white, 16),),
             ],
           )
         ],
-      ),
-    );
-  }
-  _block(BuildContext context,String key){
-    return Container(
-      width: 130,
-      child: Padding(
-        padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.04),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(App_Localization.of(context).translate(key)+" :",style: App.textBlod(App.midOrange, 16),),
-          ],
-        ),
-      ),
-    );
-  }
-  _block2(BuildContext context,String obj){
-    return Container(
-      child: Padding(
-        padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.04),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(obj,style: App.textNormal(Colors.black, 16)),
-          ],
-        ),
       ),
     );
   }
@@ -342,14 +364,14 @@ class Profile extends StatelessWidget {
             App.error_msg(context, App_Localization.of(context).translate("wrong_my_order"));
           }
 
-        })
-            .catchError((err){
-          print(err);
-          homeController.product_loading.value=false;
-          App.error_msg(context, App_Localization.of(context).translate("wrong"));
         });
+        //     .catchError((err){
+        //    print(err);
+        //   homeController.product_loading.value=false;
+        //   App.error_msg(context, App_Localization.of(context).translate("wrong"));
+        // });
       }else{
-        Get.to(NoInternet())!.then((value) {
+        Get.to(const NoInternet())!.then((value) {
           get_my_order(context);
         });
       }

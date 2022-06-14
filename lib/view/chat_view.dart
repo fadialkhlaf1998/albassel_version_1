@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:albassel_version_1/app_localization.dart';
-import 'package:albassel_version_1/const/app.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -25,12 +23,9 @@ class _ChatViewState extends State<ChatView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(App_Localization.of(context).translate("l_c_title")),
-        actions: [
-          // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,),),
-        ],
       ),
       resizeToAvoidBottomInset: true,
-      body: SafeArea(
+      body: const SafeArea(
         child: Center(
           child: WebView(
             initialUrl: "https://tawk.to/chat/6117bbf0d6e7610a49b02b9e/1fd2bc95j",

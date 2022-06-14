@@ -1,9 +1,10 @@
 
+// ignore_for_file: must_be_immutable
+
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
 import 'package:albassel_version_1/my_model/my_product.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class OrderItems extends StatelessWidget {
 
   HomeController homeController = Get.find();
 
-  OrderItems(this.products,this.code);
+  OrderItems(this.products,this.code, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +28,11 @@ class OrderItems extends StatelessWidget {
       backgroundColor: App.midOrange,
       body: SafeArea(
           child: Obx((){
-            print(homeController.loading.value);
             return Container(
 
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("assets/background/background.png"),fit: BoxFit.cover
                   )
@@ -42,7 +42,7 @@ class OrderItems extends StatelessWidget {
                   Column(
                     children: [
                       _header(context),
-                      Container(
+                      SizedBox(
                         height: MediaQuery.of(context).size.height*0.89-MediaQuery.of(context).padding.top,
                         child: ListView.builder(
 
@@ -63,7 +63,7 @@ class OrderItems extends StatelessWidget {
                                         color: Colors.grey.withOpacity(0.5),
                                         spreadRadius: 4,
                                         blurRadius: 7,
-                                        offset: Offset(0, 5), // changes position of shadow
+                                        offset: const Offset(0, 5), // changes position of shadow
                                       ),
                                     ],
                                   ),
@@ -78,47 +78,47 @@ class OrderItems extends StatelessWidget {
                                           width:120,
                                           height: 120,
                                           decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10),bottomLeft: Radius.circular(10)),
+                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),bottomLeft: Radius.circular(10)),
                                               image: DecorationImage(
                                                   image: NetworkImage(products[index].image)
                                               )
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: 10,),
+                                      const SizedBox(width: 10,),
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Container(
+                                          SizedBox(
                                             width: MediaQuery.of(context).size.width-155,
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text(products[index].title,style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis,),maxLines: 2,),
+                                                Text(products[index].title,style: const TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis,),maxLines: 2,),
                                               ],
                                             ),
                                           ),
                                           Row(
                                             children: [
-                                              Text(App_Localization.of(context).translate("oreder_id")+" :  ",style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
-                                              Text(code,style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis),),
+                                              Text(App_Localization.of(context).translate("oreder_id")+" :  ",style: const TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
+                                              Text(code,style: const TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis),),
                                             ],
                                           ),
-                                          Container(
+                                          SizedBox(
                                             width: MediaQuery.of(context).size.width-155,
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Row(
                                                   children: [
-                                                    Text(App_Localization.of(context).translate("count")+" :  ",style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
-                                                    Text(products[index].count==null?"1":products[index].count!.toString(),style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis),),
+                                                    Text(App_Localization.of(context).translate("count")+" :  ",style: const TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                    Text(products[index].count==null?"1":products[index].count!.toString(),style: const TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis),),
                                                   ],
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Text(App_Localization.of(context).translate("total")+" :  ",style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                    Text(App_Localization.of(context).translate("total")+" :  ",style: const TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
                                                     Text((products[index].count!*products[index].price).toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: TextStyle(color: App.midOrange,fontSize: 12,overflow: TextOverflow.ellipsis),),
                                                   ],
                                                 ),
@@ -176,7 +176,7 @@ class OrderItems extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      margin: EdgeInsets.only(right: 10,left: 10),
+                      margin: const EdgeInsets.only(right: 10,left: 10),
                       child: GestureDetector(
                         onTap: () {
                           Get.back();
@@ -196,7 +196,7 @@ class OrderItems extends StatelessWidget {
                   ],
                 ),
                 Container(
-                  margin: EdgeInsets.only(right: 10,left: 10),
+                  margin: const EdgeInsets.only(right: 10,left: 10),
                   child: GestureDetector(
                     onTap: () {
                       Get.back();

@@ -2,7 +2,9 @@ import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
+import 'package:albassel_version_1/helper/store.dart';
 import 'package:albassel_version_1/model/my_order.dart';
+import 'package:albassel_version_1/my_model/address.dart';
 import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:albassel_version_1/view/home.dart';
 import 'package:flutter/cupertino.dart';
@@ -58,6 +60,8 @@ class CheckoutController extends GetxController{
         // selected_operation++;
       }else{
         selected_operation++;
+        Address a = Address(address: address.text, apartment: apartment.text, city: city.text, country: country.value, Emirate: emirate.value, phone: phone.text);
+        Store.save_address(a);
       }
     }else{
       if(selected.value&&!is_cod.value) {
@@ -80,30 +84,13 @@ class CheckoutController extends GetxController{
         selected_operation--;
     }
   }
-  // pay(double price,BuildContext context){
-  //   MyFatoorah.startPayment(
-  //     context: context,
-  //     request: MyfatoorahRequest.test(
-  //       currencyIso: Country.UAE,
-  //       successUrl:
-  //       "https://assets.materialup.com/uploads/473ef52c-8b96-46f7-9771-cac4b112ae28/preview.png",
-  //       errorUrl:
-  //       "https://www.digitalpaymentguru.com/wp-content/uploads/2019/08/Transaction-Failed.png",
-  //       invoiceAmount: price,
-  //       language: Global.lang_code=="en"?ApiLanguage.English:ApiLanguage.Arabic,
-  //       token: "rLtt6JWvbUHDDhsZnfpAhpYk4dxYDQkbcPTyGaKp2TYqQgG7FGZ5Th_WD53Oq8Ebz6A53njUoo1w3pjU1D4vs_ZMqFiz_j0urb_BH9Oq9VZoKFoJEDAbRZepGcQanImyYrry7Kt6MnMdgfG5jn4HngWoRdKduNNyP4kzcp3mRv7x00ahkm9LAK7ZRieg7k1PDAnBIOG3EyVSJ5kK4WLMvYr7sCwHbHcu4A5WwelxYK0GMJy37bNAarSJDFQsJ2ZvJjvMDmfWwDVFEVe_5tOomfVNt6bOg9mexbGjMrnHBnKnZR1vQbBtQieDlQepzTZMuQrSuKn-t5XZM7V6fCW7oP-uXGX-sMOajeX65JOf6XVpk29DP6ro8WTAflCDANC193yof8-f5_EYY-3hXhJj7RBXmizDpneEQDSaSz5sFk0sV5qPcARJ9zGG73vuGFyenjPPmtDtXtpx35A-BVcOSBYVIWe9kndG3nclfefjKEuZ3m4jL9Gg1h2JBvmXSMYiZtp9MR5I6pvbvylU_PP5xJFSjVTIz7IQSjcVGO41npnwIxRXNRxFOdIUHn0tjQ-7LwvEcTXyPsHXcMD8WtgBh-wxR8aKX7WPSsT1O8d8reb2aR7K3rkV3K82K_0OgawImEpwSvp9MNKynEAJQS6ZHe_J_l77652xwPNxMRTMASk1ZsJL",
-  //     ),
-  //   ).then((response) {
-  //     print(response);
-  //   }).catchError((e) {
-  //     print(e);
-  //   });
-  // }
+
   add_order_payment(BuildContext context){
     get_details();
     //todo add order to shpify
-    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.shipping.value)+double.parse(cartController.sub_total.value), is_paid.value,lineItems);
+    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
     cartController.clear_cart();
+
     App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
   }
   add_order_shopyfi(BuildContext context){
@@ -114,26 +101,41 @@ class CheckoutController extends GetxController{
       Get.offAll(()=>Home());
     }else{
       //todo add order to shpify
-      add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value),  double.parse(cartController.shipping.value)+double.parse(cartController.sub_total.value), is_paid.value,lineItems);
+      add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
       cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
       Get.offAll(()=>Home());
     }
   }
 
-  add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems){
-    MyApi.add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems).then((succ) {
+  add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems,String discount){
+    MyApi.add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount).then((succ) {
       if(!succ){
-        add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems);
+        add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount);
       }
     }).catchError((err){
-      add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems);
+      add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount);
     });
   }
 
+  // String get_details(){
+  //   String text="";
+  //   lineItems = <LineItem>[];
+  //   for(int i=0;i<my_order.length;i++){
+  //     if(my_order[i].quantity.value>0){
+  //       lineItems.add(LineItem(id: my_order[i].product.value.id, quantity: my_order[i].quantity.value));
+  //       text+=my_order[i].product.value.title+" X "+my_order[i].quantity.value.toString()+"\n";
+  //     }else{
+  //       my_order.removeAt(i);
+  //     }
+  //
+  //   }
+  //   return text;
+  // }
+
   String get_details(){
     String text="";
-    lineItems = <LineItem>[];
+    lineItems.clear();
     for(int i=0;i<my_order.length;i++){
       if(my_order[i].quantity.value>0){
         lineItems.add(LineItem(id: my_order[i].product.value.id, quantity: my_order[i].quantity.value));
@@ -141,7 +143,14 @@ class CheckoutController extends GetxController{
       }else{
         my_order.removeAt(i);
       }
-
+    }
+    for(int i=0;i<cartController.auto_discount.length;i++){
+      if(cartController.auto_discount[i].quantity.value>0&&cartController.auto_discount[i].product.value.availability>0){
+        lineItems.add(LineItem(id: cartController.auto_discount[i].product.value.id, quantity: cartController.auto_discount[i].quantity.value));
+        text+=cartController.auto_discount[i].product.value.title+" X "+cartController.auto_discount[i].quantity.value.toString()+"\n";
+      }else{
+        cartController.auto_discount.removeAt(i);
+      }
     }
     return text;
   }

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, non_constant_identifier_names
+
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
@@ -11,6 +13,8 @@ class Wishlist extends StatelessWidget {
   WishListController wishListController = Get.find();
   CartController cartController = Get.find();
   HomeController homeController = Get.find();
+
+  Wishlist({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +31,7 @@ class Wishlist extends StatelessWidget {
           child: Container(
 
             width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage("assets/background/background.png"),
                   fit: BoxFit.cover
@@ -50,8 +54,8 @@ class Wishlist extends StatelessWidget {
       height: MediaQuery.of(context).size.height*0.3,
       decoration: BoxDecoration(
         color: App.orange,
-        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(25),bottomRight:Radius.circular(25)),
-        image: DecorationImage(
+        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(25),bottomRight:Radius.circular(25)),
+        image: const DecorationImage(
           image: AssetImage("assets/background/wishlist.png"),
           fit: BoxFit.cover
         ),
@@ -66,7 +70,7 @@ class Wishlist extends StatelessWidget {
             children: [
               IconButton(onPressed: (){
                 homeController.selected_bottom_nav_bar.value=0;
-              }, icon: Icon(Icons.arrow_back_ios,color: Colors.white,size: 25,))
+              }, icon: const Icon(Icons.arrow_back_ios,color: Colors.white,size: 25,))
             ],
           ),
           Row(
@@ -81,8 +85,8 @@ class Wishlist extends StatelessWidget {
   }
   _wish_list(BuildContext context){
     return GridView.builder(
-      physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 4/6
       ),
@@ -90,7 +94,7 @@ class Wishlist extends StatelessWidget {
         itemCount: wishListController.wishlist.length,
         itemBuilder: (context ,index){
           return Container(
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15)
@@ -110,15 +114,15 @@ class Wishlist extends StatelessWidget {
 
                         borderRadius: BorderRadius.circular(15),
                         boxShadow: [
-                          BoxShadow(color: Colors.black38.withOpacity(0.1), spreadRadius: 0, blurRadius: 2,offset: Offset(0,4))
+                          BoxShadow(color: Colors.black38.withOpacity(0.1), spreadRadius: 0, blurRadius: 2,offset: const Offset(0,4))
                         ]
                       ),
                     ),
                 ),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Text(wishListController.wishlist[index].title,style: TextStyle(color: Colors.black,overflow: TextOverflow.clip,fontSize: 12),maxLines: 2,textAlign: TextAlign.center,),
+                  child: Text(wishListController.wishlist[index].title,style: const TextStyle(color: Colors.black,overflow: TextOverflow.clip,fontSize: 12),maxLines: 2,textAlign: TextAlign.center,),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -152,7 +156,7 @@ class Wishlist extends StatelessWidget {
                       // }, icon: Icon(Icons.shopping_cart_outlined,color: App.orange,)),
                       IconButton(onPressed: (){
                         wishListController.delete_from_wishlist(wishListController.wishlist[index]);
-                      }, icon: Icon(Icons.delete,color: Colors.grey,))
+                      }, icon: const Icon(Icons.delete,color: Colors.grey,))
                     ],
                   ),
                 )

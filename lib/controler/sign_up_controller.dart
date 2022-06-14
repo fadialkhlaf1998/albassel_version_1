@@ -5,10 +5,12 @@ import 'package:albassel_version_1/helper/api.dart';
 import 'package:albassel_version_1/helper/log_in_api.dart';
 import 'package:albassel_version_1/helper/store.dart';
 import 'package:albassel_version_1/my_model/my_api.dart';
+import 'package:albassel_version_1/view/home.dart';
 import 'package:albassel_version_1/view/no_internet.dart';
 import 'package:albassel_version_1/view/verification_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class SignUpController extends GetxController{
  var hide_passeord=true.obs;
@@ -17,17 +19,43 @@ class SignUpController extends GetxController{
  var pass_vaildate = true.obs;
  var fname_vaildate = true.obs;
  var lname_vaildate = true.obs;
+ var phone_vaildate = true.obs;
+ var country = "United Arab Emirates".obs;
+ var country_code = "AE".obs;
+ var isoCode = PhoneNumber(isoCode: "AE",dialCode: "+971").obs;
+
+ String path = "non";
+
+ var showCustomerType = true.obs;
+ var showFileUploader = true.obs;
+
+ setCustomerType(int type){
+   Global.customer_type = type;
+   showCustomerType.value=false;
+   if(type==0){
+    showFileUploader.value=false;
+   }else{
+    showFileUploader.value=true;
+   }
+ }
 
  void change_visibilty(){
   hide_passeord.value = !hide_passeord.value;
  }
- signUp(BuildContext context,String email,String pass,String fname,String lname){
-  try{
-   if(!RegExp(r'\S+@\S+\.\S+').hasMatch(email)||email.isEmpty||pass.isEmpty||fname.isEmpty||lname.isEmpty||pass.length<6){
+ signUp(BuildContext context,String email,String pass,String fname,String lname,String phone,String country){
+
+    try{
+   if(!RegExp(r'\S+@\S+\.\S+').hasMatch(email)||email.isEmpty||pass.isEmpty||fname.isEmpty||lname.isEmpty||pass.length<6||(Global.customer_type !=0 && phone.isEmpty)){
     if(email.isEmpty||!RegExp(r'\S+@\S+\.\S+').hasMatch(email)){
      email_vaildate.value=false;
     }else{
      email_vaildate.value=true;
+    }
+    //todo not for customer
+    if(Global.customer_type !=0 && phone.isEmpty){
+     phone_vaildate.value = false;
+    }else{
+     phone_vaildate.value = true;
     }
     if(pass.isEmpty||pass.length<6){
      if(pass.length<6&&pass.isNotEmpty){
@@ -52,19 +80,26 @@ class SignUpController extends GetxController{
     }
    }else{
     MyApi.check_internet().then((net) {
+
      if(net){
       loading.value=true;
-      MyApi.sign_up(email, pass,fname,lname).then((value) {
-       print(value.state);
+      MyApi.sign_up(email, pass,fname,lname,isoCode.value.dialCode!+phone,country).then((value) async{
         if(value.state==200){
         Store.saveLoginInfo(email, pass);
+        if(Global.customer_type!=0){
+         await MyApi.upload_customer_file(path, value.data.first.id);
+        }
 
-         // Global.customer=value.data.first;
-         App.sucss_msg(context, App_Localization.of(context).translate("sign_up_succ"));
          loading.value=false;
-         Get.offAll(() => VerificationCode());
-        //verrification code
-        //Get.to(() => Home());
+        Store.save_customer_type(Global.customer_type);
+         if(Global.customer_type==0){
+          App.sucss_msg(context, App_Localization.of(context).translate("sign_up_succ"));
+          Get.offAll(() => VerificationCode());
+         }else{
+          App.sucss_msg(context, App_Localization.of(context).translate("sign_up_will_replay_mail"));
+          Get.offAll(() => Home());
+         }
+
        }else{
         loading.value=false;
         App.error_msg(context, App_Localization.of(context).translate("wrong_signup_msg"));
@@ -72,7 +107,7 @@ class SignUpController extends GetxController{
       });
      }else{
       Get.to(()=>NoInternet())!.then((value) {
-       signUp(context,email,pass,fname,lname);
+       signUp(context,email,pass,fname,lname,phone,country_code.value);
       });
      }
     });

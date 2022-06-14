@@ -1,16 +1,14 @@
+// ignore_for_file: must_be_immutable, non_constant_identifier_names, unrelated_type_equality_checks
+
 import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/category_view_nav_controller.dart';
 import 'package:albassel_version_1/controler/wish_list_controller.dart';
-import 'package:albassel_version_1/helper/api.dart';
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
-import 'package:albassel_version_1/my_model/category.dart';
 import 'package:albassel_version_1/view/cart.dart';
 import 'package:albassel_version_1/view/category_view_nav.dart';
-import 'package:albassel_version_1/view/chat_view.dart';
-import 'package:albassel_version_1/view/product.dart';
 import 'package:albassel_version_1/view/products_search.dart';
 import 'package:albassel_version_1/view/profile.dart';
 import 'package:albassel_version_1/view/wishlist.dart';
@@ -20,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:new_version/new_version.dart';
 
 class Home extends StatelessWidget {
@@ -31,7 +28,7 @@ class Home extends StatelessWidget {
   CategoryViewNavController categoryViewNavController=Get.put(CategoryViewNavController());
   TextEditingController search_controller = TextEditingController();
 
-  Home(){
+  Home({Key? key}) : super(key: key){
     homeController.scaffoldKey = GlobalKey<ScaffoldState>();
   }
 
@@ -39,7 +36,6 @@ class Home extends StatelessWidget {
 
 
   _checkVersion(BuildContext context)async{
-    //todo change IDS
     final newVersion = NewVersion(
       iOSId: 'com.Maxart.Albassel',
       androidId: 'com.maxart.albassel_version_1',
@@ -52,13 +48,11 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print(homeController.introController.sliders[0].image);
-    // precacheImage(NetworkImage(homeController.introController.sliders[0].image), context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    Future.delayed(Duration(milliseconds: 300)).then((value) {
+    Future.delayed(const Duration(milliseconds: 300)).then((value) {
       _checkVersion(context);
     });
     return Obx((){
@@ -80,7 +74,7 @@ class Home extends StatelessWidget {
   _home(BuildContext context){
     return SafeArea(
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage("assets/background/background.png"),
                 fit: BoxFit.cover
@@ -89,7 +83,7 @@ class Home extends StatelessWidget {
           child: Stack(
             children: [
               SingleChildScrollView(
-                physics: homeController.product_loading.value?NeverScrollableScrollPhysics():null,
+                physics: homeController.product_loading.value?const NeverScrollableScrollPhysics():null,
                 child: Stack(
                   children: [
                     Container(
@@ -105,13 +99,14 @@ class Home extends StatelessWidget {
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height,
                             color: Colors.transparent,
-                            child: Center(
+                            child: const Center(
                               child: CircularProgressIndicator(),
                             ),
                           )
                           : Column(
                         children: [
-                          _header(context),
+
+                          SizedBox(height: MediaQuery.of(context).size.height*0.35,),
                           _body(context)
                         ],
                       ),
@@ -132,19 +127,20 @@ class Home extends StatelessWidget {
                   ],
                 ),
               ),
-              Positioned(top: 0,child: homeController.product_loading.value?Container(height:MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,color: Colors.grey.withOpacity(0.4),child: Center(child: CircularProgressIndicator()),):Center())
+              Positioned(child: _header(context),),
+              Positioned(top: 0,child: homeController.product_loading.value?Container(height:MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,color: Colors.grey.withOpacity(0.4),child: const Center(child: CircularProgressIndicator()),):const Center())
             ],
           ),
         )
     );
   }
   _header(BuildContext context){
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height*0.35,
       child: Stack(
         children: [
-          Container(height: MediaQuery.of(context).size.height*0.35,width: MediaQuery.of(context).size.width,),
+          SizedBox(height: MediaQuery.of(context).size.height*0.35,width: MediaQuery.of(context).size.width,),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -171,7 +167,7 @@ class Home extends StatelessWidget {
                                   onPressed: (){
                                     homeController.openDrawer();
                                   },
-                                  icon: Icon(Icons.list,size: 35,color: Colors.white,),
+                                  icon: const Icon(Icons.list,size: 35,color: Colors.white,),
                               ),
                               GestureDetector(
                                 onTap: (){
@@ -183,7 +179,7 @@ class Home extends StatelessWidget {
                                   width: 70,
                                   height: 70,
 
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     image: DecorationImage(
                                       image: AssetImage("assets/logo/logo.png")
                                     )
@@ -193,7 +189,7 @@ class Home extends StatelessWidget {
                               IconButton(
                                 onPressed: (){
                                 },
-                                icon: Icon(Icons.list,size: 30,color: Colors.transparent,),
+                                icon: const Icon(Icons.list,size: 30,color: Colors.transparent,),
                               ),
                             ],
                           ),
@@ -229,7 +225,7 @@ class Home extends StatelessWidget {
         child: Stack(
           children: [
             TextField(
-              style: TextStyle(color: Colors.grey,fontSize: 14),
+              style: const TextStyle(color: Colors.grey,fontSize: 14),
               textAlignVertical: TextAlignVertical.top,
               controller: controller,
               // onChanged: (query){
@@ -237,7 +233,6 @@ class Home extends StatelessWidget {
               // },
               // onSubmitted: homeController.on_submit(),
               onEditingComplete: (){
-                print('****************');
               },
 
               onSubmitted: (query){
@@ -249,7 +244,7 @@ class Home extends StatelessWidget {
               },
               decoration: InputDecoration(
 
-                icon: Icon(Icons.search),
+                icon: const Icon(Icons.search),
                   enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent)
                   ),
@@ -258,7 +253,7 @@ class Home extends StatelessWidget {
                   ),
 
                 hintText: App_Localization.of(context).translate("search"),
-                hintStyle: TextStyle(color: Colors.grey,fontSize: 11)
+                hintStyle: const TextStyle(color: Colors.grey,fontSize: 11)
               ),
             ),
 
@@ -289,7 +284,7 @@ class Home extends StatelessWidget {
                   color: Colors.black.withOpacity(0.16),
                   blurRadius: 5,
                   spreadRadius: 0,
-                  offset: Offset(0, 3)
+                  offset: const Offset(0, 3)
               )
             ]
         ),
@@ -306,7 +301,7 @@ class Home extends StatelessWidget {
                 homeController.selected_category.value=index;
                 homeController.get_sub_categoryPage(homeController.category[index].id,context);
               },
-              child: Padding(padding: EdgeInsets.all(4),
+              child: Padding(padding: const EdgeInsets.all(4),
                 child: Container(
                   width: (MediaQuery.of(context).size.width*0.9)/5-10,
                   height: MediaQuery.of(context).size.height*0.08,
@@ -324,7 +319,7 @@ class Home extends StatelessWidget {
                             color: Colors.transparent,
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
-                            image: NetworkImage(homeController.category[index].image==null?"https://st2.depositphotos.com/1491329/8004/i/950/depositphotos_80041516-stock-photo-girl-with-healthy-brown-hair.jpg":homeController.category[index].image.replaceAll("localhost", "10.0.2.2")),
+                            image: NetworkImage(homeController.category[index].image),
                             fit: BoxFit.contain,
                           )
                         ),
@@ -342,42 +337,39 @@ class Home extends StatelessWidget {
     );
   }
   _body(BuildContext context){
-    return Container(
-
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width*0.9+1,
-              height: MediaQuery.of(context).size.width * 0.45+1,
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.16),
-                        blurRadius: 5,
-                        spreadRadius: 0,
-                        offset: Offset(0, 3)
-                    )
-                  ]
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _slider(context),
-                ],
-              ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width*0.9+1,
+            height: MediaQuery.of(context).size.width * 0.45+1,
+            decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.16),
+                      blurRadius: 5,
+                      spreadRadius: 0,
+                      offset: const Offset(0, 3)
+                  )
+                ]
             ),
-            SizedBox(height: 15,),
-            _top_category(context),
-            // !homeController.product_loading.value&&homeController.sub_Category.isEmpty
-            // ?_no_data(context)
-            // :_product_list(context),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _slider(context),
+              ],
+            ),
+          ),
+          const SizedBox(height: 15,),
+          _top_category(context),
+          // !homeController.product_loading.value&&homeController.sub_Category.isEmpty
+          // ?_no_data(context)
+          // :_product_list(context),
 
-            _shop_by_brand(context),
-            _best_sellers(context),
-            SizedBox(height: 30,)
-          ],
-        ),
+          _shop_by_brand(context),
+          _best_sellers(context),
+          const SizedBox(height: 30,)
+        ],
       ),
     );
   }
@@ -391,12 +383,12 @@ class Home extends StatelessWidget {
               Text(App_Localization.of(context).translate("shop_brand"),style: App.textBlod(Colors.black, 16),)
             ],
           ),
-          SizedBox(height: 15,),
+          const SizedBox(height: 15,),
           GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3
               ),
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: homeController.brands.length,
               itemBuilder: (context,index){
@@ -443,12 +435,12 @@ class Home extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(height: 15,),
+          const SizedBox(height: 15,),
            GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount:  homeController.bestSellers.length<=6?homeController.bestSellers.length:6,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 4/6
               ),
@@ -487,16 +479,17 @@ class Home extends StatelessWidget {
                                   width: MediaQuery.of(context).size.width,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    color: Color(0xffF1F1F1),
+                                    color: const Color(0xffF1F1F1),
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsets.only(left: 5,right: 5),
+                                    padding: const EdgeInsets.only(left: 5,right: 5),
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Text(homeController.bestSellers[index].title,style: TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
-                                        Text(App_Localization.of(context).translate("aed")+" "+homeController.bestSellers[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
+                                        Text(homeController.bestSellers[index].title,style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
+                                        // Text(App_Localization.of(context).translate("aed")+" "+homeController.bestSellers[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
+                                        App.price(context, homeController.bestSellers[index].price, homeController.bestSellers[index].offer_price),
                                         GestureDetector(
                                           onTap: (){
                                             cartController.add_to_cart(homeController.bestSellers[index], 1,context);
@@ -633,9 +626,9 @@ class Home extends StatelessWidget {
               Text(App_Localization.of(context).translate("top_category"),style: App.textBlod(Colors.black, 16),)
             ],
           ),
-          SizedBox(height: 0,),
+          const SizedBox(height: 0,),
           ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: homeController.topCategory.length,
               itemBuilder: (context,index){
@@ -647,7 +640,7 @@ class Home extends StatelessWidget {
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width*0.9,
-                      height: MediaQuery.of(context).size.height * 0.2,
+                      height: MediaQuery.of(context).size.width*0.45,
                       decoration: BoxDecoration(
                         color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
@@ -684,58 +677,6 @@ class Home extends StatelessWidget {
       ),
     );
   }
-  _sub_category(BuildContext context){
-    return Padding(
-      padding: EdgeInsets.symmetric( horizontal: MediaQuery.of(context).size.width*0.05),
-      child: Column(
-        children: [
-
-          ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: homeController.sub_Category.length,
-              itemBuilder: (context,index){
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: GestureDetector(
-                    onTap: (){
-                      homeController.get_products(homeController.sub_Category[index].id,index,context);
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width*0.9,
-                      height: MediaQuery.of(context).size.height * 0.2,
-
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(homeController.sub_Category[index].image.replaceAll("localhost", "10.0.2.2"),),
-                          )
-                      ),
-                      // child: Align(
-                      //   alignment: Alignment.centerRight,
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.symmetric(horizontal: 20),
-                      //     child: Row(
-                      //       mainAxisAlignment: MainAxisAlignment.end,
-                      //       children: [
-                      //         Text(homeController.sub_Category[index].title,style: App.textBlod(Colors.black,18),),
-                      //         SizedBox(width: 15,),
-                      //         Icon(Icons.arrow_forward_ios)
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
-                    ),
-                  ),
-                );
-              }),
-          SizedBox(height: 30,),
-        ],
-      ),
-    );
-  }
   _slider(BuildContext context){
     return Stack(
       children: [
@@ -749,8 +690,8 @@ class Home extends StatelessWidget {
           ),
           child: Container(
 
+            width: MediaQuery.of(context).size.width*0.9,
             height: MediaQuery.of(context).size.width * 0.45,
-            width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
@@ -763,9 +704,8 @@ class Home extends StatelessWidget {
                     homeController.go_to_product_page(e);
                   },
                   child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height:
-                    MediaQuery.of(context).size.width * 0.48,
+                      width: MediaQuery.of(context).size.width*0.9,
+                      height: MediaQuery.of(context).size.width * 0.45,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         // image: DecorationImage(
@@ -776,6 +716,8 @@ class Home extends StatelessWidget {
                       // placeholder: (context, url) => const CircularProgressIndicator(),
                       imageUrl: e.image,
                         imageBuilder: (context, imageProvider) => Container(
+                          width: MediaQuery.of(context).size.width*0.9,
+                          height: MediaQuery.of(context).size.width * 0.45,
                         decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
@@ -804,7 +746,7 @@ class Home extends StatelessWidget {
         /**3 point*/
         Positioned(
           bottom: 10,
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width*0.9,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -836,7 +778,7 @@ class Home extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color:  homeController.product_loading.value?Colors.grey.withOpacity(0.4):Colors.transparent,
-              image: DecorationImage(
+              image: const DecorationImage(
                   image: AssetImage("assets/background/background.png"),
                   fit: BoxFit.cover
               ),
@@ -844,15 +786,15 @@ class Home extends StatelessWidget {
             child: Container(
 
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
                     ],
                     gradient:App.orangeGradient()
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(30.0),
                     topRight: Radius.circular(30.0),
                   ),
@@ -876,7 +818,7 @@ class Home extends StatelessWidget {
                     selectedItemColor: Colors.grey[800],
                     unselectedItemColor: Colors.white,
                     items: <BottomNavigationBarItem>[
-                      BottomNavigationBarItem(
+                      const BottomNavigationBarItem(
                         label: "",
                         icon: Icon(Icons.home),
                       ),
@@ -884,15 +826,15 @@ class Home extends StatelessWidget {
                         label: "",
                         icon: SvgPicture.asset("assets/icon/category.svg",color: homeController.selected_bottom_nav_bar==1?Colors.blueGrey[800]:Colors.white,),
                       ),
-                      BottomNavigationBarItem(
+                      const BottomNavigationBarItem(
                         label: "",
                         icon: Icon(Icons.shopping_cart_outlined,),
                       ),
-                      BottomNavigationBarItem(
+                      const BottomNavigationBarItem(
                         label: "",
                         icon: Icon(Icons.favorite_border,),
                       ),
-                      BottomNavigationBarItem(
+                      const BottomNavigationBarItem(
                         label: "",
                         icon: Icon(Icons.person,),
                       ),
@@ -905,102 +847,10 @@ class Home extends StatelessWidget {
               top: 5,
               left: Global.lang_code=="en"?MediaQuery.of(context).size.width*0.5-26:null,
               right: Global.lang_code=="ar"?MediaQuery.of(context).size.width*0.5-26:null,
-              child: CircleAvatar(radius: 8,backgroundColor: cartController.my_order.length==0?Colors.transparent:Colors.red,child: Text(cartController.my_order.length.toString(),style: App.textNormal(cartController.my_order.length==0?Colors.transparent: Colors.white, 10),)),
+              child: CircleAvatar(radius: 8,backgroundColor: cartController.my_order.isEmpty?Colors.transparent:Colors.red,child: Text(cartController.my_order.length.toString(),style: App.textNormal(cartController.my_order.isEmpty?Colors.transparent: Colors.white, 10),)),
           )
         ],
       );
     });
-  }
-  _no_data(BuildContext context){
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height*0.2,
-      color: Colors.white,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error,size: 30,),
-            SizedBox(height: 10,),
-            Text(App_Localization.of(context).translate("no_data"),style: App.textNormal(Colors.black, 20),overflow: TextOverflow.ellipsis,)
-          ],
-        ),
-      ),
-    );
-  }
-  _product_list(BuildContext context){
-    return Container(
-      child: Center(
-        child: GridView.builder(
-          shrinkWrap: true,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            ///no.of items in the horizontal axis
-            crossAxisCount: 3,
-            childAspectRatio: 3/4
-          ),
-            itemCount: homeController.sub_Category.length,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context,index){
-          return GestureDetector(
-            onTap: (){
-              // homeController.go_to_product_page(index);
-
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 10,
-                width: 10,
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.16),
-                      blurRadius: 5,
-                      spreadRadius: 0,
-                        offset: Offset(0, 3)
-                    )
-                  ]
-                ),
-
-                child: Column(
-                  children: [
-                    Expanded(
-                      flex: 8,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
-                            image: DecorationImage(
-                              image: NetworkImage(homeController.sub_Category[index].image,),
-                                fit: BoxFit.cover
-                            )
-                        ),
-                        ),),
-                    Expanded(
-                      flex: 4,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8,right: 8,top: 4,bottom: 4),
-                            child: Container(
-                                child: Center(child: Text(homeController.sub_Category[index].title,overflow: TextOverflow.clip,maxLines: 3,style: TextStyle(fontSize: 10,),)),
-                            ),
-                          ),
-
-                        ],
-                      ),),
-                  ],
-                ),
-
-              ),
-            ),
-          );
-        }),
-      ),
-    );
   }
 }

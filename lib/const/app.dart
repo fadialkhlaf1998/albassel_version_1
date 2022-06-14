@@ -5,10 +5,8 @@ import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
 import 'package:albassel_version_1/view/chat_view.dart';
 import 'package:albassel_version_1/view/policy_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/parser.dart';
 import 'package:get/get.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -268,14 +266,29 @@ class App{
       )
     );
   }
-
+  static price(BuildContext context ,double price,double? offer){
+    // print(offer!);
+    return offer==null?
+    Text(App_Localization.of(context).translate("aed")+" "+price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis)
+        :Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text(App_Localization.of(context).translate("aed")+" "+price.toStringAsFixed(2),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),),
+          Text(App_Localization.of(context).translate("aed")+" "+offer.toStringAsFixed(2),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.grey[700], fontSize: 9, fontWeight: FontWeight.bold,decoration: TextDecoration.lineThrough),),
+        ],
+      ),
+    );
+  }
   static sucss_msg(BuildContext context,String msg){
     return showTopSnackBar(
       context,
       CustomSnackBar.success(
         message:
         msg,
-        backgroundColor: midOrange,
+        backgroundColor: Color(0xffC3C7C7),
+        textStyle: TextStyle(color: App.midOrange,fontWeight: FontWeight.bold),
       ),
     );
   }

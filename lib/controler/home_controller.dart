@@ -343,7 +343,7 @@ class HomeController extends GetxController{
     product_loading.value=true;
     MyApi.check_internet().then((internet) {
       if (internet) {
-        if(slid.product_id!=null){
+        if(slid.product_id!=null&&slid.is_product==1){
           MyApi.getProductsInfo(slid.product_id!).then((value) {
             product_loading.value=false;
             //todo add favorite
@@ -351,23 +351,14 @@ class HomeController extends GetxController{
           }).catchError((err){
             product_loading.value=false;
           });
-        }else if(slid.sub_category_id!=null){
-          MyApi.getProducts(wishListController.wishlist,slid.sub_category_id!).then((value) {
+        }else{
+          MyApi.sliderProducts(wishListController.wishlist,slid.id).then((value) {
             product_loading.value=false;
             if(value.isNotEmpty){
               Get.to(()=>ProductsSearchView(value,""));
             }
           }).catchError((err){
             product_loading.value=false;
-          });
-        }else if(slid.brand_id!=null){
-          MyApi.getProductsByBrand(wishListController.wishlist,slid.brand_id!).then((value) {
-            loading.value=false;
-            if(value.isNotEmpty){
-              Get.to(()=>ProductsSearchView(value,""));
-            }
-          }).catchError((err){
-            loading.value=false;
           });
         }
 

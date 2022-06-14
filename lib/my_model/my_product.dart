@@ -2,7 +2,7 @@
 //
 //     final myProduct = myProductFromMap(jsonString);
 
-import 'package:meta/meta.dart';
+import 'package:albassel_version_1/const/global.dart';
 import 'dart:convert';
 import 'package:get/get.dart';
 
@@ -19,42 +19,72 @@ class MyProduct {
     required this.image,
     required this.ratingCount,
     required this.availability,
+    required this.offer_price,
+    required this.category_id,
     this.count
   });
 
   int id;
   int subCategoryId;
+  int category_id;
   int brandId;
   String title;
   String subTitle;
   String description;
-  int price;
+  double price;
+  double? offer_price;
   double rate;
   String image;
   int ratingCount;
   int availability;
   var favorite=false.obs;
   int? count;
+  factory MyProduct.fromJsonForCart(String str) => MyProduct.fromMapForCart(json.decode(str));
+  factory MyProduct.fromMapForCart(Map<String, dynamic> json) {
+
+    return MyProduct(
+        id: json["id"],
+        subCategoryId: json["sub_category_id"] ?? -1,
+        brandId: json["brand_id"] ?? -1,
+        title: json["title"],
+        subTitle: json["sub_title"],
+        description: json["description"],
+        price:  Global.customer_type==0?double.parse(json["price"].toString()):Global.customer_type==1?double.parse(json["salon_price"].toString()):double.parse(json["whole_saller_price"].toString()),
+        offer_price: json["offer_price"]==null?null:double.parse(json["offer_price"].toString()),
+        rate: double.parse(json["rate"].toString()),
+        image: json["image"],
+        ratingCount: json["rating_count"],
+        category_id: json["category_id"] ?? -1,
+        availability: json["availability"]==null?0:json["availability"]<0?0:json["availability"],
+        // availability: 10,
+        count: json["count"]==null?1:json["count"]
+    );
+  }
 
   factory MyProduct.fromJson(String str) => MyProduct.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory MyProduct.fromMap(Map<String, dynamic> json) => MyProduct(
+  factory MyProduct.fromMap(Map<String, dynamic> json) {
+    return MyProduct(
     id: json["id"],
-    subCategoryId: json["sub_category_id"],
-    brandId: json["brand_id"],
+    subCategoryId: json["sub_category_id"] ?? 1,
+    brandId: json["brand_id"] ?? 1,
     title: json["title"],
     subTitle: json["sub_title"],
     description: json["description"],
-    price: json["price"],
+      price: Global.customer_type==0?double.parse(json["price"].toString()):Global.customer_type==1?double.parse(json["salon_price"].toString()):double.parse(json["whole_saller_price"].toString()),
+      offer_price: json["offer_price"]==null?null:double.parse(json["offer_price"].toString()),
     rate: double.parse(json["rate"].toString()),
     image: json["image"],
     ratingCount: json["rating_count"],
-    availability: json["availability"]==null?0:json["availability"],
-    // availability: 0,
+      category_id: json["category_id"] ?? 1,
+    // availability: json["availability"]==null?0:json["availability"],
+        availability:   json["availability"]==null?0:json["availability"]<0?0:json["availability"],
+    // availability: 10,
     count: json["count"]==null?1:json["count"]
   );
+  }
 
   Map<String, dynamic> toMap() => {
     "id": id,
@@ -66,7 +96,9 @@ class MyProduct {
     "price": price,
     "rate": rate,
     "image": image,
+    "category_id": category_id,
     "rating_count": ratingCount,
-    "availability":availability
+    "availability":availability,
+    "offer_price":offer_price
   };
 }

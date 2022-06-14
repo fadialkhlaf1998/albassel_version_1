@@ -1,23 +1,16 @@
+// ignore_for_file: must_be_immutable, non_constant_identifier_names, unrelated_type_equality_checks
+
 import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/wish_list_controller.dart';
-import 'package:albassel_version_1/helper/api.dart';
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
-import 'package:albassel_version_1/my_model/sub_category.dart';
-import 'package:albassel_version_1/view/cart.dart';
-import 'package:albassel_version_1/view/product.dart';
 import 'package:albassel_version_1/view/products_search.dart';
-import 'package:albassel_version_1/view/profile.dart';
-import 'package:albassel_version_1/view/wishlist.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:albassel_version_1/my_model/sub_category.dart';
 
 class CategoryView extends StatelessWidget {
 
@@ -25,6 +18,8 @@ class CategoryView extends StatelessWidget {
   CartController cartController=Get.find();
   WishListController wishListController=Get.find();
   TextEditingController search_controller = TextEditingController();
+
+  CategoryView({Key? key}) : super(key: key);
 
 
   // CategoryView(List<SubCategory> sub_Category){
@@ -49,7 +44,7 @@ class CategoryView extends StatelessWidget {
   _home(BuildContext context){
     return SafeArea(
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage("assets/background/background.png"),
                   fit: BoxFit.cover
@@ -58,7 +53,7 @@ class CategoryView extends StatelessWidget {
           child: Stack(
             children: [
               SingleChildScrollView(
-                physics:  homeController.product_loading.value?NeverScrollableScrollPhysics():null,
+                physics:  homeController.product_loading.value?const NeverScrollableScrollPhysics():null,
                 child: Stack(
                   children: [
                     Container(
@@ -74,13 +69,14 @@ class CategoryView extends StatelessWidget {
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,
                         color: Colors.transparent,
-                        child: Center(
+                        child: const Center(
                           child: CircularProgressIndicator(),
                         ),
                       )
                           : Column(
                         children: [
-                          _header(context),
+                          // _header(context),
+                          SizedBox(height: MediaQuery.of(context).size.height*0.35,),
                           _body(context)
                         ],
                       ),
@@ -101,19 +97,20 @@ class CategoryView extends StatelessWidget {
                   ],
                 ),
               ),
-              Positioned(top: 0,child: homeController.product_loading.value?Container(height:MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,color: Colors.grey.withOpacity(0.4),child: Center(child: CircularProgressIndicator()),):Center())
+              Positioned(top: 0,child:_header(context)),
+              Positioned(top: 0,child: homeController.product_loading.value?Container(height:MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,color: Colors.grey.withOpacity(0.4),child: const Center(child: CircularProgressIndicator()),):const Center())
             ],
           ),
         )
     );
   }
   _header(BuildContext context){
-    return Container(
+    return SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height*0.35,
         child: Stack(
           children: [
-            Container(height: MediaQuery.of(context).size.height*0.35,width: MediaQuery.of(context).size.width,),
+            SizedBox(height: MediaQuery.of(context).size.height*0.35,width: MediaQuery.of(context).size.width,),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -140,7 +137,7 @@ class CategoryView extends StatelessWidget {
                                   onPressed: (){
                                     Get.back();
                                   },
-                                  icon: Icon(Icons.arrow_back_ios,size: 35,color: Colors.white,),
+                                  icon: const Icon(Icons.arrow_back_ios,size: 35,color: Colors.white,),
                                 ),
                                 GestureDetector(
                                   onTap: (){
@@ -150,7 +147,7 @@ class CategoryView extends StatelessWidget {
                                     width: 70,
                                     height: 70,
 
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                         image: DecorationImage(
                                             image: AssetImage("assets/logo/logo.png")
                                         )
@@ -160,7 +157,7 @@ class CategoryView extends StatelessWidget {
                                 IconButton(
                                   onPressed: (){
                                   },
-                                  icon: Icon(Icons.list,size: 30,color: Colors.transparent,),
+                                  icon: const Icon(Icons.list,size: 30,color: Colors.transparent,),
                                 ),
                               ],
                             ),
@@ -196,7 +193,7 @@ class CategoryView extends StatelessWidget {
         child: Stack(
           children: [
             TextField(
-              style: TextStyle(color: Colors.grey,fontSize: 14),
+              style: const TextStyle(color: Colors.grey,fontSize: 14),
               textAlignVertical: TextAlignVertical.top,
               controller: controller,
               // onChanged: (query){
@@ -204,7 +201,6 @@ class CategoryView extends StatelessWidget {
               // },
               // onSubmitted: homeController.on_submit(),
               onEditingComplete: (){
-                print('****************');
               },
 
               onSubmitted: (query){
@@ -221,7 +217,7 @@ class CategoryView extends StatelessWidget {
               },
               decoration: InputDecoration(
 
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                   enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.transparent)
                   ),
@@ -230,7 +226,7 @@ class CategoryView extends StatelessWidget {
                   ),
 
                   hintText: App_Localization.of(context).translate("search"),
-                  hintStyle: TextStyle(color: Colors.grey,fontSize: 11)
+                  hintStyle: const TextStyle(color: Colors.grey,fontSize: 11)
               ),
             ),
             Positioned(
@@ -302,7 +298,7 @@ class CategoryView extends StatelessWidget {
                   color: Colors.black.withOpacity(0.16),
                   blurRadius: 5,
                   spreadRadius: 0,
-                  offset: Offset(0, 3)
+                  offset: const Offset(0, 3)
               )
             ]
         ),
@@ -319,7 +315,7 @@ class CategoryView extends StatelessWidget {
                     homeController.selected_category.value=index;
                     homeController.get_sub_category(homeController.category[index].id,context);
                   },
-                  child: Padding(padding: EdgeInsets.all(4),
+                  child: Padding(padding: const EdgeInsets.all(4),
                     child: Container(
                         width: (MediaQuery.of(context).size.width*0.9)/5-10,
                         height: MediaQuery.of(context).size.height*0.08,
@@ -337,7 +333,7 @@ class CategoryView extends StatelessWidget {
                                   color: Colors.transparent,
                                   borderRadius: BorderRadius.circular(10),
                                   image: DecorationImage(
-                                    image: NetworkImage(homeController.category[index].image==null?"https://st2.depositphotos.com/1491329/8004/i/950/depositphotos_80041516-stock-photo-girl-with-healthy-brown-hair.jpg":homeController.category[index].image.replaceAll("localhost", "10.0.2.2")),
+                                    image: NetworkImage(homeController.category[index].image),
                                     fit: BoxFit.contain,
                                   )
                               ),
@@ -356,84 +352,33 @@ class CategoryView extends StatelessWidget {
   }
 
   _body(BuildContext context){
-    return Container(
-
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            homeController.sub_Category_category_view.isNotEmpty?
-            _sub_category(context)
-                :Container(
-              height: MediaQuery.of(context).size.height*0.4,
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.error,size: 50,color: App.midOrange,),
-                  SizedBox(height: 10,),
-                  Text(App_Localization.of(context).translate("empty_elm"),style: App.textNormal(Colors.black, 20),),
-
-                ],
-              ),
-            ),
-            // _top_category(context),
-            // SizedBox(height: 20,),
-            _best_sellers(context),
-            SizedBox(height: 20,),
-          ],
-        ),
-      ),
-    );
-  }
-
-  _top_category(BuildContext context){
-    return Padding(
-      padding: EdgeInsets.all( MediaQuery.of(context).size.width*0.05),
+    return SingleChildScrollView(
       child: Column(
         children: [
-          Row(
-            children: [
-              Text(App_Localization.of(context).translate("top_category"),style: App.textBlod(Colors.black, 16),)
-            ],
+          homeController.sub_Category_category_view.isNotEmpty?
+          _sub_category(context)
+              :SizedBox(
+            height: MediaQuery.of(context).size.height*0.4,
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error,size: 50,color: App.midOrange,),
+                const SizedBox(height: 10,),
+                Text(App_Localization.of(context).translate("empty_elm"),style: App.textNormal(Colors.black, 20),),
+
+              ],
+            ),
           ),
-          SizedBox(height: 0,),
-          ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: homeController.topCategory.length,
-              itemBuilder: (context,index){
-                return Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: GestureDetector(
-                    onTap: (){
-                      homeController.get_sub_category(homeController.topCategory[index].categoryId,context);
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width*0.9,
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(homeController.topCategory[index].mainImage.replaceAll("localhost", "10.0.2.2"),),
-                          )
-                      ),
-                      // child: Align(
-                      //   alignment: Alignment.centerRight,
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.symmetric(horizontal: 20),
-                      //     child: Text(homeController.topCategory[index].category,style: App.textBlod(Colors.black,18),),
-                      //   ),
-                      // ),
-                    ),
-                  ),
-                );
-              }),
+          // _top_category(context),
+          // SizedBox(height: 20,),
+          _best_sellers(context),
+          const SizedBox(height: 20,),
         ],
       ),
     );
   }
+
   _best_sellers(BuildContext context){
     return Padding(
       padding: EdgeInsets.all( MediaQuery.of(context).size.width*0.05),
@@ -451,12 +396,12 @@ class CategoryView extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(height: 15,),
+          const SizedBox(height: 15,),
           GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount:  homeController.bestSellers.length<=6?homeController.bestSellers.length:6,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 4/6
               ),
@@ -495,16 +440,17 @@ class CategoryView extends StatelessWidget {
                                   width: MediaQuery.of(context).size.width,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    color: Color(0xffF1F1F1),
+                                    color: const Color(0xffF1F1F1),
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsets.only(left: 5,right: 5),
+                                    padding: const EdgeInsets.only(left: 5,right: 5),
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Text(homeController.bestSellers[index].title,style: TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
-                                        Text(App_Localization.of(context).translate("aed")+" "+homeController.bestSellers[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
+                                        Text(homeController.bestSellers[index].title,style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
+                                        // Text(App_Localization.of(context).translate("aed")+" "+homeController.bestSellers[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
+                                        App.price(context, homeController.bestSellers[index].price, homeController.bestSellers[index].offer_price),
                                         GestureDetector(
                                           onTap: (){
                                             cartController.add_to_cart(homeController.bestSellers[index], 1,context);
@@ -638,7 +584,7 @@ class CategoryView extends StatelessWidget {
         children: [
 
           ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: homeController.sub_Category_category_view.length,
               itemBuilder: (context,index){
@@ -683,7 +629,7 @@ class CategoryView extends StatelessWidget {
                   ),
                 );
               }),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
         ],
       ),
     );
@@ -695,7 +641,7 @@ class CategoryView extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color:  homeController.product_loading.value?Colors.grey.withOpacity(0.4):Colors.transparent,
-              image: DecorationImage(
+              image: const DecorationImage(
                   image: AssetImage("assets/background/background.png"),
                   fit: BoxFit.cover
               ),
@@ -703,15 +649,15 @@ class CategoryView extends StatelessWidget {
             child: Container(
 
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
                     ],
                     gradient:App.orangeGradient()
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(30.0),
                     topRight: Radius.circular(30.0),
                   ),
@@ -736,7 +682,7 @@ class CategoryView extends StatelessWidget {
                     selectedItemColor: Colors.grey[800],
                     unselectedItemColor: Colors.white,
                     items: <BottomNavigationBarItem>[
-                      BottomNavigationBarItem(
+                      const BottomNavigationBarItem(
                         label: "",
                         icon: Icon(Icons.home),
                       ),
@@ -744,15 +690,15 @@ class CategoryView extends StatelessWidget {
                         label: "",
                         icon: SvgPicture.asset("assets/icon/category.svg",color: homeController.selected_bottom_nav_bar==1?Colors.blueGrey[800]:Colors.white,),
                       ),
-                      BottomNavigationBarItem(
+                      const BottomNavigationBarItem(
                         label: "",
                         icon: Icon(Icons.shopping_cart_outlined,),
                       ),
-                      BottomNavigationBarItem(
+                      const BottomNavigationBarItem(
                         label: "",
                         icon: Icon(Icons.favorite_border,),
                       ),
-                      BottomNavigationBarItem(
+                      const BottomNavigationBarItem(
                         label: "",
                         icon: Icon(Icons.person,),
                       ),
@@ -765,7 +711,7 @@ class CategoryView extends StatelessWidget {
             top: 5,
             left: Global.lang_code=="en"?MediaQuery.of(context).size.width*0.5-26:null,
             right: Global.lang_code=="ar"?MediaQuery.of(context).size.width*0.5-26:null,
-            child: CircleAvatar(radius: 8,backgroundColor: cartController.my_order.length==0?Colors.transparent:Colors.red,child: Text(cartController.my_order.length.toString(),style: App.textNormal(cartController.my_order.length==0?Colors.transparent: Colors.white, 10),)),
+            child: CircleAvatar(radius: 8,backgroundColor: cartController.my_order.isEmpty?Colors.transparent:Colors.red,child: Text(cartController.my_order.length.toString(),style: App.textNormal(cartController.my_order.isEmpty?Colors.transparent: Colors.white, 10),)),
           )
         ],
       );

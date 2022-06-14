@@ -34,7 +34,7 @@ class AboutUs extends StatelessWidget {
                         Container(
                           width: MediaQuery.of(context).size.width*0.9,
                           height: 90,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage("assets/background/about_us.png")
                             )
@@ -47,11 +47,11 @@ class AboutUs extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.05),
-                    child: Text(App_Localization.of(context).translate("about_us_content_top"),style: TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.bold,),textAlign: TextAlign.justify,),
+                    child: Text(App_Localization.of(context).translate("about_us_content_top"),style: const TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.bold,),textAlign: TextAlign.justify,),
                   ),
                   Padding(
                     padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.05),
-                    child: Text(App_Localization.of(context).translate("about_us_content_bottom"),style:TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.normal,),textAlign: TextAlign.justify,),
+                    child: Text(App_Localization.of(context).translate("about_us_content_bottom"),style:const TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.normal,),textAlign: TextAlign.justify,),
                   ),
                 ],
               )
@@ -67,7 +67,7 @@ class AboutUs extends StatelessWidget {
       height: MediaQuery.of(context).size.height*0.3,
       decoration: BoxDecoration(
         color: App.midOrange,
-        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(25),bottomRight:Radius.circular(25)),
+        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(25),bottomRight:Radius.circular(25)),
 
         boxShadow: [
           App.box_shadow()
@@ -78,7 +78,7 @@ class AboutUs extends StatelessWidget {
         children: [
           Row(
             children: [
-              IconButton(onPressed: (){Get.back();}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,))
+              IconButton(onPressed: (){Get.back();}, icon: const Icon(Icons.arrow_back_ios,color: Colors.white,))
             ],
           ),
           GestureDetector(
@@ -91,7 +91,7 @@ class AboutUs extends StatelessWidget {
               width: 90,
               height: 90,
 
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("assets/logo/logo.png")
                   )

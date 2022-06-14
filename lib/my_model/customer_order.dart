@@ -24,6 +24,8 @@ class CustomerOrder {
     required this.deliver,
     required this.date,
     required this.code,
+    required this.current,
+    required this.tax,
   });
 
   int id;
@@ -39,9 +41,11 @@ class CustomerOrder {
   int subTotal;
   int shipping;
   int total;
+  double tax;
   int isPaid;
   int deliver;
   var date ;
+  var current ;
   String code;
 
   factory CustomerOrder.fromJson(String str) => CustomerOrder.fromMap(json.decode(str));
@@ -61,10 +65,12 @@ class CustomerOrder {
     details: json["details"],
     subTotal: json["sub_total"],
     shipping: json["shipping"],
+    tax: json["tax"]==null?0.00:double.parse(json["tax"].toString()),
     total: json["total"],
     isPaid: json["is_paid"],
     deliver: json["deliver"],
     date: DateTime.parse(json["created_at"]),
+      current: DateTime.parse(json["current"]),
     code: json["code"]
   );
 
@@ -83,5 +89,7 @@ class CustomerOrder {
     "shipping": shipping,
     "total": total,
     "is_paid": isPaid,
+    "current":current,
+    "tax":tax,
   };
 }

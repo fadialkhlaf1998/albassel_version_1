@@ -1,5 +1,7 @@
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/main.dart';
+import 'package:albassel_version_1/my_model/auto_discount.dart';
+import 'package:albassel_version_1/my_model/shipping.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:albassel_version_1/model/log_in_info.dart';
@@ -9,12 +11,16 @@ import 'package:albassel_version_1/model/customer.dart';
 import '../my_model/address.dart';
 
 class Global{
+  static Shipping shipping = Shipping(amount: 10, minAmountFree: 250);
   static String lang_code="en";
+  static int customer_type=0;
   static LogInInfo? logInInfo;
   static MyCustomer? customer;
   static Address? address;
   static bool remember_pass=false;
   static String remember_password="non";
+  static String remember_email="non";
+  static List<AutoDiscount> auto_discounts = <AutoDiscount>[];
   static save_language(String locale){
     SharedPreferences.getInstance().then((prefs){
       prefs.setString("lang", locale);

@@ -79,7 +79,6 @@ class _MyAppState extends State<MyApp> {
         home: Scaffold(
           body: GestureDetector(
             onTap: (){
-              MyApi.sign_up("fadi.kh100@gmail.com","password","first","last");
             },
             child: Container(
               width: 100,

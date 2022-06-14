@@ -42,15 +42,21 @@ class MyCustomer {
     required this.code,
     required this.isActive,
     required this.pass,
+    required this.customer_type,
+    required this.phone,
+    required this.country,
   });
 
   int id;
   String email;
   String firstname;
   String lastname;
+  int customer_type;
   int code;
   int isActive;
   String pass;
+  String phone;
+  String country;
 
   factory MyCustomer.fromJson(String str) => MyCustomer.fromMap(json.decode(str));
 
@@ -64,6 +70,9 @@ class MyCustomer {
     code: json["code"],
     isActive: json["is_active"],
     pass: json["pass"],
+    customer_type: json["customer_type"]??0,
+    country: json["country"]??"non",
+    phone: json["phone"]??"non",
   );
 
   Map<String, dynamic> toMap() => {
@@ -74,5 +83,8 @@ class MyCustomer {
     "code": code,
     "is_active": isActive,
     "pass": pass,
+    "customer_type": customer_type,
+    "country": country,
+    "phone": phone,
   };
 }

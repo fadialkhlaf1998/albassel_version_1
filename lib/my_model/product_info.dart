@@ -2,6 +2,7 @@
 //
 //     final productInfo = productInfoFromMap(jsonString);
 
+import 'package:albassel_version_1/const/global.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
@@ -21,15 +22,19 @@ class ProductInfo {
     required this.images,
     required this.reviews,
     required this.availability,
+    required this.offer_price,
+    required this.categoryId,
   });
 
   int id;
   int subCategoryId;
+  int categoryId;
   int brandId;
   String title;
   String subTitle;
   String description;
-  int price;
+  double price;
+  double? offer_price;
   double rate;
   String image;
   int ratingCount;
@@ -44,24 +49,28 @@ class ProductInfo {
 
   factory ProductInfo.fromMap(Map<String, dynamic> json) => ProductInfo(
     id: json["id"],
-    subCategoryId: json["sub_category_id"],
-    brandId: json["brand_id"],
+    subCategoryId: json["sub_category_id"]??-1,
+    brandId: json["brand_id"]??-1,
+    categoryId: json["category_id"]??-1,
     title: json["title"],
     subTitle: json["sub_title"],
     description: json["description"],
-    price: json["price"],
+      price: Global.customer_type==0?double.parse(json["price"].toString()):Global.customer_type==1?double.parse(json["salon_price"].toString()):double.parse(json["whole_saller_price"].toString()),
+      offer_price: json["offer_price"]==null?null:double.parse(json["offer_price"].toString()),
     rate:double.parse(json["rate"].toString()),
     image: json["image"],
     ratingCount: json["rating_count"],
     images: List<Image>.from(json["images"].map((x) => Image.fromMap(x))),
     reviews: List<Review>.from(json["reviews"].map((x) => Review.fromMap(x))),
-      availability:json["availability"]==null?0:json["availability"]
+    availability: json["availability"]==null?0:json["availability"]<0?0:json["availability"],
+      // availability:10
   );
 
   Map<String, dynamic> toMap() => {
     "id": id,
     "sub_category_id": subCategoryId,
     "brand_id": brandId,
+    "category_id": categoryId,
     "title": title,
     "sub_title": subTitle,
     "description": description,
@@ -71,7 +80,8 @@ class ProductInfo {
     "rating_count": ratingCount,
     "images": List<dynamic>.from(images.map((x) => x.toMap())),
     "reviews": List<dynamic>.from(reviews.map((x) => x.toMap())),
-    "availability":availability
+    "availability":availability,
+    "offer_price":offer_price,
   };
 }
 

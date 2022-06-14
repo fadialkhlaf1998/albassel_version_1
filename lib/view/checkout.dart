@@ -1,14 +1,13 @@
+// ignore_for_file: non_constant_identifier_names, must_be_immutable, unrelated_type_equality_checks, invalid_use_of_protected_member
+
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
-import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/checkout_controller.dart';
-import 'package:albassel_version_1/view/home.dart';
 import 'package:albassel_version_1/view/my_fatoraah.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:my_fatoorah/my_fatoorah.dart';
 
 class Checkout extends StatelessWidget {
   CheckoutController checkoutController = Get.put(CheckoutController());
@@ -17,7 +16,7 @@ class Checkout extends StatelessWidget {
   String shipping;
   String total;
 
-  Checkout(this.sub_total, this.shipping, this.total);
+  Checkout(this.sub_total, this.shipping, this.total, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +32,15 @@ class Checkout extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: Obx(()=>Container(
-              child:SingleChildScrollView(
-                physics: checkoutController.selected_operation.value==1?NeverScrollableScrollPhysics():null,
-                child: Column(
-                  children: [
-                    _header(context),
-                    checkoutController.selected_operation==0?_address(context):checkoutController.selected_operation==1?_payment(context):_summery(context),
-                    _footer(context)
-                  ],
-                ),
-              )
+          child: Obx(()=>SingleChildScrollView(
+            physics: checkoutController.selected_operation.value==1?const NeverScrollableScrollPhysics():null,
+            child: Column(
+              children: [
+                _header(context),
+                checkoutController.selected_operation==0?_address(context):checkoutController.selected_operation==1?_payment(context):_summery(context),
+                _footer(context)
+              ],
+            ),
           ),),
         ),
       ),
@@ -63,20 +60,20 @@ class Checkout extends StatelessWidget {
                   onPressed: (){
                     Get.back();
                   },
-                  icon: Icon(Icons.arrow_back)
+                  icon: const Icon(Icons.arrow_back)
               ),
               Text(App_Localization.of(context).translate("checkout"),style: App.textBlod(Colors.black, 20),),
               IconButton(
                   onPressed: (){
 
                   },
-                  icon: Icon(Icons.arrow_back,color: Colors.transparent,)
+                  icon: const Icon(Icons.arrow_back,color: Colors.transparent,)
               ),
             ],
           ),
           Padding(
-            padding: EdgeInsets.only(left: 30,right: 30),
-            child: Container(
+            padding: const EdgeInsets.only(left: 30,right: 30),
+            child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -90,12 +87,12 @@ class Checkout extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Padding(
-            padding: EdgeInsets.only(left: 25,right: 25),
-            child: Container(
+            padding: const EdgeInsets.only(left: 25,right: 25),
+            child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -138,7 +135,7 @@ class Checkout extends StatelessWidget {
     );
   }
   _footer(BuildContext context){
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height*0.1,
       width: MediaQuery.of(context).size.width,
       child: checkoutController.selected_operation==2?
@@ -199,10 +196,10 @@ class Checkout extends StatelessWidget {
     );
   }
   _address(BuildContext context){
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Padding(
-        padding: EdgeInsets.only(left: 30,right: 30),
+        padding: const EdgeInsets.only(left: 30,right: 30),
         child: Column(
           children: [
             Row(
@@ -212,18 +209,18 @@ class Checkout extends StatelessWidget {
                 App.checkoutTextField(checkoutController.lastName, "last_name", context, MediaQuery.of(context).size.width*0.4, 40,checkoutController.address_err.value),
               ],
             ),
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
             App.checkoutTextField(checkoutController.address, "address", context, MediaQuery.of(context).size.width-60, 40,checkoutController.address_err.value),
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
             App.checkoutTextField(checkoutController.apartment, "apartment", context, MediaQuery.of(context).size.width-60, 40,checkoutController.address_err.value),
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
             App.checkoutTextField(checkoutController.city, "city", context, MediaQuery.of(context).size.width-60, 40,checkoutController.address_err.value),
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
 
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width*0.35,
                   height: 80,
                   child: Column(
@@ -247,7 +244,7 @@ class Checkout extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width*0.35,
                   height: 80,
                   child: Column(
@@ -277,7 +274,7 @@ class Checkout extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(App_Localization.of(context).translate("phone"),style: App.textNormal(Colors.grey, 12),),
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width-60,
                   height: 60,
                   child: TextField(
@@ -285,8 +282,8 @@ class Checkout extends StatelessWidget {
                     controller: checkoutController.phone,
                     maxLength: 9,
                     decoration: InputDecoration(
-                        prefix: Text("+971"),
-                        enabledBorder: checkoutController.address_err.value&&checkoutController.phone.value.text.isEmpty?UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)):UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                        prefix: const Text("+971"),
+                        enabledBorder: checkoutController.address_err.value&&checkoutController.phone.value.text.isEmpty?const UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)):const UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
                         focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: App.midOrange))
                     ),
                     style: App.textNormal(Colors.black, 14),
@@ -296,7 +293,7 @@ class Checkout extends StatelessWidget {
             ),
 
 
-            SizedBox(height: 40,)
+            const SizedBox(height: 40,)
           ],
         ),
       ),
@@ -304,7 +301,7 @@ class Checkout extends StatelessWidget {
   }
   _payment(BuildContext context){
     return !checkoutController.selected.value?
-          Container(
+          SizedBox(
             height: MediaQuery.of(context).size.height*0.7-MediaQuery.of(context).padding.top,
             width: MediaQuery.of(context).size.width,
             child: Column(
@@ -324,14 +321,14 @@ class Checkout extends StatelessWidget {
                       checkoutController.is_paid.value=false;
                       checkoutController.is_cod.value=true;
                     },
-                    leading: CircleAvatar(
+                    leading: const CircleAvatar(
                       child: Icon(Icons.delivery_dining),
                     ),
                     title: Text(App_Localization.of(context).translate("cod")),
                     subtitle: Text(App_Localization.of(context).translate("cash")),
                   ),
                 ),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -340,7 +337,7 @@ class Checkout extends StatelessWidget {
                     ]
                   ),
                   child: ListTile(
-                    leading: CircleAvatar(
+                    leading: const CircleAvatar(
                       child: Icon(Icons.credit_card),
                     ),
                     onTap: (){
@@ -354,7 +351,7 @@ class Checkout extends StatelessWidget {
               ],
             ),
           )
-        :Container(
+        :SizedBox(
       height: MediaQuery.of(context).size.height*0.7-MediaQuery.of(context).padding.top,
       width: MediaQuery.of(context).size.width,
       child:MyFatoraahPage("title",total.toString()));
@@ -402,7 +399,7 @@ class Checkout extends StatelessWidget {
   _summery(BuildContext context){
     return Column(
       children: [
-        Container(
+        SizedBox(
           height: MediaQuery.of(context).size.height*0.3,
           child: ListView.builder(
             // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
@@ -412,13 +409,13 @@ class Checkout extends StatelessWidget {
               itemBuilder: (context,index){
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.height*0.2,
                     child: Column(
                       children: [
                         Expanded(flex:3,
                             child:Container(
-                              margin: EdgeInsets.all(10),
+                              margin: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(color: Colors.grey),
@@ -431,15 +428,15 @@ class Checkout extends StatelessWidget {
                         ),
                         Expanded(flex:1,
                           child: Container(
-                            margin: EdgeInsets.only(left: 10,right: 10),
+                            margin: const EdgeInsets.only(left: 10,right: 10),
                             child: Column(
                               children: [
-                                Text(checkoutController.my_order[index].product.value.title,style: TextStyle(fontSize: 8,overflow: TextOverflow.ellipsis),),
+                                Text(checkoutController.my_order[index].product.value.title,style: const TextStyle(fontSize: 8,overflow: TextOverflow.ellipsis),),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(App_Localization.of(context).translate("aed")+" "+double.parse(checkoutController.my_order[index].price.value).toStringAsFixed(2),style: TextStyle(fontSize: 10,overflow: TextOverflow.ellipsis,color: App.midOrange)),
-                                    Text(App_Localization.of(context).translate("quantity")+": "+checkoutController.my_order[index].quantity.value.toString(),style: TextStyle(fontSize: 10,overflow: TextOverflow.ellipsis,color: Colors.black)),
+                                    Text(App_Localization.of(context).translate("quantity")+": "+checkoutController.my_order[index].quantity.value.toString(),style: const TextStyle(fontSize: 10,overflow: TextOverflow.ellipsis,color: Colors.black)),
                                   ],
                                 )
                               ],
@@ -452,7 +449,7 @@ class Checkout extends StatelessWidget {
                 );
               }),
         ),
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width*0.8,
 
           child:  Column(
@@ -461,46 +458,44 @@ class Checkout extends StatelessWidget {
                 children: [
                   Text(
                     App_Localization.of(context).translate("sub_total"),
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black,
                         fontSize: 13,
                         fontWeight: FontWeight.bold
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Flexible(
-                    child: Container(
-                      child: LayoutBuilder(
-                        builder: (BuildContext context,
-                            BoxConstraints constraints) {
-                          final boxWidth = constraints.constrainWidth();
-                          final dashWidth = 4.0;
-                          final dashHeight = 2.0;
-                          final dashCount =
-                          (boxWidth / (2 * dashWidth)).floor();
-                          return Flex(
-                            children: List.generate(dashCount, (_) {
-                              return SizedBox(
-                                width: dashWidth,
-                                height: dashHeight,
-                                child: const DecoratedBox(
-                                  decoration:
-                                  BoxDecoration(color: Colors.grey),
-                                ),
-                              );
-                            }),
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            direction: Axis.horizontal,
-                          );
-                        },
-                      ),
+                    child: LayoutBuilder(
+                      builder: (BuildContext context,
+                          BoxConstraints constraints) {
+                        final boxWidth = constraints.constrainWidth();
+                        const dashWidth = 4.0;
+                        const dashHeight = 2.0;
+                        final dashCount =
+                        (boxWidth / (2 * dashWidth)).floor();
+                        return Flex(
+                          children: List.generate(dashCount, (_) {
+                            return const SizedBox(
+                              width: dashWidth,
+                              height: dashHeight,
+                              child: DecoratedBox(
+                                decoration:
+                                BoxDecoration(color: Colors.grey),
+                              ),
+                            );
+                          }),
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          direction: Axis.horizontal,
+                        );
+                      },
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Text(
                     sub_total.toString() + " "+App_Localization.of(context).translate("aed"),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 13,
@@ -508,51 +503,49 @@ class Checkout extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   Text(
                     App_Localization.of(context).translate("shipping"),
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black,
                         fontSize: 13,
                         fontWeight: FontWeight.bold
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Flexible(
-                    child: Container(
-                      child: LayoutBuilder(
-                        builder: (BuildContext context,
-                            BoxConstraints constraints) {
-                          final boxWidth = constraints.constrainWidth();
-                          final dashWidth = 4.0;
-                          final dashHeight = 2.0;
-                          final dashCount =
-                          (boxWidth / (2 * dashWidth)).floor();
-                          return Flex(
-                            children: List.generate(dashCount, (_) {
-                              return SizedBox(
-                                width: dashWidth,
-                                height: dashHeight,
-                                child: const DecoratedBox(
-                                  decoration:
-                                  BoxDecoration(color: Colors.grey),
-                                ),
-                              );
-                            }),
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            direction: Axis.horizontal,
-                          );
-                        },
-                      ),
+                    child: LayoutBuilder(
+                      builder: (BuildContext context,
+                          BoxConstraints constraints) {
+                        final boxWidth = constraints.constrainWidth();
+                        const dashWidth = 4.0;
+                        const dashHeight = 2.0;
+                        final dashCount =
+                        (boxWidth / (2 * dashWidth)).floor();
+                        return Flex(
+                          children: List.generate(dashCount, (_) {
+                            return const SizedBox(
+                              width: dashWidth,
+                              height: dashHeight,
+                              child: DecoratedBox(
+                                decoration:
+                                BoxDecoration(color: Colors.grey),
+                              ),
+                            );
+                          }),
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          direction: Axis.horizontal,
+                        );
+                      },
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Text(
                     shipping.toString() + " "+App_Localization.of(context).translate("aed"),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 13,
@@ -560,51 +553,49 @@ class Checkout extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   Text(
                     App_Localization.of(context).translate("total"),
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black,
                         fontSize: 13,
                         fontWeight: FontWeight.bold
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Flexible(
-                    child: Container(
-                      child: LayoutBuilder(
-                        builder: (BuildContext context,
-                            BoxConstraints constraints) {
-                          final boxWidth = constraints.constrainWidth();
-                          final dashWidth = 4.0;
-                          final dashHeight = 2.0;
-                          final dashCount =
-                          (boxWidth / (2 * dashWidth)).floor();
-                          return Flex(
-                            children: List.generate(dashCount, (_) {
-                              return SizedBox(
-                                width: dashWidth,
-                                height: dashHeight,
-                                child: const DecoratedBox(
-                                  decoration:
-                                  BoxDecoration(color: Colors.grey),
-                                ),
-                              );
-                            }),
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            direction: Axis.horizontal,
-                          );
-                        },
-                      ),
+                    child: LayoutBuilder(
+                      builder: (BuildContext context,
+                          BoxConstraints constraints) {
+                        final boxWidth = constraints.constrainWidth();
+                        const dashWidth = 4.0;
+                        const dashHeight = 2.0;
+                        final dashCount =
+                        (boxWidth / (2 * dashWidth)).floor();
+                        return Flex(
+                          children: List.generate(dashCount, (_) {
+                            return const SizedBox(
+                              width: dashWidth,
+                              height: dashHeight,
+                              child: DecoratedBox(
+                                decoration:
+                                BoxDecoration(color: Colors.grey),
+                              ),
+                            );
+                          }),
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          direction: Axis.horizontal,
+                        );
+                      },
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Text(
                     total.toString() + " "+App_Localization.of(context).translate("aed"),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 13,
@@ -612,7 +603,7 @@ class Checkout extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
             ],
           ),
         ),

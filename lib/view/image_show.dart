@@ -1,4 +1,6 @@
 
+// ignore_for_file: must_be_immutable
+
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/view/home.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,7 @@ class ImageShow extends StatelessWidget {
   String image;
 
 
-  ImageShow(this.image);
+  ImageShow(this.image, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,24 +21,21 @@ class ImageShow extends StatelessWidget {
         child: SafeArea(
 
             child: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               child: Container(
                 color: App.midOrange,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     _header(context),
-                    Hero(
-                      tag: image,
-                      child: Container(
-                        color: Colors.white,
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height * 0.1),
-                        child: PhotoView(
-                         imageProvider: NetworkImage(image),
-                          backgroundDecoration: BoxDecoration(
-                            color: Colors.white
-                          ),
+                    Container(
+                      color: Colors.white,
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height * 0.1),
+                      child: PhotoView(
+                       imageProvider: NetworkImage(image),
+                        backgroundDecoration: const BoxDecoration(
+                          color: Colors.white
                         ),
                       ),
                     ),
@@ -66,12 +65,12 @@ class ImageShow extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(right: 0,left: 0),
+                    margin: const EdgeInsets.only(right: 0,left: 0),
                     child: GestureDetector(
                       onTap: () {
                         Get.back();
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.arrow_back_ios,
                         size: 25,
                         color: Colors.white,
@@ -79,7 +78,7 @@ class ImageShow extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(right: 10,left: 10),
+                    margin: const EdgeInsets.only(right: 10,left: 10),
                     child: GestureDetector(
                       onTap: () {
                         Get.offAll(() => Home());
@@ -88,11 +87,7 @@ class ImageShow extends StatelessWidget {
                         width: 25,
                         height: 25,
                         decoration: const BoxDecoration(
-                          // image: DecorationImage(
-                          //   image: AssetImage(
-                          //       "assets/logo/logo.png"),
-                          //   fit: BoxFit.cover,
-                          // ),
+
                         ),
                       ),
                     ),

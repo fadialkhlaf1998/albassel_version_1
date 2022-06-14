@@ -19,7 +19,17 @@ class ProductsController extends GetxController{
   Rx<int> selected_sub_category = 0.obs;
 WishListController wishListController = Get.find();
 CartController cartController = Get.find();
+  var productCountShow = 10.obs;
+
+  showMore(){
+    if(productCountShow.value+10<=my_products.length){
+      productCountShow.value += 10;
+    }else{
+      productCountShow.value = my_products.length;
+    }
+  }
   update_product(int index){
+
     loading.value=true;
     MyApi.check_internet().then((internet) {
       if (internet) {
@@ -28,6 +38,11 @@ CartController cartController = Get.find();
           my_products.clear();
           my_products.addAll(value);
           loading.value=false;
+          if(my_products.length>10){
+            productCountShow.value = 10;
+          }else{
+            productCountShow.value = my_products.length;
+          }
         }).catchError((err){
           loading.value=false;
         });

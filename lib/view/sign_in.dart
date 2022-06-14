@@ -1,9 +1,10 @@
+// ignore_for_file: must_be_immutable, non_constant_identifier_names
+
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/sign_in_controller.dart';
 import 'package:albassel_version_1/helper/store.dart';
-import 'package:albassel_version_1/view/home.dart';
 import 'package:albassel_version_1/view/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,9 +15,10 @@ class SignIn extends StatelessWidget {
   TextEditingController password=TextEditingController();
   SignInController signInController=Get.put(SignInController());
   TextEditingController email=TextEditingController();
-  SignIn(this.is_home){
+  SignIn(this.is_home, {Key? key}) : super(key: key){
     if(Global.remember_pass&&Global.remember_password!="non"){
       password.text=Global.remember_password;
+      email.text=Global.remember_email;
     }
   }
 
@@ -34,11 +36,11 @@ class SignIn extends StatelessWidget {
         body: Obx((){
           return Center(
             child: SingleChildScrollView(
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: signInController.loading.value?
-                Center(child: CircularProgressIndicator(),)
+                const Center(child: CircularProgressIndicator(),)
                     :Stack(
                   children: [
                     Container(
@@ -48,7 +50,7 @@ class SignIn extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Spacer(),
+                          const Spacer(),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(App_Localization.of(context).translate("or"),style: App.textNormal(Colors.grey, 20),),
@@ -57,7 +59,7 @@ class SignIn extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(App_Localization.of(context).translate("not_have_account"),style: App.textNormal(Colors.black, 16),),
-                              SizedBox(width: 5,),
+                              const SizedBox(width: 5,),
                               GestureDetector(
                                 onTap: (){
                                   Get.to(() => SignUp());
@@ -67,7 +69,7 @@ class SignIn extends StatelessWidget {
                             ],
                           ),
 
-                          SizedBox(height: 50,)
+                          const SizedBox(height: 50,)
                         ],
                       ),
 
@@ -77,13 +79,13 @@ class SignIn extends StatelessWidget {
                         Container(
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height * 0.3,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             image: DecorationImage(
                                 image: AssetImage("assets/background/signup.png"),
                                 fit: BoxFit.cover),
                           ),
                           child: Center(
-                              child: Container(
+                              child: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.3,
                                 child: Image.asset("assets/logo/logo.png"),
                               )),
@@ -96,7 +98,7 @@ class SignIn extends StatelessWidget {
                               onPressed: (){
                                 Get.back();
                               },
-                              icon: Icon(Icons.arrow_back_ios,color: Colors.white,size: 20,),
+                              icon: const Icon(Icons.arrow_back_ios,color: Colors.white,size: 20,),
                             )
                         ),
                       ],
@@ -110,7 +112,7 @@ class SignIn extends StatelessWidget {
                             borderRadius: BorderRadius.circular(
                                 MediaQuery.of(context).size.height * 0.04),
                             color: Colors.white,
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                   color: Colors.black54,
                                   spreadRadius: 0.02,
@@ -123,7 +125,7 @@ class SignIn extends StatelessWidget {
                               App_Localization.of(context).translate("sign_in"),
                               style: App.textBlod(Colors.black, 22),
                             ),
-                            Container(
+                            SizedBox(
                               width: MediaQuery.of(context).size.width*0.9,
                               height: 40,
                               child: TextField(
@@ -184,7 +186,7 @@ class SignIn extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           height: 40,
           width: MediaQuery.of(context).size.width*0.9,
           child: TextField(
@@ -207,7 +209,7 @@ class SignIn extends StatelessWidget {
             style: App.textNormal(Colors.grey, 14),
           ),
         ),
-        SizedBox(height: 10,),
+        const SizedBox(height: 10,),
         Row(
           children: [
             Checkbox(value: signInController.remember_value.value,onChanged: (val){
@@ -217,8 +219,8 @@ class SignIn extends StatelessWidget {
             Text(App_Localization.of(context).translate("remember_pass"))
           ],
         ),
-        SizedBox(height: 30,),
-        Container(
+        const SizedBox(height: 30,),
+        SizedBox(
           width: MediaQuery.of(context).size.width*0.9,
           height: 20,
           child: Row(

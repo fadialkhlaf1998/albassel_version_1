@@ -1,6 +1,7 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
-import 'package:albassel_version_1/controler/sign_up_controller.dart';
 import 'package:albassel_version_1/controler/verification_code_controller.dart';
 import 'package:albassel_version_1/view/home.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ class VerificationCode extends StatelessWidget{
   VerificationCodeController verificationCodeController= Get.put(VerificationCodeController());
 
   TextEditingController code=TextEditingController();
+
+  VerificationCode({Key? key}) : super(key: key);
 
 
   @override
@@ -28,14 +31,14 @@ class VerificationCode extends StatelessWidget{
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("assets/background/signin.png"),
                     fit: BoxFit.cover,
                   ),
                 ),
                 child:verificationCodeController.loading.value?
-                Center(child: CircularProgressIndicator(),)
+                const Center(child: CircularProgressIndicator(),)
                     : Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -45,11 +48,11 @@ class VerificationCode extends StatelessWidget{
                             onPressed: (){
                               Get.back();
                             },
-                            icon: Icon(Icons.arrow_back_ios,color: Colors.white,size: 20,)
+                            icon: const Icon(Icons.arrow_back_ios,color: Colors.white,size: 20,)
                         )
                       ],
                     ),
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width*0.4,
                       child: Image.asset("assets/logo/logo.png"),
                     ),
@@ -130,7 +133,7 @@ class VerificationCode extends StatelessWidget{
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(App_Localization.of(context).translate(translate),style: App.textNormal(Colors.grey, 14),),
-        Container(
+        SizedBox(
           height: 40,
           width: MediaQuery.of(context).size.width*0.9,
           child: TextField(
@@ -149,7 +152,7 @@ class VerificationCode extends StatelessWidget{
             style: App.textNormal(Colors.white, 14),
           ),
         ),
-        SizedBox(height: 50,)
+        const SizedBox(height: 50,)
       ],
     );
   }

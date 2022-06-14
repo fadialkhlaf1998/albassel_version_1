@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, non_constant_identifier_names
+
 import 'dart:async';
 
 import 'package:albassel_version_1/app_localization.dart';
@@ -5,12 +7,6 @@ import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/category_view_nav_controller.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
-import 'package:albassel_version_1/controler/products_controller.dart';
-import 'package:albassel_version_1/controler/products_search_controller.dart';
-import 'package:albassel_version_1/model/product.dart';
-import 'package:albassel_version_1/my_model/my_product.dart';
-import 'package:albassel_version_1/my_model/sub_category.dart';
-import 'package:albassel_version_1/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -24,14 +20,17 @@ class CategoryViewnave extends StatelessWidget {
   TextEditingController search_controller = TextEditingController();
 
   CategoryViewnave(){
+    if(productsController.my_products.length>10){
+      productsController.productCountShow.value = 10;
+    }else{
+      productsController.productCountShow.value = productsController.my_products.length;
+    }
 
-    //double.parse((100*(this.selected_sub_category+1)).toString())
-    // After 1 second, it takes you to the bottom of the ListView
     Timer(
-      Duration(milliseconds: 500),
+      const Duration(milliseconds: 500),
           () =>scrollController.animateTo(
         double.parse((150*(productsController.selected_sub_category.value)).toString()),
-        duration: Duration(seconds: 1),
+        duration: const Duration(seconds: 1),
         curve: Curves.fastOutSlowIn,
       ),
     );
@@ -49,7 +48,7 @@ class CategoryViewnave extends StatelessWidget {
           return SafeArea(
               child: Container(
                 height: double.infinity,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage("assets/background/background.png"),
                         fit: BoxFit.cover
@@ -61,35 +60,69 @@ class CategoryViewnave extends StatelessWidget {
                       // physics: NeverScrollableScrollPhysics(),
                       child: Column(
                         children: [
-                          _header(context),
-                          _category(context),
-                          _sub_category(context),
+                          // _header(context),
+                          SizedBox(      height: MediaQuery.of(context).size.height*0.2+40+40,),
+                          // _category(context),
+                          // _sub_category(context),
                           productsController.my_products.isEmpty?
                           Container(height:MediaQuery.of(context).size.height*0.8,color: Colors.transparent,child: Center(child: Column(
                             children: [
-                              SizedBox(height: 50,),
+                              const SizedBox(height: 50,),
                               Icon(Icons.error,size: 50,color: App.midOrange,),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               Text(App_Localization.of(context).translate("empty_elm"),style: App.textNormal(Colors.black, 20),)
                             ],
                           )),)
                               :Column(
                             children: [
                               _products(context),
-                              SizedBox(height: 30,)
+                              showMoreBtn(context),
+                              const SizedBox(height: 30,)
                             ],
                           )
 
                         ],
                       ),
                     ),
-                    Positioned(top: 0,child: homeController.product_loading.value || productsController.loading.value?Container(height:MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,color: Colors.grey.withOpacity(0.4),child: Center(child: CircularProgressIndicator()),):Center())
+                    Positioned(child: Column(
+                      children: [
+                        _header(context),
+                        _category(context),
+                        _sub_category(context),
+                      ],
+                    ) ),
+
+                    Positioned(top: 0,child: homeController.product_loading.value || productsController.loading.value?Container(height:MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,color: Colors.grey.withOpacity(0.4),child: const Center(child: CircularProgressIndicator()),):const Center())
                   ],
                 ),
               ));
         });
 
   }
+
+  showMoreBtn(BuildContext context){
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 20),
+      width: MediaQuery.of(context).size.width,
+      child: Center(
+        child:  productsController.productCountShow.value==productsController.my_products.length?Center():GestureDetector(
+          onTap: (){
+            productsController.showMore();
+          },
+          child: Container(
+            width: 90,
+            height: 30,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: App.orange
+            ),
+            child: Center(child: Text(App_Localization.of(context).translate("show_more"),style: TextStyle(fontSize: 12,color: Colors.white),),),
+          ),
+        ),
+      ),
+    );
+  }
+
   _header(BuildContext context){
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -121,7 +154,7 @@ class CategoryViewnave extends StatelessWidget {
                             onPressed: (){
                               // Get.back();
                             },
-                            icon: Icon(Icons.arrow_back_ios,size: 30,color: Colors.transparent,),
+                            icon: const Icon(Icons.arrow_back_ios,size: 30,color: Colors.transparent,),
                           ),
                           GestureDetector(
                             onTap: (){
@@ -131,7 +164,7 @@ class CategoryViewnave extends StatelessWidget {
                               width: 70,
                               height: 70,
 
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   image: DecorationImage(
                                       image: AssetImage("assets/logo/logo.png")
                                   )
@@ -141,7 +174,7 @@ class CategoryViewnave extends StatelessWidget {
                           IconButton(
                             onPressed: (){
                             },
-                            icon: Icon(Icons.list,size: 30,color: Colors.transparent,),
+                            icon: const Icon(Icons.list,size: 30,color: Colors.transparent,),
                           ),
                         ],
                       ),
@@ -171,7 +204,7 @@ class CategoryViewnave extends StatelessWidget {
         child: Stack(
           children: [
             TextField(
-              style: TextStyle(color: Colors.grey,fontSize: 14),
+              style: const TextStyle(color: Colors.grey,fontSize: 14),
               textAlignVertical: TextAlignVertical.top,
               controller: controller,
               // onChanged: (query){
@@ -179,7 +212,6 @@ class CategoryViewnave extends StatelessWidget {
               // },
               // onSubmitted: homeController.on_submit(),
               onEditingComplete: (){
-                print('****************');
               },
 
               onSubmitted: (query){
@@ -190,7 +222,7 @@ class CategoryViewnave extends StatelessWidget {
               },
               decoration: InputDecoration(
 
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                   enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.transparent)
                   ),
@@ -199,7 +231,7 @@ class CategoryViewnave extends StatelessWidget {
                   ),
 
                   hintText: App_Localization.of(context).translate("search"),
-                  hintStyle: TextStyle(color: Colors.grey,fontSize: 11)
+                  hintStyle: const TextStyle(color: Colors.grey,fontSize: 11)
               ),
             ),
             Positioned(
@@ -214,49 +246,7 @@ class CategoryViewnave extends StatelessWidget {
       ),
     );
   }
-  // _search(BuildContext context,TextEditingController controller){
-  //   return Container(
-  //     width: MediaQuery.of(context).size.width*0.9,
-  //     decoration: BoxDecoration(
-  //         color: Colors.white,
-  //         borderRadius: BorderRadius.circular(5)
-  //     ),
-  //     child: Padding(
-  //       padding: const EdgeInsets.only(left: 8,right: 8),
-  //       child: TextField(
-  //         textAlignVertical: TextAlignVertical.top,
-  //         style: TextStyle(color: Colors.grey,fontSize: 14),
-  //         controller: controller,
-  //         onChanged: (query){
-  //           homeController.search(query);
-  //         },
-  //         // onSubmitted: homeController.on_submit(),
-  //         onSubmitted: (query){
-  //           // if(query.isEmpty){
-  //           //   search_controller.text="";
-  //           //   homeController.on_submit();
-  //           // }
-  //           if(query.isNotEmpty){
-  //             search_controller.text="";
-  //             homeController.get_products_by_search(query,context);
-  //           }
-  //         },
-  //         decoration: InputDecoration(
-  //           icon: Icon(Icons.search),
-  //           enabledBorder: const UnderlineInputBorder(
-  //               borderSide: BorderSide(color: Colors.transparent)
-  //           ),
-  //           focusedBorder: const UnderlineInputBorder(
-  //               borderSide: BorderSide(color: Colors.transparent)
-  //           ),
-  //
-  //             hintText: App_Localization.of(context).translate("search"),
-  //             hintStyle: TextStyle(color: Colors.grey,fontSize: 11)
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+
   _category(BuildContext context){
     return Container(
       height: 40,
@@ -271,7 +261,7 @@ class CategoryViewnave extends StatelessWidget {
                 onTap: (){
                   productsController.update_sub_category(index);
                 },
-                child: Container(
+                child: SizedBox(
                   width: 150,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -301,7 +291,7 @@ class CategoryViewnave extends StatelessWidget {
                 onTap: (){
                   productsController.update_product(index);
                 },
-                child: Container(
+                child: SizedBox(
                   width: 150,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -317,115 +307,114 @@ class CategoryViewnave extends StatelessWidget {
     );
   }
   _products(BuildContext context){
-    return Container(
-      child: GridView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          // physics: ScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: productsController.my_products.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 4/6
-          ),
-          itemBuilder: (context,index){
-            return Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: GestureDetector(
-                onTap: (){
-                  productsController.go_to_product(index);
-                },
-                child: Stack(
-                  children: [
-                    Container(
-                      decoration:BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: DecorationImage(
-                                      image: NetworkImage(productsController.my_products[index].image),
-                                      fit: BoxFit.contain
-                                  )
-                              ),
+
+    return GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: productsController.productCountShow.value,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 4/6
+        ),
+        itemBuilder: (context,index){
+          return Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: GestureDetector(
+              onTap: (){
+                productsController.go_to_product(index);
+              },
+              child: Stack(
+                children: [
+                  Container(
+                    decoration:BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                    image: NetworkImage(productsController.my_products[index].image),
+                                    fit: BoxFit.contain
+                                )
                             ),
                           ),
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Color(0xffF1F1F1),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 5,right: 5),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Text(productsController.my_products[index].title,style: TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
-                                    Text(App_Localization.of(context).translate("aed")+" "+productsController.my_products[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
-                                    productsController.my_products[index].availability==0?
-                                    Container(
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: const Color(0xffF1F1F1),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 5,right: 5),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(productsController.my_products[index].title,style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
+                                  // Text(App_Localization.of(context).translate("aed")+" "+productsController.my_products[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
+                                  App.price(context, productsController.my_products[index].price, productsController.my_products[index].offer_price),
+                                  productsController.my_products[index].availability==0?
+                                  Container(
+                                    width: MediaQuery.of(context).size.width*0.4,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(color:Colors.red)
+                                    ),
+                                    child: Center(
+                                      child: Text(App_Localization.of(context).translate("out_of_stock"),style: App.textNormal(Colors.red, 12),),
+                                    ),
+                                  )
+                                  :GestureDetector(
+                                    onTap: (){
+                                      productsController.cartController.add_to_cart(productsController.my_products[index], 1,context);
+                                      // App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
+                                    },
+                                    child: Container(
                                       width: MediaQuery.of(context).size.width*0.4,
                                       height: 30,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(5),
-                                          border: Border.all(color:Colors.red)
+                                          border: Border.all(color:App.midOrange)
                                       ),
                                       child: Center(
-                                        child: Text(App_Localization.of(context).translate("out_of_stock"),style: App.textNormal(Colors.red, 12),),
+                                        child: Text(App_Localization.of(context).translate("add_cart"),style: App.textNormal(App.midOrange, 12),),
                                       ),
-                                    )
-                                    :GestureDetector(
-                                      onTap: (){
-                                        productsController.cartController.add_to_cart(productsController.my_products[index], 1,context);
-                                        // App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
-                                      },
-                                      child: Container(
-                                        width: MediaQuery.of(context).size.width*0.4,
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5),
-                                            border: Border.all(color:App.midOrange)
-                                        ),
-                                        child: Center(
-                                          child: Text(App_Localization.of(context).translate("add_cart"),style: App.textNormal(App.midOrange, 12),),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        )
+                      ],
                     ),
-                    Positioned(child: IconButton(onPressed: (){
-                      if(productsController.my_products[index].favorite.value){
-                        productsController.my_products[index].favorite.value=false;
-                        productsController.wishListController.delete_from_wishlist(productsController.my_products[index]);
-                      }else{
-                        productsController.my_products[index].favorite.value=true;
-                        productsController.wishListController.add_to_wishlist(productsController.my_products[index],context);
-                      }
+                  ),
+                  Positioned(child: IconButton(onPressed: (){
+                    productsController.loading.value = !productsController.loading.value;
+                    productsController.loading.value = !productsController.loading.value;
+                    if(productsController.my_products[index].favorite.value){
+                      productsController.my_products[index].favorite.value=false;
+                      productsController.wishListController.delete_from_wishlist(productsController.my_products[index]);
+                    }else{
+                      productsController.my_products[index].favorite.value=true;
+                      productsController.wishListController.add_to_wishlist(productsController.my_products[index],context);
+                    }
 
-                    }, icon: Obx((){
-                      return Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
-                    })))
-                  ],
-                ),
+                  }, icon: Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,)))
+                ],
               ),
-            );
-          }),
-    );
+            ),
+          );
+        });
   }
 }

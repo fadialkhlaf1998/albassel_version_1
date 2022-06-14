@@ -1,4 +1,5 @@
-import 'package:albassel_version_1/helper/api.dart';
+// ignore_for_file: deprecated_member_use
+
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/my_model/my_api.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class NoInternet extends StatelessWidget{
+  const NoInternet({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -37,7 +40,7 @@ class NoInternet extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(height: MediaQuery.of(context).size.height*0.2,),
-              Icon(Icons.wifi_off,size: 100,color: Colors.white,),
+              const Icon(Icons.wifi_off,size: 100,color: Colors.white,),
               Column(
                 children: [
                   Text(App_Localization.of(context).translate("oops"),style: App.textBlod(Colors.white, 32),),

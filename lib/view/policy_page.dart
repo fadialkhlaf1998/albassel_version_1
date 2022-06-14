@@ -1,4 +1,5 @@
-import 'package:albassel_version_1/app_localization.dart';
+// ignore_for_file: must_be_immutable
+
 import 'package:albassel_version_1/const/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +13,7 @@ class PolicyPage extends StatelessWidget {
   String content;
 
 
-  PolicyPage(this.title, this.content);
+  PolicyPage(this.title, this.content, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class PolicyPage extends StatelessWidget {
                 // ),
                 Padding(
                   padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.05),
-                  child:Html(data: this.content,
+                  child:Html(data: content,
                     style: {
                     "p": Style(
                         textAlign: TextAlign.justify
@@ -68,7 +69,7 @@ class PolicyPage extends StatelessWidget {
       height: MediaQuery.of(context).size.height*0.3,
       decoration: BoxDecoration(
         color: App.midOrange,
-        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(25),bottomRight:Radius.circular(25)),
+        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(25),bottomRight:Radius.circular(25)),
 
         boxShadow: [
           App.box_shadow()
@@ -81,9 +82,9 @@ class PolicyPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
 
-              IconButton(onPressed: (){Get.back();}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+              IconButton(onPressed: (){Get.back();}, icon: const Icon(Icons.arrow_back_ios,color: Colors.white,)),
 
-              IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios,color: Colors.transparent,)),
+              IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_back_ios,color: Colors.transparent,)),
             ],
           ),
           GestureDetector(
@@ -96,7 +97,7 @@ class PolicyPage extends StatelessWidget {
               width: 90,
               height: 90,
 
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("assets/logo/logo.png")
                   )
@@ -107,7 +108,7 @@ class PolicyPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(this.title,style: App.textBlod(Colors.white, 30),)
+              Text(title,style: App.textBlod(Colors.white, 30),)
             ],
           )
         ],

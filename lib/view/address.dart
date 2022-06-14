@@ -8,19 +8,21 @@ import 'package:get/get.dart';
 
 
 class AddressView extends StatelessWidget {
-  AdressController _adressController = Get.put(AdressController());
+  final AdressController _adressController = Get.put(AdressController());
+
+  AddressView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Obx((){
-          return Container(
+          return SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: [
                 _header(context),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 _address(context),
                 GestureDetector(
                     onTap: (){
@@ -41,7 +43,7 @@ class AddressView extends StatelessWidget {
                       ),
                     )
                 ),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
               ],
             ),
           );
@@ -51,22 +53,22 @@ class AddressView extends StatelessWidget {
   }
 
   _address(BuildContext context){
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Padding(
-        padding: EdgeInsets.only(left: 30,right: 30),
+        padding: const EdgeInsets.only(left: 30,right: 30),
         child: Column(
           children: [
             App.checkoutTextField(_adressController.address, "address", context, MediaQuery.of(context).size.width-60, 40,_adressController.address_err.value),
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
             App.checkoutTextField(_adressController.apartment, "apartment", context, MediaQuery.of(context).size.width-60, 40,_adressController.address_err.value),
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
             App.checkoutTextField(_adressController.city, "city", context, MediaQuery.of(context).size.width-60, 40,_adressController.address_err.value),
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width*0.35,
                   height: 80,
                   child: Column(
@@ -90,7 +92,7 @@ class AddressView extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width*0.35,
                   height: 80,
                   child: Column(
@@ -120,16 +122,17 @@ class AddressView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(App_Localization.of(context).translate("phone"),style: App.textNormal(Colors.grey, 12),),
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width-60,
                   height: 60,
                   child: TextField(
                     controller: _adressController.phone,
+                    keyboardType: TextInputType.number,
                     maxLength: 9,
 
                     decoration: InputDecoration(
-                        prefix: Text("+971"),
-                        enabledBorder: _adressController.address_err.value&&_adressController.phone.value.text.isEmpty?UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)):UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                        prefix: const Text("+971"),
+                        enabledBorder: _adressController.address_err.value&&_adressController.phone.value.text.isEmpty?const UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)):const UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
                         focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: App.midOrange))
                     ),
                     style: App.textNormal(Colors.black, 14),
@@ -138,7 +141,7 @@ class AddressView extends StatelessWidget {
               ],
             ),
 
-            SizedBox(height: 40,)
+            const SizedBox(height: 40,)
           ],
         ),
       ),
@@ -150,7 +153,7 @@ class AddressView extends StatelessWidget {
       height: MediaQuery.of(context).size.height*0.3,
       decoration: BoxDecoration(
         color: App.midOrange,
-        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(25),bottomRight:Radius.circular(25)),
+        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(25),bottomRight: Radius.circular(25)),
 
         boxShadow: [
           App.box_shadow()
@@ -163,11 +166,11 @@ class AddressView extends StatelessWidget {
             children: [
               IconButton(onPressed: (){
                 Get.back();
-              }, icon: Icon(Icons.arrow_back_ios,color: Colors.white,size: 25,))
+              }, icon: const Icon(Icons.arrow_back_ios,color: Colors.white,size: 25,))
             ],
           ),
-          SizedBox(),
-          SizedBox(),
+          const SizedBox(),
+          const SizedBox(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
