@@ -38,9 +38,9 @@ class CustomerOrder {
   String emirate;
   String phone;
   String details;
-  int subTotal;
-  int shipping;
-  int total;
+  double subTotal;
+  double shipping;
+  double total;
   double tax;
   int isPaid;
   int deliver;
@@ -63,10 +63,10 @@ class CustomerOrder {
     emirate: json["emirate"],
     phone: json["phone"],
     details: json["details"],
-    subTotal: json["sub_total"],
-    shipping: json["shipping"],
+    subTotal: double.parse(json["sub_total"].toString()),
+    shipping: double.parse(json["shipping"].toString()),
     tax: json["tax"]==null?0.00:double.parse(json["tax"].toString()),
-    total: json["total"],
+    total:  double.parse(json["total"].toString()),
     isPaid: json["is_paid"],
     deliver: json["deliver"],
     date: DateTime.parse(json["created_at"]),
