@@ -300,6 +300,14 @@ class SignUp extends StatelessWidget{
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        const SizedBox(height: 20,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(onPressed: (){Get.back();}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+          ],
+        ),
+
         const SizedBox(height: 120,),
 
           Container(
