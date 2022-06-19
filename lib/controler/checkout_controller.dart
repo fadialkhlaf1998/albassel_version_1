@@ -101,6 +101,10 @@ class CheckoutController extends GetxController{
       Get.offAll(()=>Home());
     }else{
       //todo add order to shpify
+      print('*******:sub total:*******');
+      print(cartController.sub_total.value);
+      print(cartController.couponAutoDiscount.value);
+      print(double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value));
       add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
       cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
@@ -108,6 +112,7 @@ class CheckoutController extends GetxController{
     }
   }
 
+  //todo remove coment
   add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems,String discount){
     MyApi.add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount).then((succ) {
       if(!succ){
