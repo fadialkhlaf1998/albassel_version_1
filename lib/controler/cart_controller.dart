@@ -122,7 +122,6 @@ class CartController extends GetxController{
       my_order[index].price.value=x.toString();
       get_total();
     }
-
   }
 
   decrease(MyOrder myOrder,index){

@@ -574,6 +574,7 @@ class MyApi {
       Result result = Result.fromJson(json);
       Global.customer=result.data.first;
       Global.customer_type = result.data.first.customer_type;
+      Global.customer_type_decoder = result.data.first.customer_type;
       Store.save_verificat();
       return result;
     }

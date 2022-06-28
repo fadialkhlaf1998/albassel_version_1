@@ -39,6 +39,7 @@ class Store{
   static Future<List<MyOrder>> load_order()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String myjson = prefs.getString("my_order")??"non";
+
     if(myjson=="non"){
       return <MyOrder>[];
     }else{
@@ -96,6 +97,7 @@ class Store{
       load_wishlist();
     });
   }
+
   static save_remember(bool val){
     SharedPreferences.getInstance().then((prefs) {
       prefs.setBool("remember", val);
@@ -170,6 +172,7 @@ class Store{
       prefs.setString("pass", pass);
       prefs.setString("remember_pass", pass);
       prefs.setString("remember_email", email);
+
       Global.remember_password=pass;
       Global.remember_email=email;
     });
@@ -182,9 +185,18 @@ class Store{
       prefs.remove("verificat");
       prefs.remove("wishlist");
       prefs.remove("my_order");
+      prefs.remove("addresses");
+      prefs.remove("rate");
+      prefs.remove("recently");
+      prefs.remove("customer_type");
+      load_rate();
+      load_address();
+      load_recently();
       Global.customer_type = 0;
+      Global.customer_type_decoder = 0;
       print(Global.customer_type);
       Global.customer=null;
+
     });
   }
 
@@ -200,6 +212,7 @@ class Store{
     Global.customer_type = type;
     return type;
   }
+
 
   static Future<LogInInfo> loadLogInInfo()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();

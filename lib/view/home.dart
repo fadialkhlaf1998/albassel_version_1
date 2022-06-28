@@ -25,7 +25,7 @@ class Home extends StatelessWidget {
   HomeController homeController=Get.put(HomeController());
   CartController cartController=Get.find();
   WishListController wishListController=Get.find();
-  CategoryViewNavController categoryViewNavController=Get.put(CategoryViewNavController());
+
   TextEditingController search_controller = TextEditingController();
 
   Home({Key? key}) : super(key: key){
@@ -105,7 +105,6 @@ class Home extends StatelessWidget {
                           )
                           : Column(
                         children: [
-
                           SizedBox(height: MediaQuery.of(context).size.height*0.35,),
                           _body(context)
                         ],
@@ -436,102 +435,107 @@ class Home extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 15,),
-           GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount:  homeController.bestSellers.length<=6?homeController.bestSellers.length:6,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 4/6
-              ),
-              itemBuilder: (context,index){
-                return Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: GestureDetector(
-                    onTap: (){
-                      homeController.go_to_product(index);
-                    },
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration:BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                          image: NetworkImage(homeController.bestSellers[index].image),
-                                          fit: BoxFit.contain
-                                      )
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: const Color(0xffF1F1F1),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 5,right: 5),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Text(homeController.bestSellers[index].title,style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
-                                        // Text(App_Localization.of(context).translate("aed")+" "+homeController.bestSellers[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
-                                        App.price(context, homeController.bestSellers[index].price, homeController.bestSellers[index].offer_price),
-                                        GestureDetector(
-                                          onTap: (){
-                                            cartController.add_to_cart(homeController.bestSellers[index], 1,context);
+          Obx((){
 
-                                          },
-                                          child: Container(
-                                            width: MediaQuery.of(context).size.width*0.4,
-                                            height: 30,
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(5),
-                                                border: Border.all(color:App.midOrange)
-                                            ),
-                                            child: Center(
-                                              child: Text(App_Localization.of(context).translate("add_cart"),style: App.textNormal(App.midOrange, 12),),
-                                            ),
-                                          ),
+            return  GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount:  homeController.bestSellers.length<=6?homeController.bestSellers.length:6,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 4/6
+                ),
+                itemBuilder: (context,index){
+                  // print("view");
+                  // print(homeController.bestSellers[3].price);
+                  return Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: GestureDetector(
+                      onTap: (){
+                        homeController.go_to_product(index);
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration:BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        image: DecorationImage(
+                                            image: NetworkImage(homeController.bestSellers[index].image),
+                                            fit: BoxFit.contain
                                         )
-                                      ],
                                     ),
                                   ),
                                 ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Positioned(child: IconButton(onPressed: (){
-                          if(homeController.bestSellers[index].favorite.value){
-                            homeController.bestSellers[index].favorite.value=false;
-                            wishListController.delete_from_wishlist(homeController.bestSellers[index]);
-                          }else{
-                            homeController.bestSellers[index].favorite.value=true;
-                            wishListController.add_to_wishlist(homeController.bestSellers[index],context);
-                          }
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: const Color(0xffF1F1F1),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 5,right: 5),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text(homeController.bestSellers[index].title,style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
+                                          // Text(App_Localization.of(context).translate("aed")+" "+homeController.bestSellers[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
+                                          App.price(context, homeController.bestSellers[index].price, homeController.bestSellers[index].offer_price),
+                                          GestureDetector(
+                                            onTap: (){
+                                              cartController.add_to_cart(homeController.bestSellers[index], 1,context);
 
-                        }, icon: Obx((){
-                          return Icon(homeController.bestSellers[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
-                        })))
-                      ],
+                                            },
+                                            child: Container(
+                                              width: MediaQuery.of(context).size.width*0.4,
+                                              height: 30,
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(5),
+                                                  border: Border.all(color:App.midOrange)
+                                              ),
+                                              child: Center(
+                                                child: Text(App_Localization.of(context).translate("add_cart"),style: App.textNormal(App.midOrange, 12),),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Positioned(child: IconButton(onPressed: (){
+                            if(homeController.bestSellers[index].favorite.value){
+                              homeController.bestSellers[index].favorite.value=false;
+                              wishListController.delete_from_wishlist(homeController.bestSellers[index]);
+                            }else{
+                              homeController.bestSellers[index].favorite.value=true;
+                              wishListController.add_to_wishlist(homeController.bestSellers[index],context);
+                            }
+
+                          }, icon: Obx((){
+                            return Icon(homeController.bestSellers[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
+                          })))
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                });
+          })
           // GridView.builder(
           //     physics: NeverScrollableScrollPhysics(),
           //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

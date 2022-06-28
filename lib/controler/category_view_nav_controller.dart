@@ -28,6 +28,7 @@ class CategoryViewNavController extends GetxController{
 
   @override
   void onInit() {
+    print('new category navigate');
     categories.addAll(introController.category);
     if(introController.category.isNotEmpty)
     MyApi.getSubCategory(introController.category.first.id).then((sub_cat) {

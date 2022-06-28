@@ -14,6 +14,7 @@ class Global{
   static Shipping shipping = Shipping(amount: 10, minAmountFree: 250);
   static String lang_code="en";
   static int customer_type=0;
+  static int customer_type_decoder=0;
   static LogInInfo? logInInfo;
   static MyCustomer? customer;
   static Address? address;

@@ -1,5 +1,8 @@
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
+import 'package:albassel_version_1/const/global.dart';
+import 'package:albassel_version_1/controler/cart_controller.dart';
+import 'package:albassel_version_1/controler/category_view_nav_controller.dart';
 import 'package:albassel_version_1/controler/wish_list_controller.dart';
 import 'package:albassel_version_1/helper/api.dart';
 import 'package:albassel_version_1/controler/intro_controller.dart';
@@ -31,9 +34,10 @@ class HomeController extends GetxController{
   List<Brand> brands=<Brand>[];
   List<MySlider> slider=<MySlider>[];
   List<TopCategory> topCategory=<TopCategory>[];
-  List<MyProduct> bestSellers=<MyProduct>[];
+  RxList<MyProduct> bestSellers=<MyProduct>[].obs;
   bool makeup=false;
-
+  CartController cartController = Get.find();
+  CategoryViewNavController categoryViewNavController=Get.put(CategoryViewNavController());
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var selected_bottom_nav_bar = 0.obs;
   ScrollController scrollController = new ScrollController();
@@ -91,76 +95,27 @@ class HomeController extends GetxController{
   }
   void nave_to_logout() {
     Store.logout();
+    cartController.clear_cart();
+    updateBestSellersSubCategory();
+    wishListController.wishlist.clear();
     Get.offAll(()=>Welcome());
   }
-
-
-  search(String query){
-    // if(query.isEmpty){
-    //   products.clear();
-    //   products.addAll(temp_products);
-    // }else {
-    //   products.clear();
-    //   for (int i = 0; i < temp_products.length; i++) {
-    //     if(temp_products[i].title!.toLowerCase().contains(query.toLowerCase())){
-    //       products.add(temp_products[i]);
-    //     }
-    //   }
-    // }
-  }
-  on_submit(){
-    // products.clear();
-    // products.addAll(temp_products);
-
+  updateBestSellersSubCategory()async{
+    print(Global.customer_type_decoder);
+    print('best sellers');
+    List<MyProduct> list = await MyApi.getBestSellers(wishListController.wishlist);
+    introController.bestSellers = list;
+    bestSellers.clear();
+    bestSellers.addAll(list);
+    for(int i=0;i<bestSellers.length;i++){
+      print(bestSellers[i].price);
+    }
+    // loading.value = true;
+    categoryViewNavController.onInit();
   }
 
-  // get_product_by_collection(int id){
-  //   Api.check_internet().then((internet) {
-  //     if (internet) {
-  //       product_loading.value=true;
-  //       products.clear();
-  //       temp_products.clear();
-  //       Api.get_products(id).then((_products) {
-  //         products.addAll(_products);
-  //         temp_products.addAll(_products);
-  //         for(int i=0;i<wishListController.wishlist.length;i++){
-  //           for(int j=0;j<products.length;j++){
-  //             if(wishListController.wishlist[i].id==products[j].id){
-  //               products[j].is_favoirite.value=true;
-  //               temp_products[j].is_favoirite.value=true;
-  //             }
-  //           }
-  //         }
-  //         product_loading.value=false;
-  //       });
-  //     }else{
-  //       Get.to(NoInternet())!.then((value) {
-  //         get_product_by_collection(id);
-  //       });
-  //     }
-  //   });
-  // }
-
-  // go_to_product_page(int index){
-  //   Api.check_internet().then((internet) {
-  //     if (internet) {
-  //       loading.value=true;
-  //       Api.get_products_variants_by_id(products[index].id!).then((variants){
-  //         selected_product=products[index];
-  //         selected_product!.variants=variants;
-  //         wishListController.is_favorite(products[index]);
-  //         Get.to(()=>ProductView())!.then((value){
-  //           loading.value=false;
-  //         });
-  //       });
-  //     }else{
-  //       Get.to(NoInternet())!.then((value) {
-  //         go_to_product_page(index);
-  //       });
-  //     }
-  //   });
-  //
-  // }
+  search(String query){}
+  on_submit(){}
 
   get_sub_category(int category_id,BuildContext context){
     MyApi.check_internet().then((internet) {
@@ -424,49 +379,6 @@ class HomeController extends GetxController{
     }
   }
 
-
-
-  // get_data(){
-  //     try{
-  //       Api.check_internet().then((internet) {
-  //         if (internet) {
-  //           if(introController.category.length>0){
-  //             collections.addAll(introController.collections);
-  //             loading.value=false;
-  //             Api.get_products(collections.first.id!).then((_products) {
-  //               products.addAll(_products);
-  //               temp_products.addAll(_products);
-  //               for(int i=0;i<wishListController.wishlist.length;i++){
-  //                 for(int j=0;j<products.length;j++){
-  //                   if(wishListController.wishlist[i].id==products[j].id){
-  //                     products[j].is_favoirite.value=true;
-  //                     temp_products[j].is_favoirite.value=true;
-  //                   }
-  //                 }
-  //               }
-  //               scrollController.animateTo(
-  //                 80,
-  //                 curve: Curves.easeOut,
-  //                 duration: const Duration(milliseconds: 800),
-  //               );
-  //               product_loading.value=false;
-  //             });
-  //           }else{
-  //             introController.get_data();
-  //             get_data();
-  //           }
-  //         }else{
-  //           Get.to(NoInternet())!.then((value) {
-  //             get_data();
-  //           });
-  //         }
-  //       });
-  //     }catch (e){
-  //       get_data();
-  //     }
-  //
-  //
-  //   }
 
   set_bottom_bar(int index){
     selected_bottom_nav_bar.value=index;

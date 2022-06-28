@@ -287,10 +287,12 @@ class App{
       CustomSnackBar.success(
         message:
         msg,
+
         backgroundColor: Color(0xffC3C7C7),
         textStyle: TextStyle(color: App.midOrange,fontWeight: FontWeight.bold),
       ),
     );
+    // return Get.snackbar("", msg,duration: Duration(milliseconds: 2000),backgroundColor: Color(0xffC3C7C7),colorText: App.midOrange);
   }
   static error_msg(BuildContext context,String err){
     return showTopSnackBar(

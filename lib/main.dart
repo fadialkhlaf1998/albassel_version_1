@@ -19,7 +19,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
-//final 1.0.3.1
+//final 2.0.0+6
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
   static void set_local(BuildContext context , Locale locale){

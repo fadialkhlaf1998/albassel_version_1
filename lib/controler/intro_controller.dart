@@ -138,6 +138,7 @@ class IntroController extends GetxController{
   // }
 
   get_nav(){
+    print('get_nave');
     Store.load_remember();
     Store.loadLogInInfo().then((info) {
       if(info.email=="non"){
@@ -150,6 +151,7 @@ class IntroController extends GetxController{
                 MyApi.login(info.email,info.pass).then((value) {
                   print(value.message);
                   if(value.state==200){
+                    print('home');
                     Get.offAll(()=>Home());
                   }else{
                     Get.offAll(()=>Welcome());

@@ -508,7 +508,7 @@ class Cart extends StatelessWidget {
                       if(cartController.my_order.value.isNotEmpty){
 
                         if(Global.customer!=null){
-                          if(Global.customer_type!=0){
+                          if(Global.customer_type!=0||Global.customer!.country.toLowerCase()!="ae"){
                             if(Global.customer!.country.toLowerCase()!="ae"){
                               App.error_msg(context, App_Localization.of(context).translate("cannot_order_out_ae"));
                             }else{

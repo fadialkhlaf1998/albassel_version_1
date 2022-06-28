@@ -48,6 +48,7 @@ class SignUpController extends GetxController{
    if(!RegExp(r'\S+@\S+\.\S+').hasMatch(email)||email.isEmpty||pass.isEmpty||fname.isEmpty||lname.isEmpty||pass.length<6||(Global.customer_type !=0 && phone.isEmpty)){
     if(email.isEmpty||!RegExp(r'\S+@\S+\.\S+').hasMatch(email)){
      email_vaildate.value=false;
+     // App.error_msg(context, App_Localization.of(context).translate("plz_vailed_email"));
     }else{
      email_vaildate.value=true;
     }

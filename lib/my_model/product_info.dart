@@ -55,7 +55,7 @@ class ProductInfo {
     title: json["title"],
     subTitle: json["sub_title"],
     description: json["description"],
-      price: Global.customer_type==0?double.parse(json["price"].toString()):Global.customer_type==1?double.parse(json["salon_price"].toString()):double.parse(json["whole_saller_price"].toString()),
+      price: Global.customer_type_decoder==0?double.parse(json["price"].toString()):Global.customer_type_decoder==1?double.parse(json["salon_price"].toString()):double.parse(json["whole_saller_price"].toString()),
       offer_price: json["offer_price"]==null?null:double.parse(json["offer_price"].toString()),
     rate:double.parse(json["rate"].toString()),
     image: json["image"],
