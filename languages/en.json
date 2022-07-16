@@ -190,7 +190,12 @@
   "cannot_order_out_ae": "Sorry, Delivery is not available outside UAE. Please contact us by Email.",
   "included":"(included)",
   "show_more": "Show More",
-  "plz_vailed_email": "Please Enter Valid Email Address"
+  "plz_vailed_email": "Please Enter Valid Email Address",
+  "delete_account": "Delete Account",
+  "are_you_sure_to_delete_account": "Are you sure about delete your account",
+  "confirm":"Confirm",
+  "yes":"Yes",
+  "no": "No"
 
 }
 

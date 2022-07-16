@@ -1,6 +1,7 @@
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/const/global.dart';
+import 'package:albassel_version_1/controler/home_controller.dart';
 import 'package:albassel_version_1/helper/api.dart';
 import 'package:albassel_version_1/helper/log_in_api.dart';
 import 'package:albassel_version_1/my_model/my_api.dart';
@@ -13,6 +14,7 @@ class ProfileController extends GetxController{
   var validateNewPass = true.obs;
   var validateConfNewPass = true.obs;
   var loading = false.obs;
+  HomeController homeController = Get.find();
 
   change_password(BuildContext context,String pass,String confPass){
     if(pass.isEmpty||confPass.isEmpty){
@@ -60,6 +62,23 @@ class ProfileController extends GetxController{
               context, App_Localization.of(context).translate("conf_eq_pass"));
         }
       }
+    }
+  }
+
+  Future <bool> deleteAccount(BuildContext context)async{
+    var internet = await MyApi.check_internet();
+    if(internet){
+      loading.value=true;
+
+      var result = await MyApi.delete_acount();
+      homeController.nave_to_logout();
+      loading.value=false;
+      return true;
+    }else{
+      Get.to(()=>NoInternet())!.then((value) {
+        return deleteAccount(context);
+      });
+      return false;
     }
   }
 }

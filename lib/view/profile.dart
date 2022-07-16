@@ -143,25 +143,46 @@ class Profile extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20,),
-                  GestureDetector(
-                    onTap:(){
-                      if(profileController.openNewPass.value){
-                        profileController.change_password(context,newpass.value.text, confNewpass.value.text);
-                      }else{
-                        profileController.openNewPass.value=true;
-                      }
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width*0.45,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          border: Border.all(color:Colors.black,width: 1),
-                          borderRadius: BorderRadius.circular(20)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap:(){
+                          if(profileController.openNewPass.value){
+                            profileController.change_password(context,newpass.value.text, confNewpass.value.text);
+                          }else{
+                            profileController.openNewPass.value=true;
+                          }
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width*0.45,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              border: Border.all(color:Colors.black,width: 1),
+                              borderRadius: BorderRadius.circular(20)
+                          ),
+                          child: Center(
+                            child: Text(App_Localization.of(context).translate("change_pass"),style: App.textBlod(Colors.black, 14),),
+                          ),
+                        ),
                       ),
-                      child: Center(
-                        child: Text(App_Localization.of(context).translate("change_pass"),style: App.textBlod(Colors.black, 14),),
+                      GestureDetector(
+                        onTap:(){
+                          showAlertDialog(context);
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width*0.45,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              border: Border.all(color:Colors.black,width: 1),
+                              borderRadius: BorderRadius.circular(20)
+                          ),
+                          child: Center(
+                            child: Text(App_Localization.of(context).translate("delete_account"),style: App.textBlod(Colors.black, 14),),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                     const SizedBox(height: 20,),
                   _adress(context),
@@ -236,7 +257,7 @@ class Profile extends StatelessWidget {
         Get.to(()=>AddressView());
       },
       child: Container(
-        width: MediaQuery.of(context).size.width*0.9,
+        width: MediaQuery.of(context).size.width*0.93,
         height: 40,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
@@ -262,7 +283,7 @@ class Profile extends StatelessWidget {
         homeController.selected_bottom_nav_bar.value=3;
       },
       child: Container(
-        width: MediaQuery.of(context).size.width*0.4,
+        width: MediaQuery.of(context).size.width*0.45,
         height: 40,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
@@ -280,7 +301,7 @@ class Profile extends StatelessWidget {
         get_my_order(context);
       },
       child: Container(
-        width: MediaQuery.of(context).size.width*0.4,
+        width: MediaQuery.of(context).size.width*0.45,
         height: 40,
         decoration: BoxDecoration(
             border: Border.all(width: 1,color: Colors.black),
@@ -378,4 +399,47 @@ class Profile extends StatelessWidget {
     });
 
   }
+
+  showAlertDialog(BuildContext context) {
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text(App_Localization.of(context).translate("confirm")),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+            profileController.deleteAccount(context);
+          },
+          child: Text(App_Localization.of(context).translate("yes"), style: TextStyle(color: App.midOrange),),
+        ),
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: Text(App_Localization.of(context).translate("no"), style: TextStyle(color: Colors.black),),
+        ),
+      ],
+      content: SizedBox(
+        height: 50,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(App_Localization.of(context).translate("are_you_sure_to_delete_account"))
+          ],
+        ),
+      ),
+
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 }

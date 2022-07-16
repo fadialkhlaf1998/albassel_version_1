@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/helper/store.dart';
 import 'package:albassel_version_1/model/my_order.dart';
@@ -380,6 +381,30 @@ class MyApi {
     }
     else {
       return <MyProduct>[];
+    }
+  }
+
+  static Future<bool> delete_acount()async{
+
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('DELETE', Uri.parse(url+'api/delete-acount'));
+    request.body = json.encode({
+      "id": Global.customer!.id
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    print('--------- response ---------');
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      var jsonString = await response.stream.bytesToString();
+      print(jsonString);
+      return true;
+    }
+    else {
+      return false;
     }
   }
 
