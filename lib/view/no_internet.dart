@@ -50,7 +50,7 @@ class NoInternet extends StatelessWidget{
                   ),
                 ],
               ),
-              RaisedButton(
+              TextButton(
                 onPressed: (){
                   MyApi.check_internet().then((value) {
                     if(value){
@@ -58,8 +58,8 @@ class NoInternet extends StatelessWidget{
                     }
                   });
                 },
-                elevation: 2,
-                color: Colors.white,
+                // elevation: 2,
+                // color: Colors.white,
                 child:Text(App_Localization.of(context).translate("reload"),style: App.textBlod(App.orange, 16),),
               ),
               SizedBox(height: MediaQuery.of(context).size.height*0.2,),

@@ -210,7 +210,7 @@ class CartController extends GetxController{
       y=Global.shipping.amount;
       shipping.value=Global.shipping.amount.toString();
     }
-    tax.value = ((x+y)*0.05).toString();
+
     double z = calcDicount();
     if(discountCode != null){
       if(amountOfCanDiscount>=discountCode!.minimumQuantity){
@@ -220,7 +220,9 @@ class CartController extends GetxController{
       }
     }
     coupon.value = (double.parse(coupon.value)+z).toString();
+    tax.value = ((x - z)*5/105).toString();
     total.value = (x + y - z).toString();
+
     Store.save_order(my_order.value);
   }
 
