@@ -1,4 +1,5 @@
 import 'package:albassel_version_1/const/app.dart';
+import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/checkout_controller.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +85,9 @@ class _MyHomePageState extends State<MyFatoraahPage> {
   void sendPayment() {
     var request = MFSendPaymentRequest(
         invoiceValue: double.parse(amount),
-        customerName: "Customer name",
+        customerName: Global.customer!.firstname + " " + Global.customer!.lastname,
+        customerEmail: Global.customer!.email,
+        customerMobile: "-",
         notificationOption: MFNotificationOption.LINK);
 
     /*var invoiceItem =
@@ -167,8 +170,8 @@ class _MyHomePageState extends State<MyFatoraahPage> {
     MFSDK.executePayment(
         context,
         request,
-
         MFAPILanguage.EN,
+
            onPaymentResponse:  (String invoiceId, MFResult<MFPaymentStatusResponse> result) => {
           if (result.isSuccess())
             {
