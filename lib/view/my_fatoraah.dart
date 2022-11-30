@@ -81,13 +81,16 @@ class _MyHomePageState extends State<MyFatoraahPage> {
 
   /*
     Send Payment
+
    */
   void sendPayment() {
     var request = MFSendPaymentRequest(
         invoiceValue: double.parse(amount),
+        // customerName: "Customer name",
+
         customerName: Global.customer!.firstname + " " + Global.customer!.lastname,
-        customerEmail: Global.customer!.email,
         customerMobile: "-",
+        customerEmail: Global.customer!.email,
         notificationOption: MFNotificationOption.LINK);
 
     /*var invoiceItem =
@@ -625,11 +628,27 @@ class _MyHomePageState extends State<MyFatoraahPage> {
                 Padding(
                   padding: EdgeInsets.all(5.0),
                 ),
-                TextButton(
-
-                  child: Text('Pay',style: TextStyle(color:  Colors.white),),
-                  onPressed: pay,
-                ),
+                // TextButton(
+                //   style: ,
+                //   child:
+                //   onPressed: ,
+                // ),
+                Center(
+                  child: GestureDetector(
+                    onTap: pay,
+                    child: Container(
+                      width: 150,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: App.midOrange,
+                        borderRadius: BorderRadius.circular(15)
+                      ),
+                      child: Center(
+                        child: Text('Pay',style: TextStyle(color:  Colors.white,fontWeight: FontWeight.bold),),
+                      ),
+                    ),
+                  ),
+                )
                 // RaisedButton(
                 //   color: Colors.lightBlue,
                 //   textColor: Colors.white,
