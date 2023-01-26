@@ -195,6 +195,9 @@
   "are_you_sure_to_delete_account": "هل أنت متأكد من حذف الحساب",
   "confirm":"تأكيد",
   "yes":"نعم",
-  "no": "لا"
+  "no": "لا",
+  "installment_payment": "الدفع بالتقسيط",
+  "no_discount_installment_pay": "لا توجد خصومات على أقساط السداد",
+  "cashew_description": "أو قسّم مشترياتك إلى أقساط دون أي تكلفة إضافية عليك."
 
 }

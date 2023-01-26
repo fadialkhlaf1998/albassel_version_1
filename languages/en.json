@@ -195,7 +195,11 @@
   "are_you_sure_to_delete_account": "Are you sure about delete your account",
   "confirm":"Confirm",
   "yes":"Yes",
-  "no": "No"
+  "no": "No",
+
+  "installment_payment": "Installment Payment",
+  "no_discount_installment_pay": "no discounts for installment payments",
+  "cashew_description": "Or split your purchase into installments, with no extra cost to you."
 
 }
 

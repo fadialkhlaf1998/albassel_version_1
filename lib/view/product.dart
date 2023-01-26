@@ -10,6 +10,7 @@ import 'package:albassel_version_1/controler/wish_list_controller.dart';
 import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:albassel_version_1/my_model/my_product.dart';
 import 'package:albassel_version_1/my_model/product_info.dart';
+import 'package:albassel_version_1/view/cashew_details.dart';
 import 'package:albassel_version_1/view/image_show.dart';
 import 'package:albassel_version_1/view/no_internet.dart';
 import 'package:albassel_version_1/view/sign_in.dart';
@@ -18,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 
@@ -362,6 +364,43 @@ class ProductView extends StatelessWidget {
               ),
             )
           ],
+        ),
+        SizedBox(height: 10,),
+        Container(
+          width: Get.width * 0.9,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: GestureDetector(
+              onTap: (){
+                Get.to(()=>CashewDetails());
+              },
+              child: Container(
+                width: Get.width * 0.9,
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Color(0xffd6d6d3)),
+                    borderRadius: BorderRadius.circular(7)
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: Get.width*0.9 - 92,
+                      child: Column(
+                        children: [
+                          Text(App_Localization.of(context).translate("cashew_description"),style: TextStyle(fontSize: 12),)
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: 80,
+                      height: 25,
+                      child: SvgPicture.asset("assets/icon/cashew.svg"),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

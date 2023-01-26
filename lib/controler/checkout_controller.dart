@@ -2,11 +2,13 @@ import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
+import 'package:albassel_version_1/helper/cashew_api.dart';
 import 'package:albassel_version_1/helper/store.dart';
 import 'package:albassel_version_1/model/my_order.dart';
 import 'package:albassel_version_1/my_model/address.dart';
 import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:albassel_version_1/view/home.dart';
+import 'package:albassel_version_1/view/web_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:my_fatoorah/my_fatoorah.dart';
@@ -18,6 +20,7 @@ class CheckoutController extends GetxController{
   var is_paid=false.obs;
   var selected=false.obs;
   var is_cod=false.obs;
+  var cashewLoading=false.obs;
   double total=0.0;
   List<LineItem> lineItems = <LineItem>[];
   CartController cartController = Get.find();
@@ -84,39 +87,83 @@ class CheckoutController extends GetxController{
         selected_operation--;
     }
   }
+  add_order_installment_payment(BuildContext context)async{
+    cashewLoading(true);
+    String token = await getCashewToken();
+    CashewResponse? cashewResponse = await Cashew.checkout(
+        token: token,
+        mobileNumber: "+971"+phone.text,
+        email: Global.customer!.email,
+        firstName: firstName.text,
+        lastName: lastName.text,
+        address1:address.text,
+        address2: apartment.text,
+        city: city.text,
+        state: emirate.value,
+        country: country.value,
+        cart: cartController.my_order,
+        shipping: double.parse(cartController.shipping.value)
+    );
+    cashewLoading(false);
+    if(cashewResponse == null){
+      App.error_msg(
+          context, App_Localization.of(context).translate("wrong"));
+    }else{
+      print('***************\n');
+      print(cashewResponse.paymentUrl);
+      // cartController.clear_cart();
+      Get.off(()=>MyWebView(cashewResponse));
+      //App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
+    }
+
+  }
+
+  Future<String> getCashewToken()async{
+    String? token = await Cashew.getToken();
+    if(token == null){
+      return await getCashewToken();
+    }else{
+      return token;
+    }
+  }
 
   add_order_payment(BuildContext context){
     get_details();
     //todo add order to shpify
-    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
-    cartController.clear_cart();
+    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value ?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
+    // cartController.clear_cart();
 
     App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
   }
   add_order_shopyfi(BuildContext context){
     get_details();
     if(is_paid.value){
-      cartController.clear_cart();
+      // cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
       Get.offAll(()=>Home());
     }else{
-      //todo add order to shpify
-      print('*******:sub total:*******');
-      print(cartController.sub_total.value);
-      print(cartController.couponAutoDiscount.value);
-      print(double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value));
-      add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
-      cartController.clear_cart();
+      add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value ?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
+      // cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
       Get.offAll(()=>Home());
     }
   }
 
+  add_order_cashew(BuildContext context){
+    get_details();
+    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), 2,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
+    // cartController.clear_cart();
+    App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
+    Get.offAll(()=>Home());
+  }
+
   //todo remove coment
-  add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems,String discount){
+  add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,int is_paid,List<LineItem> lineItems,String discount){
     MyApi.add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount).then((succ) {
       if(!succ){
         add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount);
+      }else{
+        cartController.clear_cart();
       }
     }).catchError((err){
       add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount);

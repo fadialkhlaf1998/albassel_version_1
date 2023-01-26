@@ -7,6 +7,7 @@ import 'package:albassel_version_1/controler/checkout_controller.dart';
 import 'package:albassel_version_1/view/my_fatoraah.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class Checkout extends StatelessWidget {
@@ -304,7 +305,11 @@ class Checkout extends StatelessWidget {
           SizedBox(
             height: MediaQuery.of(context).size.height*0.7-MediaQuery.of(context).padding.top,
             width: MediaQuery.of(context).size.width,
-            child: Column(
+            child: checkoutController.cashewLoading.value?
+                Center(
+                  child: CircularProgressIndicator(),
+                )
+                : Column(
               children: [
                 Container(
                   decoration: BoxDecoration(
@@ -347,7 +352,39 @@ class Checkout extends StatelessWidget {
                     title: Text(App_Localization.of(context).translate("payment")),
                     subtitle: Text(App_Localization.of(context).translate("c_card")),
                   ),
-                )
+                ),
+                const SizedBox(height: 10,),
+                double.parse(cartController.total.value) >= 200 &&double.parse(cartController.total.value) <= 2000
+                    ?Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        App.box_shadow()
+                      ]
+                  ),
+                  child: ListTile(
+                    leading: const CircleAvatar(
+                      child: Icon(Icons.credit_card),
+                    ),
+                    onTap: (){
+                      // checkoutController.selected.value=true;
+                      // checkoutController.is_cod.value=false;
+                      checkoutController.add_order_installment_payment(context);
+                    },
+                    title: Row(
+                      children: [
+                        Text(App_Localization.of(context).translate("installment_payment")),
+                        Container(
+                          width: 80,
+                          height: 25,
+                          child: SvgPicture.asset("assets/icon/cashew.svg"),
+                        )
+                      ],
+                    ),
+                    subtitle: Text(App_Localization.of(context).translate("no_discount_installment_pay")),
+                  ),
+                ):Center(),
+
               ],
             ),
           )

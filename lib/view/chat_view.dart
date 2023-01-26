@@ -29,7 +29,6 @@ class _ChatViewState extends State<ChatView> {
         child: Center(
           child: WebView(
             initialUrl: "https://tawk.to/chat/6117bbf0d6e7610a49b02b9e/1fd2bc95j",
-            // initialUrl: "https://community.shopify.com/c/shopify-apis-and-sdks/bd-p/shopify-apis-and-technology",
             javascriptMode: JavascriptMode.unrestricted,
           ),
         ),

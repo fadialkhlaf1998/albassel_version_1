@@ -5,6 +5,7 @@ import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
 import 'package:albassel_version_1/view/chat_view.dart';
 import 'package:albassel_version_1/view/policy_page.dart';
+import 'package:albassel_version_1/view/web_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
