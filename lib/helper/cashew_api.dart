@@ -1,18 +1,20 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/model/my_order.dart';
+import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:albassel_version_1/view/web_view.dart';
 import 'package:http/http.dart' as http;
 
 
 class Cashew {
 
-  static String cancelUrl = "https://www.albaselco.com/error";
+  static String cancelUrl = MyApi.url+"cashew-cancle";
 
   static Future<String?> getToken()async{
     var headers = {
-      'Cashewsecretkey': '',
+      'Cashewsecretkey': 'ce4557294d36450dae5546288fbcbf68dbbb5a3c7426a8927230b838a86e17cd',
       'Storeurl': 'https://www.albaselco.com/'
     };
     var request = http.Request('POST', Uri.parse('https://api.cashewpayments.com/v1/identity/store/authorize'));
@@ -45,8 +47,6 @@ class Cashew {
     required String country,
     required List<MyOrder> cart,
     required double shipping,
-
-
   })async{
     List<Item> itemsList = <Item>[];
 
@@ -65,9 +65,10 @@ class Cashew {
               quantity: cart[i].quantity.value));
     }
     //Vat = 5 * price / 105
-    taxAmount = 5 * totalAmount / 105;
+    taxAmount = 5 * (totalAmount - shipping) / 105;
     int orderId = DateTime.now().millisecondsSinceEpoch;
-    String confirmationUrl = "http://localhost/sdk/index.php/cashew-direct-integration/?payment_status=success&order_reference_id=$orderId";
+    // String confirmationUrl = "http://localhost/sdk/index.php/cashew-direct-integration/?payment_status=success&order_reference_id=$orderId";
+    String confirmationUrl = MyApi.url+"cashew-confirm/${Global.customer!.id}";
     var headers = {
       'Authorization': token,
       'Content-Type': 'application/json'

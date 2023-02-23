@@ -741,6 +741,11 @@ class MyApi {
   }
 
   static Future<bool> add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,int is_paid,List<LineItem> lineItems,String discount)async{
+    print('******** Fadi-Test ********'+lineItems.length.toString());
+    lineItems.forEach((element) {
+      print('****************');
+      print(element.id);
+    });
     var headers = {
       'Content-Type': 'application/json',
     };
