@@ -379,7 +379,7 @@ class Checkout extends StatelessWidget {
                         Container(
                           width: 80,
                           height: 25,
-                          child: Text(" tabby",style: TextStyle(color: App.midOrange),),
+                          child: Text(" tabby",style: TextStyle(color: Color(0xff3bffbe)),),
                         )
                       ],
                     ),
