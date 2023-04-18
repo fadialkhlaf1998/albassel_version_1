@@ -371,6 +371,7 @@ class Checkout extends StatelessWidget {
                       // checkoutController.is_cod.value=false;
                       // checkoutController.add_order_installment_payment(context);
                       checkoutController.lunch_order_tabby(context);
+
                     },
                     title: Row(
                       children: [
@@ -379,6 +380,39 @@ class Checkout extends StatelessWidget {
                           width: 80,
                           height: 25,
                           child: Text(" tabby",style: TextStyle(color: App.midOrange),),
+                        )
+                      ],
+                    ),
+                    subtitle: Text(App_Localization.of(context).translate("no_discount_installment_pay")),
+                  ),
+                ):Center(),
+                const SizedBox(height: 10,),
+                double.parse(cartController.total.value) >= 200 &&double.parse(cartController.total.value) <= 2000
+                    ?Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        App.box_shadow()
+                      ]
+                  ),
+                  child: ListTile(
+                    leading: const CircleAvatar(
+                      child: Icon(Icons.credit_card),
+                    ),
+                    onTap: (){
+                      // checkoutController.selected.value=true;
+                      // checkoutController.is_cod.value=false;
+                      checkoutController.add_order_installment_payment(context);
+                      // checkoutController.lunch_order_tabby(context);
+
+                    },
+                    title: Row(
+                      children: [
+                        Text(App_Localization.of(context).translate("installment_payment")),
+                        Container(
+                          width: 80,
+                          height: 25,
+                          child: SvgPicture.asset("assets/icon/cashew.svg"),
                         )
                       ],
                     ),

@@ -145,11 +145,10 @@ class CheckoutController extends GetxController{
         onResult: (WebViewResult resultCode) {
           print('*************** RESULT ***************');
           print(resultCode.name);
-
+          cashewLoading(false);
           if(resultCode.name == "authorized"){
             add_order_tabby(context);
           }else{
-            cashewLoading(false);
             // App.error_msg(context, App_Localization.of(context).translate("wrong"));
           }
         },
