@@ -14,10 +14,16 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:math';
 
 import 'package:get/get.dart';
+import 'package:tabby_flutter_inapp_sdk/tabby_flutter_inapp_sdk.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  TabbySDK().setup(
+    withApiKey: '',
+    environment: Environment.production,
+  );
   runApp(const MyApp());
+
 }
 //final 2.0.0+6
 class MyApp extends StatefulWidget {

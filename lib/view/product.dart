@@ -41,7 +41,7 @@ class ProductView extends StatelessWidget {
         product_rating=wishListController.rate[i].rate;
       }
     }
-    MyProduct myProduct1 = MyProduct(id: myProduct.id, subCategoryId: myProduct.subCategoryId, brandId: myProduct.brandId, title: myProduct.title, subTitle: myProduct.subTitle, description: myProduct.description, price: myProduct.price, rate: myProduct.rate, image: myProduct.image, ratingCount: myProduct.ratingCount,availability: myProduct.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
+    MyProduct myProduct1 = MyProduct(id: myProduct.id,sku: myProduct.sku, subCategoryId: myProduct.subCategoryId, brandId: myProduct.brandId, title: myProduct.title, subTitle: myProduct.subTitle, description: myProduct.description, price: myProduct.price, rate: myProduct.rate, image: myProduct.image, ratingCount: myProduct.ratingCount,availability: myProduct.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
     wishListController.add_to_recently(myProduct1);
     productController.myProduct!.is_favoirite.value=wishListController.is_favorite(myProduct1);
   }
@@ -59,7 +59,7 @@ class ProductView extends StatelessWidget {
             }
           }
           productController.myProduct=value;
-          MyProduct myProduct1 = MyProduct(id: productController.myProduct!.id, subCategoryId: productController.myProduct!.subCategoryId, brandId: productController.myProduct!.brandId, title: productController.myProduct!.title, subTitle: productController.myProduct!.subTitle, description: productController.myProduct!.description, price: productController.myProduct!.price, rate: productController.myProduct!.rate, image: productController.myProduct!.image, ratingCount: productController.myProduct!.ratingCount,availability: productController.myProduct!.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
+          MyProduct myProduct1 = MyProduct(id: productController.myProduct!.id,sku: productController.myProduct!.sku, subCategoryId: productController.myProduct!.subCategoryId, brandId: productController.myProduct!.brandId, title: productController.myProduct!.title, subTitle: productController.myProduct!.subTitle, description: productController.myProduct!.description, price: productController.myProduct!.price, rate: productController.myProduct!.rate, image: productController.myProduct!.image, ratingCount: productController.myProduct!.ratingCount,availability: productController.myProduct!.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
           productController.myProduct!.is_favoirite.value=wishListController.is_favorite(myProduct1);
         }).catchError((err){
           productController.loading.value=false;
@@ -154,7 +154,7 @@ class ProductView extends StatelessWidget {
                     color: App.midOrange,
                   ),
                   onRatingUpdate: (rating) {
-                    MyProduct myProduct1 = MyProduct(id: myProduct.id, subCategoryId: myProduct.subCategoryId, brandId: myProduct.brandId, title: myProduct.title, subTitle: myProduct.subTitle, description: myProduct.description, price: myProduct.price, rate: myProduct.rate, image: myProduct.image, ratingCount: myProduct.ratingCount,availability: myProduct.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
+                    MyProduct myProduct1 = MyProduct(id: myProduct.id,sku: myProduct.sku, subCategoryId: myProduct.subCategoryId, brandId: myProduct.brandId, title: myProduct.title, subTitle: myProduct.subTitle, description: myProduct.description, price: myProduct.price, rate: myProduct.rate, image: myProduct.image, ratingCount: myProduct.ratingCount,availability: myProduct.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
                     wishListController.add_to_rate(myProduct1, rating);
                     MyApi.rate(productController.myProduct!, rating);
                   },

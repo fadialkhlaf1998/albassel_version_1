@@ -21,7 +21,8 @@ class MyProduct {
     required this.availability,
     required this.offer_price,
     required this.category_id,
-    this.count
+    this.count,
+    required this.sku,
   });
 
   int id;
@@ -35,6 +36,7 @@ class MyProduct {
   double? offer_price;
   double rate;
   String image;
+  String sku;
   int ratingCount;
   int availability;
   var favorite=false.obs;
@@ -44,6 +46,7 @@ class MyProduct {
 
     return MyProduct(
         id: json["id"],
+        sku: json["sku"]==null?"":json["sku"],
         subCategoryId: json["sub_category_id"] ?? -1,
         brandId: json["brand_id"] ?? -1,
         title: json["title"],
@@ -68,6 +71,7 @@ class MyProduct {
   factory MyProduct.fromMap(Map<String, dynamic> json) {
     return MyProduct(
     id: json["id"],
+    sku: json["sku"],
     subCategoryId: json["sub_category_id"] ?? 1,
     brandId: json["brand_id"] ?? 1,
     title: json["title"],

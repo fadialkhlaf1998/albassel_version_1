@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.maxart.albassel_version_1">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <queries>
         <!-- If your app opens https URLs -->
         <intent>
@@ -13,7 +16,15 @@
         android:label="Albasel"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-
+       <provider
+           android:name="androidx.core.content.FileProvider"
+           android:authorities="${applicationId}.flutter_inappwebview.fileprovider"
+           android:exported="false"
+           android:grantUriPermissions="true">
+           <meta-data
+               android:name="android.support.FILE_PROVIDER_PATHS"
+               android:resource="@xml/provider_paths" />
+       </provider>
         <activity
             android:name=".MainActivity"
             android:exported="true"

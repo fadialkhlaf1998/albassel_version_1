@@ -13,7 +13,9 @@ import 'package:albassel_version_1/view/web_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:my_fatoorah/my_fatoorah.dart';
+import 'package:tabby_flutter_inapp_sdk/tabby_flutter_inapp_sdk.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 class CheckoutController extends GetxController{
   var selected_operation = 0.obs;
@@ -89,6 +91,77 @@ class CheckoutController extends GetxController{
         selected_operation--;
     }
   }
+
+  lunch_order_tabby(BuildContext context)async{
+    cashewLoading(true);
+    try{
+      var now = new DateTime.now();
+      var dateFormatted = DateFormat("yyyy-MM-ddTHH:mm:ss").format(now);
+      print(DateTime.now().toIso8601String());
+      final mockPayload = Payment(
+        amount: cartController.total.value,
+        currency: Currency.aed,
+        buyer: Buyer(
+          email: Global.customer!.email,
+          phone: phone.text,
+          // email: "card.success@tabby.ai",
+          // phone: "500000001",
+          name: firstName.text+" "+lastName.text,
+        ),
+        buyerHistory: BuyerHistory(
+          loyaltyLevel: 0,
+          registeredSince: dateFormatted+"+04:00",
+          wishlistCount: 0,
+        ),
+        shippingAddress: ShippingAddress(
+          city: city.text,
+          address: country.value+"/"+emirate.value+"/"+address.text+"/"+apartment.text,
+          zip: '',
+        ),
+        order: Order(referenceId: DateTime.now().millisecondsSinceEpoch.toString(), items:
+        cartController.my_order.map((element) => OrderItem(
+          title: element.product.value.title,
+          description: element.product.value.description,
+          quantity: element.quantity.value,
+          unitPrice: element.product.value.price.toStringAsFixed(2) ,
+          referenceId: element.product.value.sku,
+          productUrl: '',
+          category: '',
+        )).toList()
+        ),
+        orderHistory: [
+
+        ],
+      );
+
+      final session = await TabbySDK().createSession(TabbyCheckoutPayload(
+        merchantCode: 'ABPP',
+        lang: Global.lang_code=="en"?Lang.en:Lang.ar,
+        payment: mockPayload,
+      ));
+      TabbyWebView.showWebView(
+        context: context,
+        webUrl: session.availableProducts.installments!.webUrl,
+        onResult: (WebViewResult resultCode) {
+          print('*************** RESULT ***************');
+          print(resultCode.name);
+
+          if(resultCode.name == "authorized"){
+            add_order_tabby(context);
+          }else{
+            cashewLoading(false);
+            // App.error_msg(context, App_Localization.of(context).translate("wrong"));
+          }
+        },
+      );
+    }catch(e){
+      cashewLoading(false);
+      App.error_msg(context, App_Localization.of(context).translate("wrong"));
+      print(e);
+      print('***************');
+      e.printError();
+    }
+  }
   add_order_installment_payment(BuildContext context)async{
     cashewLoading(true);
     String token = await getCashewToken();
@@ -115,12 +188,6 @@ class CheckoutController extends GetxController{
       print(cashewResponse.paymentUrl);
       add_order_cashew(context);
       launchUrl(Uri.parse(cashewResponse.paymentUrl),mode: LaunchMode.externalApplication);
-
-      // cartController.clear_cart();
-      // Get.off(()=>MyWebView(cashewResponse));
-      // await launchUrl(Uri.parse(cashewResponse.paymentUrl));
-      // print('back from url');
-      //App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
     }
 
   }
@@ -155,7 +222,14 @@ class CheckoutController extends GetxController{
       Get.offAll(()=>Home());
     }
   }
-
+  add_order_tabby(BuildContext context){
+    my_order.addAll(cartController.my_order.value);
+    get_details();
+    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), -2,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
+    // cartController.clear_cart();
+    // App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
+    Get.offAll(()=>Home());
+  }
   add_order_cashew(BuildContext context){
     my_order.addAll(cartController.my_order.value);
     get_details();

@@ -24,6 +24,7 @@ class ProductInfo {
     required this.availability,
     required this.offer_price,
     required this.categoryId,
+    required this.sku,
   });
 
   int id;
@@ -31,6 +32,7 @@ class ProductInfo {
   int categoryId;
   int brandId;
   String title;
+  String sku;
   String subTitle;
   String description;
   double price;
@@ -49,6 +51,7 @@ class ProductInfo {
 
   factory ProductInfo.fromMap(Map<String, dynamic> json) => ProductInfo(
     id: json["id"],
+    sku: json["sku"]==null?"":json["sku"],
     subCategoryId: json["sub_category_id"]??-1,
     brandId: json["brand_id"]??-1,
     categoryId: json["category_id"]??-1,

@@ -369,7 +369,8 @@ class Checkout extends StatelessWidget {
                     onTap: (){
                       // checkoutController.selected.value=true;
                       // checkoutController.is_cod.value=false;
-                      checkoutController.add_order_installment_payment(context);
+                      // checkoutController.add_order_installment_payment(context);
+                      checkoutController.lunch_order_tabby(context);
                     },
                     title: Row(
                       children: [
@@ -377,7 +378,7 @@ class Checkout extends StatelessWidget {
                         Container(
                           width: 80,
                           height: 25,
-                          child: SvgPicture.asset("assets/icon/cashew.svg"),
+                          child: Text(" tabby",style: TextStyle(color: App.midOrange),),
                         )
                       ],
                     ),

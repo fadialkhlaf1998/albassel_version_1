@@ -33,6 +33,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+	<key>NSCameraUsageDescription</key>
+    <string>This allows Tabby to take a photo</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This allows Tabby to select a photo</string>
+
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
