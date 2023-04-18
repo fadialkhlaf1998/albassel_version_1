@@ -354,7 +354,7 @@ class Checkout extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10,),
-                double.parse(cartController.total.value) >= 200 &&double.parse(cartController.total.value) <= 2000
+                double.parse(cartController.total.value) >= 10 &&double.parse(cartController.total.value) <= 4000
                     ?Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
