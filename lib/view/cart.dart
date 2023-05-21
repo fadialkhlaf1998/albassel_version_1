@@ -6,6 +6,7 @@ import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
 import 'package:albassel_version_1/view/checkout.dart';
+import 'package:albassel_version_1/view/custom_web_view.dart';
 import 'package:albassel_version_1/view/sign_in.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
@@ -390,8 +391,43 @@ class Cart extends StatelessWidget {
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(App_Localization.of(context).translate("total"),style: App.textBlod(Colors.black, 20),)
+                Text(App_Localization.of(context).translate("total"),style: App.textBlod(Colors.black, 20),),
+                GestureDetector(
+                  onTap: (){
+                    Get.to(()=>TabbyWebView("https://checkout.tabby.ai/promos/product-page/installments/en/?price=${cartController.total.value}&currency=AED"));
+                  },
+                  child: Container(
+                    // width: Get.width * 0.9,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        // border: Border.all(color: Color(0xffd6d6d3)),
+                        borderRadius: BorderRadius.circular(7)
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          // width: Get.width*0.9 - 92,
+                          width: 80,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(App_Localization.of(context).translate("tabby_promotion"),style: TextStyle(fontSize: 10),)
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 60,
+                          height: 25,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(image: AssetImage("assets/logo/tabby.png"))
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
             Row(

@@ -199,7 +199,9 @@
 
   "installment_payment": "Installment Payment",
   "no_discount_installment_pay": "no discounts for installment payments",
-  "cashew_description": "Or split your purchase into installments, with no extra cost to you."
+  "cashew_description": "Or split your purchase into installments, with no extra cost to you.",
+
+  "tabby_promotion": "Pay in 4. No interest, no fees."
 
 }
 

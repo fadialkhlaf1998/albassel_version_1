@@ -77,6 +77,8 @@ class Product {
     required this.shopifyId,
     required this.offerPrice,
     required this.count,
+    required this.brand,
+    required this.category,
   });
 
   int id;
@@ -90,6 +92,8 @@ class Product {
   double price;
   double rate;
   String image;
+  String brand;
+  String category;
   int ratingCount;
   int newArrivials;
   int availability;
@@ -105,6 +109,8 @@ class Product {
   factory Product.fromMap(Map<String, dynamic> json) => Product(
     id: json["id"],
     autoDiscountId: json["auto_discount_id"],
+    brand: json["brand"],
+    category: json["category"],
     productId: json["product_id"],
     subCategoryId: json["sub_category_id"]??1,
     brandId: json["brand_id"]??1,
@@ -127,6 +133,8 @@ class Product {
     "id": id,
     "auto_discount_id": autoDiscountId,
     "product_id": productId,
+    "brand":brand,
+    "category":category,
     "sub_category_id": subCategoryId,
     "brand_id": brandId,
     "title": title,

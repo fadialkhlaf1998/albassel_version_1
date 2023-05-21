@@ -740,7 +740,7 @@ class MyApi {
     }
   }
 
-  static Future<bool> add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,int is_paid,List<LineItem> lineItems,String discount)async{
+  static Future<bool> add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,int is_paid,List<LineItem> lineItems,String discount,String reference)async{
     print('******** Fadi-Test ********'+lineItems.length.toString());
     lineItems.forEach((element) {
       print('****************');
@@ -766,7 +766,8 @@ class MyApi {
       "is_paid": is_paid,
       "address": city+"/"+address,
       "lineItems": List<dynamic>.from(lineItems.map((x) => x.toMap())),
-      "discount":discount
+      "discount":discount,
+      "reference":reference
     });
     request.headers.addAll(headers);
 

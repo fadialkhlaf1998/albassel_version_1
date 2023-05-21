@@ -11,6 +11,7 @@ import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:albassel_version_1/my_model/my_product.dart';
 import 'package:albassel_version_1/my_model/product_info.dart';
 import 'package:albassel_version_1/view/cashew_details.dart';
+import 'package:albassel_version_1/view/custom_web_view.dart';
 import 'package:albassel_version_1/view/image_show.dart';
 import 'package:albassel_version_1/view/no_internet.dart';
 import 'package:albassel_version_1/view/sign_in.dart';
@@ -35,13 +36,14 @@ class ProductView extends StatelessWidget {
 
   ProductView(this.myProduct, {Key? key}) : super(key: key){
     productController.myProduct=myProduct;
+
     // productController.myProduct!.availability=0;
     for(int i=0;i<wishListController.rate.length;i++){
       if(myProduct.id==wishListController.rate[i].id){
         product_rating=wishListController.rate[i].rate;
       }
     }
-    MyProduct myProduct1 = MyProduct(id: myProduct.id,sku: myProduct.sku, subCategoryId: myProduct.subCategoryId, brandId: myProduct.brandId, title: myProduct.title, subTitle: myProduct.subTitle, description: myProduct.description, price: myProduct.price, rate: myProduct.rate, image: myProduct.image, ratingCount: myProduct.ratingCount,availability: myProduct.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
+    MyProduct myProduct1 = MyProduct(id: myProduct.id,brand: myProduct.brand,category: myProduct.category,sku: myProduct.sku, subCategoryId: myProduct.subCategoryId, brandId: myProduct.brandId, title: myProduct.title, subTitle: myProduct.subTitle, description: myProduct.description, price: myProduct.price, rate: myProduct.rate, image: myProduct.image, ratingCount: myProduct.ratingCount,availability: myProduct.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
     wishListController.add_to_recently(myProduct1);
     productController.myProduct!.is_favoirite.value=wishListController.is_favorite(myProduct1);
   }
@@ -59,7 +61,8 @@ class ProductView extends StatelessWidget {
             }
           }
           productController.myProduct=value;
-          MyProduct myProduct1 = MyProduct(id: productController.myProduct!.id,sku: productController.myProduct!.sku, subCategoryId: productController.myProduct!.subCategoryId, brandId: productController.myProduct!.brandId, title: productController.myProduct!.title, subTitle: productController.myProduct!.subTitle, description: productController.myProduct!.description, price: productController.myProduct!.price, rate: productController.myProduct!.rate, image: productController.myProduct!.image, ratingCount: productController.myProduct!.ratingCount,availability: productController.myProduct!.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
+          MyProduct myProduct1 = MyProduct(id: productController.myProduct!.id
+              ,brand: productController.myProduct!.brand,category: productController.myProduct!.category,sku: productController.myProduct!.sku, subCategoryId: productController.myProduct!.subCategoryId, brandId: productController.myProduct!.brandId, title: productController.myProduct!.title, subTitle: productController.myProduct!.subTitle, description: productController.myProduct!.description, price: productController.myProduct!.price, rate: productController.myProduct!.rate, image: productController.myProduct!.image, ratingCount: productController.myProduct!.ratingCount,availability: productController.myProduct!.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
           productController.myProduct!.is_favoirite.value=wishListController.is_favorite(myProduct1);
         }).catchError((err){
           productController.loading.value=false;
@@ -154,7 +157,8 @@ class ProductView extends StatelessWidget {
                     color: App.midOrange,
                   ),
                   onRatingUpdate: (rating) {
-                    MyProduct myProduct1 = MyProduct(id: myProduct.id,sku: myProduct.sku, subCategoryId: myProduct.subCategoryId, brandId: myProduct.brandId, title: myProduct.title, subTitle: myProduct.subTitle, description: myProduct.description, price: myProduct.price, rate: myProduct.rate, image: myProduct.image, ratingCount: myProduct.ratingCount,availability: myProduct.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
+                    MyProduct myProduct1 = MyProduct(id: myProduct.id,
+                        category: myProduct.category,brand: myProduct.brand,sku: myProduct.sku, subCategoryId: myProduct.subCategoryId, brandId: myProduct.brandId, title: myProduct.title, subTitle: myProduct.subTitle, description: myProduct.description, price: myProduct.price, rate: myProduct.rate, image: myProduct.image, ratingCount: myProduct.ratingCount,availability: myProduct.availability,offer_price: myProduct.offer_price,category_id: myProduct.categoryId);
                     wishListController.add_to_rate(myProduct1, rating);
                     MyApi.rate(productController.myProduct!, rating);
                   },
@@ -395,6 +399,46 @@ class ProductView extends StatelessWidget {
                       width: 80,
                       height: 25,
                       child: SvgPicture.asset("assets/icon/cashew.svg"),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 10,),
+        Container(
+          width: Get.width * 0.9,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: GestureDetector(
+              onTap: (){
+                Get.to(()=>TabbyWebView("https://checkout.tabby.ai/promos/product-page/installments/en/?price=${productController.myProduct!.price.toStringAsFixed(2)}&currency=AED"));
+              },
+              child: Container(
+                width: Get.width * 0.9,
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Color(0xffd6d6d3)),
+                    borderRadius: BorderRadius.circular(7)
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: Get.width*0.9 - 92,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(App_Localization.of(context).translate("tabby_promotion"),style: TextStyle(fontSize: 12),)
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: 80,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(image: AssetImage("assets/logo/tabby.png"))
+                      ),
                     )
                   ],
                 ),

@@ -17,7 +17,9 @@ class Checkout extends StatelessWidget {
   String shipping;
   String total;
 
-  Checkout(this.sub_total, this.shipping, this.total, {Key? key}) : super(key: key);
+  Checkout(this.sub_total, this.shipping, this.total) {
+    checkoutController.lunch_session();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -375,15 +377,17 @@ class Checkout extends StatelessWidget {
                     },
                     title: Row(
                       children: [
-                        Text(App_Localization.of(context).translate("installment_payment")),
+                        // Text(App_Localization.of(context).translate("installment_payment")),
                         Container(
-                          width: 80,
+                          width: 57,
                           height: 25,
-                          child: Text(" tabby",style: TextStyle(color: Color(0xff3bffbe)),),
-                        )
+                          decoration: BoxDecoration(
+                              image: DecorationImage(image: AssetImage("assets/logo/tabby.png",),fit: BoxFit.cover)
+                          ),
+                        ),
                       ],
                     ),
-                    subtitle: Text(App_Localization.of(context).translate("no_discount_installment_pay")),
+                    subtitle: Text(App_Localization.of(context).translate("tabby_promotion")),
                   ),
                 ):Center(),
                 const SizedBox(height: 10,),

@@ -28,6 +28,7 @@ class CheckoutController extends GetxController{
   double total=0.0;
   List<LineItem> lineItems = <LineItem>[];
   CartController cartController = Get.find();
+  String orderTabbyId = "";
 
 
   @override
@@ -91,6 +92,52 @@ class CheckoutController extends GetxController{
         selected_operation--;
     }
   }
+  lunch_session()async{
+    var now = new DateTime.now();
+    var dateFormatted = DateFormat("yyyy-MM-ddTHH:mm:ss").format(now);
+    orderTabbyId = DateTime.now().millisecondsSinceEpoch.toString();
+    print(DateTime.now().toIso8601String());
+    final mockPayload = Payment(
+      amount: cartController.total.value,
+      currency: Currency.aed,
+      buyer: Buyer(
+        email: Global.customer!.email,
+        phone: phone.text,
+        name: firstName.text+" "+lastName.text,
+      ),
+      buyerHistory: BuyerHistory(
+        loyaltyLevel: 0,
+        registeredSince: dateFormatted+"+04:00",
+        wishlistCount: 0,
+      ),
+      shippingAddress: ShippingAddress(
+        city: city.text,
+        address: country.value+"/"+emirate.value+"/"+address.text+"/"+apartment.text,
+        zip: '',
+      ),
+      order: Order(referenceId: orderTabbyId, items:
+      cartController.my_order.map((element) => OrderItem(
+        title: element.product.value.title,
+        description: element.product.value.description,
+        quantity: element.quantity.value,
+        unitPrice: element.product.value.price.toStringAsFixed(2) ,
+        referenceId: element.product.value.sku,
+        productUrl: '',
+        category: element.product.value.category,
+        brand: element.product.value.brand,
+          imageUrl:  element.product.value.image
+      )).toList()
+      ),
+      orderHistory: [
+
+      ],
+    );
+    final session = await TabbySDK().createSession(TabbyCheckoutPayload(
+      merchantCode: 'ABPP',
+      lang: Global.lang_code=="en"?Lang.en:Lang.ar,
+      payment: mockPayload,
+    ));
+  }
 
   lunch_order_tabby(BuildContext context)async{
     cashewLoading(true);
@@ -102,10 +149,11 @@ class CheckoutController extends GetxController{
         amount: cartController.total.value,
         currency: Currency.aed,
         buyer: Buyer(
-          email: Global.customer!.email,
-          phone: phone.text,
+
           // email: "card.success@tabby.ai",
+          email: Global.customer!.email,
           // phone: "500000001",
+          phone: phone.text,
           name: firstName.text+" "+lastName.text,
         ),
         buyerHistory: BuyerHistory(
@@ -118,7 +166,7 @@ class CheckoutController extends GetxController{
           address: country.value+"/"+emirate.value+"/"+address.text+"/"+apartment.text,
           zip: '',
         ),
-        order: Order(referenceId: DateTime.now().millisecondsSinceEpoch.toString(), items:
+        order: Order(referenceId: orderTabbyId, items:
         cartController.my_order.map((element) => OrderItem(
           title: element.product.value.title,
           description: element.product.value.description,
@@ -126,14 +174,15 @@ class CheckoutController extends GetxController{
           unitPrice: element.product.value.price.toStringAsFixed(2) ,
           referenceId: element.product.value.sku,
           productUrl: '',
-          category: '',
+          category: element.product.value.category,
+          brand: element.product.value.brand,
+          imageUrl:  element.product.value.image
         )).toList()
         ),
         orderHistory: [
 
         ],
       );
-
       final session = await TabbySDK().createSession(TabbyCheckoutPayload(
         merchantCode: 'ABPP',
         lang: Global.lang_code=="en"?Lang.en:Lang.ar,
@@ -147,8 +196,9 @@ class CheckoutController extends GetxController{
           print(resultCode.name);
           cashewLoading(false);
           if(resultCode.name == "authorized"){
-            add_order_tabby(context);
-          }else{
+            add_order_tabby(context,orderTabbyId);
+          }else if(resultCode.name == "close"){
+            Get.back();
             // App.error_msg(context, App_Localization.of(context).translate("wrong"));
           }
         },
@@ -203,7 +253,7 @@ class CheckoutController extends GetxController{
   add_order_payment(BuildContext context){
     get_details();
     //todo add order to shpify
-    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value ?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
+    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value ?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"");
     // cartController.clear_cart();
 
     App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
@@ -215,39 +265,39 @@ class CheckoutController extends GetxController{
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
       Get.offAll(()=>Home());
     }else{
-      add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value ?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
+      add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value ?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"");
       // cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
       Get.offAll(()=>Home());
     }
   }
-  add_order_tabby(BuildContext context){
+  add_order_tabby(BuildContext context,String reference){
     my_order.addAll(cartController.my_order.value);
     get_details();
-    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), -2,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
+    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), -3,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),reference);
     // cartController.clear_cart();
-    // App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
+    App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
     Get.offAll(()=>Home());
   }
   add_order_cashew(BuildContext context){
     my_order.addAll(cartController.my_order.value);
     get_details();
-    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), -1,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
+    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), -1,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"");
     // cartController.clear_cart();
     // App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
     Get.offAll(()=>Home());
   }
 
   //todo remove coment
-  add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,int is_paid,List<LineItem> lineItems,String discount){
-    MyApi.add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount).then((succ) {
+  add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,int is_paid,List<LineItem> lineItems,String discount,String reference){
+    MyApi.add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,reference).then((succ) {
       if(!succ){
-        add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount);
+        add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,reference);
       }else{
         cartController.clear_cart();
       }
     }).catchError((err){
-      add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount);
+      add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,reference);
     });
   }
 
