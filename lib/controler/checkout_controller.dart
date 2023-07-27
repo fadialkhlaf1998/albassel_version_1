@@ -12,7 +12,6 @@ import 'package:albassel_version_1/view/home.dart';
 import 'package:albassel_version_1/view/web_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:my_fatoorah/my_fatoorah.dart';
 import 'package:tabby_flutter_inapp_sdk/tabby_flutter_inapp_sdk.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
@@ -58,8 +57,28 @@ class CheckoutController extends GetxController{
   List<String> countries=["united_arab_emirates"];
   List<String> emirates=["abu_dhabi","ajman","dubai","fujairah","ras_al_Khaimah","sharjah","umm_al_Quwain"];
 
-  next(BuildContext context){
 
+  getShippingAmount(String emirate){
+    for(int i=0 ; i < Global.new_shipping.length; i++){
+      if(emirate == Global.new_shipping[i].emirate){
+        return Global.new_shipping[i].amount;
+      }
+    }
+    return Global.new_shipping.first.amount;
+  }
+
+  getMinValueForFree(String emirate){
+    for(int i=0 ; i < Global.new_shipping.length; i++){
+      if(emirate == Global.new_shipping[i].emirate){
+        return Global.new_shipping[i].minAmountFree;
+      }
+    }
+    return Global.new_shipping.first.minAmountFree;
+  }
+
+  next(BuildContext context){
+    cartController.get_total(min_amount_for_free: getMinValueForFree(emirate.value.toString()),
+        shipping_amount: getShippingAmount(emirate.value.toString()));
     if(selected_operation==0){
 
       if(firstName.value.text.isEmpty||lastName.value.text.isEmpty||address.value.text.isEmpty||
@@ -71,6 +90,7 @@ class CheckoutController extends GetxController{
         Address a = Address(address: address.text, apartment: apartment.text, city: city.text, country: country.value, Emirate: emirate.value, phone: phone.text);
         Store.save_address(a);
       }
+
     }else{
       if(selected.value&&!is_cod.value) {
         App.error_msg(

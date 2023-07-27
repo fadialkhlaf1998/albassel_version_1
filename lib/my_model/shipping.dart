@@ -9,10 +9,12 @@ class Shipping {
   Shipping({
     required this.amount,
     required this.minAmountFree,
+    required this.emirate,
   });
 
   double amount;
   double minAmountFree;
+  String emirate;
 
   factory Shipping.fromJson(String str) => Shipping.fromMap(json.decode(str));
 
@@ -21,6 +23,7 @@ class Shipping {
   factory Shipping.fromMap(Map<String, dynamic> json) => Shipping(
     amount: double.parse(json["amount"].toString()),
     minAmountFree: double.parse(json["min_amount_free"].toString()),
+    emirate: json["emirate"] == null?"":json["emirate"],
   );
 
   Map<String, dynamic> toMap() => {

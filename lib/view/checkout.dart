@@ -2,6 +2,7 @@
 
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
+import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/checkout_controller.dart';
 import 'package:albassel_version_1/view/my_fatoraah.dart';
@@ -182,6 +183,8 @@ class Checkout extends StatelessWidget {
           GestureDetector(
             onTap: (){
               checkoutController.next(context);
+              shipping = cartController.shipping.value;
+              total = cartController.total.value;
             },
             child: Container(
               height: MediaQuery.of(context).size.height*0.06,
@@ -254,13 +257,17 @@ class Checkout extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(App_Localization.of(context).translate("emirate"),style: App.textNormal(Colors.grey, 12),),
-                      DropdownButton<String>(
+                      DropdownButton(
                         isExpanded: true,
                         value: checkoutController.emirate.value=="non"?null:checkoutController.emirate.value,
-                        items: checkoutController.emirates.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(App_Localization.of(context).translate(value),style: App.textNormal(Colors.black, 12),),
+                        items: Global.new_shipping.map((newvalue) {
+                          return DropdownMenuItem(
+                            value: newvalue.emirate,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width*0.45,
+                              padding: const EdgeInsets.only(left: 3),
+                              child: Text(newvalue.emirate+" Shipping:"+newvalue.amount.toString()+"AED",style: TextStyle(fontSize: 12),),
+                            ),
                           );
                         }).toList(),
                         underline: Container(color: checkoutController.address_err.value&&checkoutController.emirate.value=="non"?Colors.red:Colors.grey,height: 1,),

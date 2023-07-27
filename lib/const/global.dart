@@ -11,7 +11,8 @@ import 'package:albassel_version_1/model/customer.dart';
 import '../my_model/address.dart';
 
 class Global{
-  static Shipping shipping = Shipping(amount: 10, minAmountFree: 250);
+  static Shipping shipping = Shipping(amount: 10, minAmountFree: 250,emirate: "");
+  static List<Shipping> new_shipping = <Shipping>[];
   static String lang_code="en";
   static int customer_type=0;
   static int customer_type_decoder=0;

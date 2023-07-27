@@ -86,6 +86,7 @@ class MyApi {
       for(int i=0;i<list.length;i++){
         shippingList.add(Shipping.fromMap(list[i]));
       }
+      Global.new_shipping = shippingList;
       Global.shipping = shippingList.first;
       return true;
     }

@@ -396,7 +396,7 @@ class Cart extends StatelessWidget {
                 Text(App_Localization.of(context).translate("total"),style: App.textBlod(Colors.black, 20),),
                 GestureDetector(
                   onTap: (){
-                    Get.to(()=>TabbyWebView("https://checkout.tabby.ai/promos/product-page/installments/en/?price=${cartController.total.value}&currency=AED"));
+                    Get.to(()=>TabbyWebView("https://checkout.tabby.ai/promos/product-page/installments/en/?price=${(double.parse(cartController.total.value)-double.parse(cartController.shipping.value)).toString()}&currency=AED"));
                   },
                   child: Container(
                     // width: Get.width * 0.9,
@@ -445,12 +445,13 @@ class Cart extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(App_Localization.of(context).translate("shipping"),style: App.textNormal(Colors.black, 14),),
-                DottedLine(
-                  dashColor: Colors.grey,
-                  lineLength: MediaQuery.of(context).size.width*0.5,
-                ),
-                Text(App_Localization.of(context).translate("aed")+" "+ double.parse(cartController.shipping.value).toStringAsFixed(2))
+                // Text(App_Localization.of(context).translate("shipping"),style: App.textNormal(Colors.black, 14),),
+                // DottedLine(
+                //   dashColor: Colors.grey,
+                //   lineLength: 100,
+                // ),
+                // Text(App_Localization.of(context).translate("aed")+" "+ double.parse(cartController.shipping.value).toStringAsFixed(2))
+                Text(App_Localization.of(context).translate("Shipping_will_be_calculated_at_checkout"))
               ],
             ),
             double.parse(cartController.discount.value)>0&&cartController.canDiscountCode.value?const SizedBox(height: 5,):const Center(),
@@ -484,7 +485,7 @@ class Cart extends StatelessWidget {
                 Text(App_Localization.of(context).translate("tax")+" "+App_Localization.of(context).translate("included"),style: App.textNormal(Colors.black, 14),),
                 DottedLine(
                   dashColor: Colors.grey,
-                  lineLength: MediaQuery.of(context).size.width*0.5,
+                  lineLength: MediaQuery.of(context).size.width*0.5 - 20,
                 ),
                 Text(App_Localization.of(context).translate("aed")+" "+ double.parse(cartController.tax.value).toStringAsFixed(2))
               ],
@@ -498,7 +499,7 @@ class Cart extends StatelessWidget {
                   dashColor: Colors.grey,
                   lineLength: MediaQuery.of(context).size.width*0.5,
                 ),
-                Text(App_Localization.of(context).translate("aed")+" "+(double.parse(cartController.total.value)).toStringAsFixed(2))
+                Text(App_Localization.of(context).translate("aed")+" "+((double.parse(cartController.total.value)-double.parse(cartController.shipping.value)).toStringAsFixed(2)))
               ],
             ),
             activateDicountCode(context),

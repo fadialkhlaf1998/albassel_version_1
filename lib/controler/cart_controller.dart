@@ -193,9 +193,24 @@ class CartController extends GetxController{
     couponAutoDiscount = x.toString().obs;
     // print(coupon.value);
   }
-  get_total(){
+  get_total({
+    double? shipping_amount,
+    double? min_amount_for_free,
+}){
     autoDiscount();
-    double x=0,y=Global.shipping.amount;
+    double x=0;
+    double minAmountForFree=250;
+    if(min_amount_for_free== null){
+      minAmountForFree = Global.new_shipping.first.minAmountFree;
+    }else{
+      minAmountForFree = min_amount_for_free;
+    }
+    double y=0;
+    if(shipping_amount== null){
+      y = Global.new_shipping.first.amount;
+    }else{
+      y = shipping_amount;
+    }
     canDiscountCount=0;
     for (var elm in my_order) {
       if(canDicount(elm)){
@@ -205,12 +220,11 @@ class CartController extends GetxController{
       x += double.parse(elm.price.value);
     }
     sub_total.value=x.toString();
-    if(x>Global.shipping.minAmountFree){
+    if(x>minAmountForFree ){
       y=0;
       shipping.value="0.00";
     }else{
-      y=Global.shipping.amount;
-      shipping.value=Global.shipping.amount.toString();
+      shipping.value=y.toString();
     }
 
     double z = calcDicount();

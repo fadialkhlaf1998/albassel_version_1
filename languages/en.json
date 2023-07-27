@@ -201,7 +201,8 @@
   "no_discount_installment_pay": "no discounts for installment payments",
   "cashew_description": "Or split your purchase into installments, with no extra cost to you.",
 
-  "tabby_promotion": "Pay in 4. No interest, no fees."
+  "tabby_promotion": "Pay in 4. No interest, no fees.",
+  "Shipping_will_be_calculated_at_checkout": "Shipping will be calculated at checkout"
 
 }
 
