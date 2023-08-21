@@ -70,6 +70,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    namespace 'com.maxart.albassel_version_1'
 }
 
 flutter {

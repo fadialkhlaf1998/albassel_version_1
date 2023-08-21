@@ -45,7 +45,7 @@ dependencies:
   file_picker: ^4.5.1
   photo_view: ^0.13.0
   new_version: ^0.3.0
-  flutter_html: ^2.1.5
+  flutter_html: ^2.0.0
   country_picker: ^2.0.15
   dotted_line: ^3.1.0
   http: ^0.13.4
@@ -59,6 +59,8 @@ dependencies:
   fluttertoast: ^8.0.9
   tabby_flutter_inapp_sdk: ^1.2.0
 
+#dependency_overrides:
+#  package_info_plus: any
 
 dev_dependencies:
   flutter_test:

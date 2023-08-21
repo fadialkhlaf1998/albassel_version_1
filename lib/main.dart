@@ -3,12 +3,7 @@ import 'dart:io';
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/const/global.dart';
-import 'package:albassel_version_1/helper/log_in_api.dart';
-import 'package:albassel_version_1/view/checkout.dart';
-import 'package:albassel_version_1/view/home.dart';
-import 'package:albassel_version_1/view/sign_in.dart';
 import 'package:albassel_version_1/view/intro.dart';
-import 'package:albassel_version_1/view/no_internet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:math';
@@ -19,7 +14,7 @@ import 'package:tabby_flutter_inapp_sdk/tabby_flutter_inapp_sdk.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   TabbySDK().setup(
-    withApiKey: '',
+    withApiKey: 'pk_8de7d36f-373d-4427-8f2f-538268536aff',
     environment: Environment.production,
   );
 
