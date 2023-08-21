@@ -6,6 +6,7 @@ import 'package:albassel_version_1/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
+// import 'package:photo_view/photo_view.dart';
 
 class ImageShow extends StatelessWidget {
 
