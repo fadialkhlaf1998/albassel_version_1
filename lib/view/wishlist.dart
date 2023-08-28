@@ -129,6 +129,19 @@ class Wishlist extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      wishListController.wishlist[index].availability== 0?Container(
+                  width: MediaQuery.of(context).size.width*0.2,
+                  height: 25,
+
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(3),
+                      border: Border.all(color: Colors.red)
+                  ),
+                  child: Center(
+                    child: Text(App_Localization.of(context).translate("out_of_stock"),style: App.textNormal(Colors.red, 9),),
+                  ),
+                ):
                       GestureDetector(
                         onTap: (){
                           if(cartController.add_to_cart(wishListController.wishlist[index], 1,context)){

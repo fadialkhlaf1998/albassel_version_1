@@ -503,7 +503,8 @@ backgroundColor: App.midOrange,
 
                   }, icon: Obx((){
                     return Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
-                  })))
+                  }))),
+                  App.outOfStock(productsController.my_products[index].availability)
                 ],
               ),
             ),

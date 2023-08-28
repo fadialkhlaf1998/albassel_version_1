@@ -410,7 +410,8 @@ class CategoryViewnave extends StatelessWidget {
                       productsController.wishListController.add_to_wishlist(productsController.my_products[index],context);
                     }
 
-                  }, icon: Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,)))
+                  }, icon: Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,))),
+                  App.outOfStock(productsController.my_products[index].availability)
                 ],
               ),
             ),

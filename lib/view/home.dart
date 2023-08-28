@@ -529,7 +529,8 @@ class Home extends StatelessWidget {
 
                           }, icon: Obx((){
                             return Icon(homeController.bestSellers[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
-                          })))
+                          }))),
+                          App.outOfStock(homeController.bestSellers[index].availability),
                         ],
                       ),
                     ),

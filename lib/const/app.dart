@@ -40,6 +40,24 @@ class App{
       ),
     );
   }
+  static outOfStock(int availability){
+    return availability > 0?Center():Positioned(
+        top: 30,
+        // left: Get.width * 0.2 - 50,
+        child: Container(
+          width: Get.width * 0.42,
+          child: Center(
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                // color: Colors.red,
+                  image: DecorationImage(image: AssetImage("assets/photos/out_of_stock.png"),fit: BoxFit.contain)
+              ),
+            ),
+          ),
+        ),);
+  }
   static checkoutTextField(TextEditingController controller,String translate,BuildContext context,double width,double height,bool err){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

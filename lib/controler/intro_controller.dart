@@ -52,7 +52,7 @@ class IntroController extends GetxController{
     Store.load_address();
     var t = await get_customer_type();
     MyApi.check_internet().then((internet) async {
-      MyApi.getShipping();
+      await MyApi.getShipping();
      if(internet){
        if(category.isEmpty)
        {
