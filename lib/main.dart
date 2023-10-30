@@ -12,7 +12,7 @@ import 'package:tabby_flutter_inapp_sdk/tabby_flutter_inapp_sdk.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   TabbySDK().setup(
-    withApiKey: 'pk_8de7d36f-373d-4427-8f2f-538268536aff',
+    withApiKey: '',
     environment: Environment.production,
   );
 
