@@ -1,10 +1,4 @@
-import 'dart:developer';
-import 'dart:io';
-import 'package:albassel_version_1/app_localization.dart';
-import 'package:albassel_version_1/const/app.dart';
-import 'package:albassel_version_1/controler/checkout_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class TabbyWebView extends StatefulWidget {
@@ -16,12 +10,23 @@ class TabbyWebView extends StatefulWidget {
 }
 
 class _WebViewState extends State<TabbyWebView> {
+  WebViewController? controller;
+  bool loading = true;
 
   @override
   void initState() {
     super.initState();
     // Enable virtual display.
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    // if (Platform.isAndroid) WebView.platform = AndroidWebView();
+
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..loadRequest(
+          Uri.parse(this.widget.url));
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -33,11 +38,14 @@ class _WebViewState extends State<TabbyWebView> {
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Center(
-          child: WebView(
-            initialUrl: this.widget.url,
-            javascriptMode: JavascriptMode.unrestricted,
-            gestureNavigationEnabled: true,
-          ),
+          child:  loading
+              ? CircularProgressIndicator()
+              : WebViewWidget(controller: controller!),
+          // child: WebView(
+          //   initialUrl: this.widget.url,
+          //   javascriptMode: JavascriptMode.unrestricted,
+          //   gestureNavigationEnabled: true,
+          // ),
         ),
       ),
     );

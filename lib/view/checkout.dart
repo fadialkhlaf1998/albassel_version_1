@@ -335,8 +335,9 @@ class Checkout extends StatelessWidget {
                       checkoutController.is_paid.value=false;
                       checkoutController.is_cod.value=true;
                     },
-                    leading: const CircleAvatar(
-                      child: Icon(Icons.delivery_dining),
+                    leading:  CircleAvatar(
+                      backgroundColor: App.midOrange,
+                      child: Icon(Icons.delivery_dining ,color: Colors.white),
                     ),
                     title: Text(App_Localization.of(context).translate("cod")),
                     subtitle: Text(App_Localization.of(context).translate("cash")),
@@ -351,8 +352,9 @@ class Checkout extends StatelessWidget {
                     ]
                   ),
                   child: ListTile(
-                    leading: const CircleAvatar(
-                      child: Icon(Icons.credit_card),
+                    leading: CircleAvatar(
+                      backgroundColor: App.midOrange,
+                      child: Icon(Icons.credit_card,color: Colors.white,),
                     ),
                     onTap: (){
                       checkoutController.selected.value=true;
@@ -372,8 +374,9 @@ class Checkout extends StatelessWidget {
                       ]
                   ),
                   child: ListTile(
-                    leading: const CircleAvatar(
-                      child: Icon(Icons.credit_card),
+                    leading: CircleAvatar(
+                      backgroundColor: App.midOrange,
+                      child: Icon(Icons.credit_card ,color: Colors.white,),
                     ),
                     onTap: (){
                       // checkoutController.selected.value=true;

@@ -7,7 +7,7 @@ import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:albassel_version_1/view/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:my_fatoorah/my_fatoorah.dart';
+// import 'package:my_fatoorah/my_fatoorah.dart';
 
 class AdressController extends GetxController{
   var selected_operation = 0.obs;
@@ -74,25 +74,25 @@ class AdressController extends GetxController{
       selected_operation--;
     }
   }
-  pay(double price,BuildContext context){
-    MyFatoorah.startPayment(
-      context: context,
-      request: MyfatoorahRequest.test(
-        currencyIso: Country.UAE,
-        successUrl:
-        "https://assets.materialup.com/uploads/473ef52c-8b96-46f7-9771-cac4b112ae28/preview.png",
-        errorUrl:
-        "https://www.digitalpaymentguru.com/wp-content/uploads/2019/08/Transaction-Failed.png",
-        invoiceAmount: price,
-        language: Global.lang_code=="en"?ApiLanguage.English:ApiLanguage.Arabic,
-        token: "rLtt6JWvbUHDDhsZnfpAhpYk4dxYDQkbcPTyGaKp2TYqQgG7FGZ5Th_WD53Oq8Ebz6A53njUoo1w3pjU1D4vs_ZMqFiz_j0urb_BH9Oq9VZoKFoJEDAbRZepGcQanImyYrry7Kt6MnMdgfG5jn4HngWoRdKduNNyP4kzcp3mRv7x00ahkm9LAK7ZRieg7k1PDAnBIOG3EyVSJ5kK4WLMvYr7sCwHbHcu4A5WwelxYK0GMJy37bNAarSJDFQsJ2ZvJjvMDmfWwDVFEVe_5tOomfVNt6bOg9mexbGjMrnHBnKnZR1vQbBtQieDlQepzTZMuQrSuKn-t5XZM7V6fCW7oP-uXGX-sMOajeX65JOf6XVpk29DP6ro8WTAflCDANC193yof8-f5_EYY-3hXhJj7RBXmizDpneEQDSaSz5sFk0sV5qPcARJ9zGG73vuGFyenjPPmtDtXtpx35A-BVcOSBYVIWe9kndG3nclfefjKEuZ3m4jL9Gg1h2JBvmXSMYiZtp9MR5I6pvbvylU_PP5xJFSjVTIz7IQSjcVGO41npnwIxRXNRxFOdIUHn0tjQ-7LwvEcTXyPsHXcMD8WtgBh-wxR8aKX7WPSsT1O8d8reb2aR7K3rkV3K82K_0OgawImEpwSvp9MNKynEAJQS6ZHe_J_l77652xwPNxMRTMASk1ZsJL",
-      ),
-    ).then((response) {
-      print(response);
-    }).catchError((e) {
-      print(e);
-    });
-  }
+  // pay(double price,BuildContext context){
+  //   MyFatoorah.startPayment(
+  //     context: context,
+  //     request: MyfatoorahRequest.test(
+  //       currencyIso: Country.UAE,
+  //       successUrl:
+  //       "https://assets.materialup.com/uploads/473ef52c-8b96-46f7-9771-cac4b112ae28/preview.png",
+  //       errorUrl:
+  //       "https://www.digitalpaymentguru.com/wp-content/uploads/2019/08/Transaction-Failed.png",
+  //       invoiceAmount: price,
+  //       language: Global.lang_code=="en"?ApiLanguage.English:ApiLanguage.Arabic,
+  //       token: "rLtt6JWvbUHDDhsZnfpAhpYk4dxYDQkbcPTyGaKp2TYqQgG7FGZ5Th_WD53Oq8Ebz6A53njUoo1w3pjU1D4vs_ZMqFiz_j0urb_BH9Oq9VZoKFoJEDAbRZepGcQanImyYrry7Kt6MnMdgfG5jn4HngWoRdKduNNyP4kzcp3mRv7x00ahkm9LAK7ZRieg7k1PDAnBIOG3EyVSJ5kK4WLMvYr7sCwHbHcu4A5WwelxYK0GMJy37bNAarSJDFQsJ2ZvJjvMDmfWwDVFEVe_5tOomfVNt6bOg9mexbGjMrnHBnKnZR1vQbBtQieDlQepzTZMuQrSuKn-t5XZM7V6fCW7oP-uXGX-sMOajeX65JOf6XVpk29DP6ro8WTAflCDANC193yof8-f5_EYY-3hXhJj7RBXmizDpneEQDSaSz5sFk0sV5qPcARJ9zGG73vuGFyenjPPmtDtXtpx35A-BVcOSBYVIWe9kndG3nclfefjKEuZ3m4jL9Gg1h2JBvmXSMYiZtp9MR5I6pvbvylU_PP5xJFSjVTIz7IQSjcVGO41npnwIxRXNRxFOdIUHn0tjQ-7LwvEcTXyPsHXcMD8WtgBh-wxR8aKX7WPSsT1O8d8reb2aR7K3rkV3K82K_0OgawImEpwSvp9MNKynEAJQS6ZHe_J_l77652xwPNxMRTMASk1ZsJL",
+  //     ),
+  //   ).then((response) {
+  //     print(response);
+  //   }).catchError((e) {
+  //     print(e);
+  //   });
+  // }
   // add_order_payment(BuildContext context){
   //   //todo add order to shpify
   //   MyApi.add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value);

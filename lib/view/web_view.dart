@@ -19,11 +19,41 @@ class _WebViewState extends State<MyWebView> {
 
   CheckoutController checkoutController = Get.find();
 
+  WebViewController? controller;
+  bool loading = true;
+
   @override
   void initState() {
     super.initState();
     // Enable virtual display.
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    // if (Platform.isAndroid) WebView.platform = AndroidWebView();
+
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {
+            if(url == widget.cashewResponse.confirmationUrl){
+              checkoutController.add_order_cashew(context);
+            }else if(url == widget.cashewResponse.cancelUrl){
+              App.error_msg(
+                  context, App_Localization.of(context).translate("wrong"));
+              Get.back();
+            }
+          },
+
+        ),
+      )
+      ..loadRequest(
+          Uri.parse(widget.cashewResponse.paymentUrl));
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -35,26 +65,32 @@ class _WebViewState extends State<MyWebView> {
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Center(
-          child: WebView(
-            initialUrl: widget.cashewResponse.paymentUrl,
-            // initialUrl: "https://app.albaselco.com/",
-            javascriptMode: JavascriptMode.unrestricted,
-            gestureNavigationEnabled: true,
-            onPageFinished: (value) {
-              if(value == widget.cashewResponse.confirmationUrl){
-                checkoutController.add_order_cashew(context);
-              }else if(value == widget.cashewResponse.cancelUrl){
-                App.error_msg(
-                    context, App_Localization.of(context).translate("wrong"));
-                Get.back();
-              }
-              // else{
-              //   App.error_msg(
-              //       context, App_Localization.of(context).translate("wrong"));
-              //   Get.back();
-              // }
-            },
+          child:  loading
+            ? CircularProgressIndicator()
+              : WebViewWidget(
+              controller: controller!,
           ),
+
+          // WebView(
+          //   initialUrl: widget.cashewResponse.paymentUrl,
+          //   // initialUrl: "https://app.albaselco.com/",
+          //   javascriptMode: JavascriptMode.unrestricted,
+          //   gestureNavigationEnabled: true,
+          //   onPageFinished: (value) {
+          //     if(value == widget.cashewResponse.confirmationUrl){
+          //       checkoutController.add_order_cashew(context);
+          //     }else if(value == widget.cashewResponse.cancelUrl){
+          //       App.error_msg(
+          //           context, App_Localization.of(context).translate("wrong"));
+          //       Get.back();
+          //     }
+          //     // else{
+          //     //   App.error_msg(
+          //     //       context, App_Localization.of(context).translate("wrong"));
+          //     //   Get.back();
+          //     // }
+          //   },
+          // ),
         ),
       ),
     );

@@ -114,10 +114,11 @@ class App{
   }
   static live_chate(){
     return FloatingActionButton(
+      backgroundColor: App.orange,
       onPressed: (){
         Get.to(()=>ChatView());
       },
-      child: Icon(Icons.chat),
+      child: Icon(Icons.chat,color: Colors.white,),
     );
   }
   static void _launchURL(BuildContext context,String url) async {
@@ -302,7 +303,7 @@ class App{
   }
   static sucss_msg(BuildContext context,String msg){
     return showTopSnackBar(
-      context,
+      Overlay.of(context),
       CustomSnackBar.success(
         message:
         msg,
@@ -315,7 +316,7 @@ class App{
   }
   static error_msg(BuildContext context,String err){
     return showTopSnackBar(
-      context,
+      Overlay.of(context),
       CustomSnackBar.error(
         message:
         err,

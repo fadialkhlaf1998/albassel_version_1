@@ -17,15 +17,14 @@ import 'package:albassel_version_1/my_model/slider.dart';
 import 'package:albassel_version_1/my_model/start_up.dart';
 import 'package:albassel_version_1/my_model/sub_category.dart';
 import 'package:albassel_version_1/my_model/top_category.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+// import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
 class MyApi {
 
-  // static String url = "https://phpstack-715372-2373312.cloudwaysapps.com/";
-  static String url = "https://app.albaselco.com/";
-  // static String url = "http://10.0.2.2:3000/";
+  static String url = "";
 
   static Future<StartUp?> startUp()async{
 
@@ -681,17 +680,50 @@ class MyApi {
     }
   }
   static Future<bool> check_internet()async{
-    // return false;
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile) {
-      // I am connected to a mobile network.
+    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
+
+// This condition is for demo purposes only to explain every connection type.
+// Use conditions which work for your requirements.
+    if (connectivityResult.contains(ConnectivityResult.mobile)) {
+      // Mobile network available.
       return true;
-    } else if (connectivityResult == ConnectivityResult.wifi) {
-      // I am connected to a wifi network.
+    } else if (connectivityResult.contains(ConnectivityResult.wifi)) {
+      // Wi-fi is available.
+      // Note for Android:
+      // When both mobile and Wi-Fi are turned on system will return Wi-Fi only as active network type
       return true;
+    } else if (connectivityResult.contains(ConnectivityResult.ethernet)) {
+      // Ethernet connection available.
+      return true;
+    } else if (connectivityResult.contains(ConnectivityResult.vpn)) {
+      // Vpn connection active.
+      // Note for iOS and macOS:
+      // There is no separate network interface type for [vpn].
+      // It returns [other] on any device (also simulator)
+      return true;
+    } else if (connectivityResult.contains(ConnectivityResult.bluetooth)) {
+      // Bluetooth connection available.
+      return true;
+    } else if (connectivityResult.contains(ConnectivityResult.other)) {
+      // Connected to a network which is not in the above mentioned networks.
+      return true;
+    } else if (connectivityResult.contains(ConnectivityResult.none)) {
+      // No available network types
+      return false;
     }else{
       return false;
     }
+    // return false;
+    // var connectivityResult = await (Connectivity().checkConnectivity());
+    // if (connectivityResult == ConnectivityResult.mobile) {
+    //   // I am connected to a mobile network.
+    //   return true;
+    // } else if (connectivityResult == ConnectivityResult.wifi) {
+    //   // I am connected to a wifi network.
+    //   return true;
+    // }else{
+    //   return false;
+    // }
 
   }
   static add_review(int customer_id,int product_id,String text)async{

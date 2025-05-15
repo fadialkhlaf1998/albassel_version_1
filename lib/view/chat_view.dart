@@ -11,11 +11,24 @@ class ChatView extends StatefulWidget {
 }
 
 class _ChatViewState extends State<ChatView> {
+
+  WebViewController? controller;
+  bool loading = true;
+
   @override
   void initState() {
     super.initState();
     // Enable virtual display.
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    // if (Platform.isAndroid) WebView.platform = AndroidWebView();
+
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..loadRequest(
+          Uri.parse('https://tawk.to/chat/6117bbf0d6e7610a49b02b9e/1fd2bc95j'));
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -25,12 +38,15 @@ class _ChatViewState extends State<ChatView> {
         title: Text(App_Localization.of(context).translate("l_c_title")),
       ),
       resizeToAvoidBottomInset: true,
-      body: const SafeArea(
+      body: SafeArea(
         child: Center(
-          child: WebView(
-            initialUrl: "https://tawk.to/chat/6117bbf0d6e7610a49b02b9e/1fd2bc95j",
-            javascriptMode: JavascriptMode.unrestricted,
-          ),
+          child:  loading
+              ? CircularProgressIndicator()
+              : WebViewWidget(controller: controller!),
+          // child: WebView(
+          //   initialUrl: "https://tawk.to/chat/6117bbf0d6e7610a49b02b9e/1fd2bc95j",
+          //   javascriptMode: JavascriptMode.unrestricted,
+          // ),
         ),
       ),
     );

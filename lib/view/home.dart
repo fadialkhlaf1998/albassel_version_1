@@ -18,7 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:new_version/new_version.dart';
+import 'package:upgrader/upgrader.dart';
+// import 'package:new_version/new_version.dart';
 
 class Home extends StatelessWidget {
 
@@ -35,17 +36,17 @@ class Home extends StatelessWidget {
 
 
 
-  _checkVersion(BuildContext context)async{
-    final newVersion = NewVersion(
-      iOSId: 'com.Maxart.Albassel',
-      androidId: 'com.maxart.albassel_version_1',
-    );
-    final state = await newVersion.getVersionStatus();
-    if(state!.canUpdate){
-      newVersion.showUpdateDialog(context: context, versionStatus: state);
-    }
-  }
-
+  // _checkVersion(BuildContext context)async{
+  //   final newVersion = NewVersion(
+  //     iOSId: 'com.Maxart.Albassel',
+  //     androidId: 'com.maxart.albassel_version_1',
+  //   );
+  //   final state = await newVersion.getVersionStatus();
+  //   if(state!.canUpdate){
+  //     newVersion.showUpdateDialog(context: context, versionStatus: state);
+  //   }
+  // }
+  String appcastURL = "https://app.albaselco.com/appcast.xml";
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -53,23 +54,34 @@ class Home extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     Future.delayed(const Duration(milliseconds: 300)).then((value) {
-      _checkVersion(context);
+      // _checkVersion(context);
     });
-    return Obx((){
-      return Scaffold(
-        key: homeController.scaffoldKey,
-        drawer: App.get_drawer(context,homeController),
-        floatingActionButton: App.live_chate(),
-        backgroundColor: homeController.selected_bottom_nav_bar.value==2?Colors.white:App.midOrange,
-        body:
-        homeController.selected_bottom_nav_bar.value==0?_home(context)
-            :homeController.selected_bottom_nav_bar.value==1?CategoryViewnave()
-            :homeController.selected_bottom_nav_bar.value==2?Cart()
-            :homeController.selected_bottom_nav_bar.value==3?Wishlist():Profile(),
-
-        bottomNavigationBar: _bottom_nav_bar(context),
-      );
-    });
+    return UpgradeAlert(
+      upgrader: Upgrader(
+        storeController: UpgraderStoreController(
+          onAndroid: () => UpgraderAppcastStore(appcastURL: appcastURL),
+          oniOS: () => UpgraderAppcastStore(appcastURL: appcastURL),
+        ),
+        debugDisplayOnce: false,
+        // durationUntilAlertAgain: Duration(milliseconds: 1000)
+      ),
+      dialogStyle: UpgradeDialogStyle.cupertino,
+      child: Obx((){
+        return Scaffold(
+          key: homeController.scaffoldKey,
+          drawer: App.get_drawer(context,homeController),
+          floatingActionButton: App.live_chate(),
+          backgroundColor: homeController.selected_bottom_nav_bar.value==2?Colors.white:App.midOrange,
+          body:
+          homeController.selected_bottom_nav_bar.value==0?_home(context)
+              :homeController.selected_bottom_nav_bar.value==1?CategoryViewnave()
+              :homeController.selected_bottom_nav_bar.value==2?Cart()
+              :homeController.selected_bottom_nav_bar.value==3?Wishlist():Profile(),
+      
+          bottomNavigationBar: _bottom_nav_bar(context),
+        );
+      }),
+    );
   }
   _home(BuildContext context){
     return SafeArea(
