@@ -57,6 +57,8 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
+            useMaterial3: false,
+            // colorScheme: ColorScheme.fromSeed(seedColor: App.orange),
             primarySwatch: generateMaterialColor(App.orange),
             fontFamily: "OpenSans"
         ),

@@ -232,6 +232,13 @@ backgroundColor: App.midOrange,
                   productsController.get_products_by_search(query,context);
                 }
               },
+              keyboardType: TextInputType.none,
+              onTap: ()async{
+                final result = await showSearch(
+                    context: context,
+                    delegate: SearchTextField(suggestion_list: Global.suggestion_list,homeController: homeController));
+                productsController.get_products_by_search(result!, context);
+              },
               decoration: InputDecoration(
 
                   icon: const Icon(Icons.search),

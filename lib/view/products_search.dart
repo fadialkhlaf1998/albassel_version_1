@@ -280,7 +280,14 @@ class ProductsSearchView extends StatelessWidget {
               // onSubmitted: homeController.on_submit(),
               onEditingComplete: (){
               },
-
+              keyboardType: TextInputType.none,
+              onTap: ()async{
+                final result = await showSearch(
+                    context: context,
+                    delegate: SearchTextField(suggestion_list: Global.suggestion_list,homeController: homeController));
+                productsController.get_products_by_search(result!, context);
+                controller.text = result;
+              },
               onSubmitted: (query){
                  if(query.isNotEmpty){
                     productsController.get_products_by_search(query, context);

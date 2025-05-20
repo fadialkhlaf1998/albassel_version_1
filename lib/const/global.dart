@@ -1,6 +1,7 @@
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/main.dart';
 import 'package:albassel_version_1/my_model/auto_discount.dart';
+import 'package:albassel_version_1/my_model/my_product.dart';
 import 'package:albassel_version_1/my_model/shipping.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +14,7 @@ import '../my_model/address.dart';
 class Global{
   static Shipping shipping = Shipping(amount: 10, minAmountFree: 250,emirate: "");
   static List<Shipping> new_shipping = <Shipping>[];
+  static List<MyProduct> suggestion_list = <MyProduct>[];
   static String lang_code="en";
   static int customer_type=0;
   static int customer_type_decoder=0;

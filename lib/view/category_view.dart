@@ -6,6 +6,7 @@ import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
+import 'package:albassel_version_1/view/home.dart';
 import 'package:albassel_version_1/view/products_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -202,13 +203,20 @@ class CategoryView extends StatelessWidget {
               // onSubmitted: homeController.on_submit(),
               onEditingComplete: (){
               },
-
+              keyboardType: TextInputType.none,
+              onTap: ()async{
+                final result = await showSearch(
+                    context: context,
+                    delegate: SearchTextField(suggestion_list: Global.suggestion_list,homeController: homeController));
+                homeController.get_products_by_search(result!, context);
+              },
               onSubmitted: (query){
                 if(query.isNotEmpty){
                   search_controller.clear();
                   homeController.get_products_by_search(query,context);
                   FocusManager.instance.primaryFocus!.unfocus();
                 }
+
                 // if(query.isNotEmpty){
                 //   controller.clear();
                 //   homeController.get_products_by_search(query,context);

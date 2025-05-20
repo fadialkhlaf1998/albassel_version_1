@@ -7,6 +7,7 @@ import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/category_view_nav_controller.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
+import 'package:albassel_version_1/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -220,8 +221,15 @@ class CategoryViewnave extends StatelessWidget {
                   homeController.get_products_by_search(query,context);
                 }
               },
-              decoration: InputDecoration(
+              keyboardType: TextInputType.none,
+              onTap: ()async{
+                final result = await showSearch(
+                    context: context,
+                    delegate: SearchTextField(suggestion_list: Global.suggestion_list,homeController: homeController));
+                homeController.get_products_by_search(result!, context);
+              },
 
+              decoration: InputDecoration(
                   icon: const Icon(Icons.search),
                   enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.transparent)

@@ -28,6 +28,15 @@ CartController cartController = Get.find();
       productCountShow.value = my_products.length;
     }
   }
+
+  setProductShow(){
+    if(my_products.length > 10){
+      productCountShow.value = 10;
+    }else{
+      productCountShow.value = my_products.length;
+    }
+  }
+
   update_product(int index){
 
     loading.value=true;
@@ -60,13 +69,15 @@ CartController cartController = Get.find();
       if (internet) {
         loading.value=true;
         MyApi.getProductsSearch(wishListController.wishlist,query).then((value) {
-          loading.value=false;
+
           if(value.isNotEmpty){
             this.my_products.clear();
             this.my_products.addAll(value);
           }else{
             App.error_msg(context, App_Localization.of(context).translate("fail_search"));
           }
+          setProductShow();
+          loading.value=false;
 
         }).catchError((err){
           loading.value=false;

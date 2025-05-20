@@ -7,6 +7,7 @@ import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
+import 'package:albassel_version_1/my_model/my_product.dart';
 import 'package:albassel_version_1/view/cart.dart';
 import 'package:albassel_version_1/view/category_view_nav.dart';
 import 'package:albassel_version_1/view/products_search.dart';
@@ -228,7 +229,7 @@ class Home extends StatelessWidget {
 
       width: MediaQuery.of(context).size.width*0.9,
       decoration: BoxDecoration(
-        color: Colors.white,  
+        color: Colors.white,
         borderRadius: BorderRadius.circular(5)
       ),
       child: Padding(
@@ -245,7 +246,13 @@ class Home extends StatelessWidget {
               // onSubmitted: homeController.on_submit(),
               onEditingComplete: (){
               },
-
+              keyboardType: TextInputType.none,
+              onTap: ()async{
+                final result = await showSearch(
+                    context: context,
+                    delegate: SearchTextField(suggestion_list: Global.suggestion_list,homeController: homeController));
+                homeController.get_products_by_search(result!, context);
+              },
               onSubmitted: (query){
                 if(query.isNotEmpty){
                   controller.clear();
@@ -871,3 +878,105 @@ class Home extends StatelessWidget {
     });
   }
 }
+
+
+
+class SearchTextField extends SearchDelegate<String> {
+  final List<MyProduct> suggestion_list;
+  String? result;
+  HomeController homeController;
+
+  SearchTextField(
+      {required this.suggestion_list, required this.homeController});
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      query.isEmpty
+          ? Visibility(
+        child: Text(''),
+        visible: false,
+      )
+          : IconButton(
+        icon: Icon(Icons.search, color: Colors.white,),
+        onPressed: () {
+          close(context, query);
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        Get.back();
+      },
+    );
+  }
+
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    return super.appBarTheme(context).copyWith(
+      appBarTheme: AppBarTheme(
+        color: App.orange, //new AppBar color
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: Colors.white, // <-- this changes the back arrow color
+        ),
+      ),
+      hintColor: Colors.white,
+      textTheme: TextTheme(
+        headlineSmall: TextStyle(
+            color: Colors.white
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+
+    Future.delayed(Duration(milliseconds: 200)).then((value) {
+      close(context, query);
+    });
+
+    return Center(
+      child: CircularProgressIndicator(
+        color: App.orange,
+      ),
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestions = suggestion_list.where((item) {
+      return item.title.toLowerCase().contains(query.toLowerCase());
+    });
+    return Container(
+      color: Colors.white,
+      child: query.isEmpty?Center():ListView.builder(
+        itemCount: suggestions.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(suggestions.elementAt(index).image,),
+            ),
+            title: Text(
+              suggestions.elementAt(index).title,
+              style: TextStyle(color: App.orange),
+            ),
+
+            onTap: () {
+              query = suggestions.elementAt(index).title;
+              close(context, query);
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+

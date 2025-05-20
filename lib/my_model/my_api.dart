@@ -524,6 +524,32 @@ class MyApi {
     }
 
   }
+  static Future<List<MyProduct>> search_suggestion()async{
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('GET', Uri.parse(url+'api/search_suggestion'));
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+
+      var json = await response.stream.bytesToString();
+      var jsonlist = jsonDecode(json) as List;
+
+      for(int i=0;i<jsonlist.length;i++){
+        Global.suggestion_list.add(MyProduct.fromMap(jsonlist[i]));
+        // print(jsonlist[i]);
+      }
+      return Global.suggestion_list;
+    }
+    else {
+      print(response.reasonPhrase);
+      return [];
+    }
+
+  }
 
 
   ///-------------logIn-------------
