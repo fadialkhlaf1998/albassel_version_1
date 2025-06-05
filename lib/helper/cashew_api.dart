@@ -14,7 +14,7 @@ class Cashew {
 
   static Future<String?> getToken()async{
     var headers = {
-      'Cashewsecretkey': '',
+      'Cashewsecretkey': 'ce4557294d36450dae5546288fbcbf68dbbb5a3c7426a8927230b838a86e17cd',
       'Storeurl': 'https://www.albaselco.com/'
     };
     var request = http.Request('POST', Uri.parse('https://api.cashewpayments.com/v1/identity/store/authorize'));

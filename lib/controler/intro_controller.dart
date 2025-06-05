@@ -4,6 +4,7 @@ import 'package:albassel_version_1/controler/wish_list_controller.dart';
 import 'package:albassel_version_1/helper/store.dart';
 import 'package:albassel_version_1/my_model/brand.dart';
 import 'package:albassel_version_1/my_model/category.dart';
+import 'package:albassel_version_1/my_model/marquee.dart';
 import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:albassel_version_1/my_model/my_product.dart';
 import 'package:albassel_version_1/my_model/slider.dart';
@@ -22,6 +23,7 @@ class IntroController extends GetxController{
   List<SubCategory> sub_Category=<SubCategory>[];
   List<Brand> brands=<Brand>[];
   List<MySlider> sliders=<MySlider>[];
+  List<Marquee> marquee=<Marquee>[];
 
   List<TopCategory> topCategory=<TopCategory>[];
   List<MyProduct> bestSellers=<MyProduct>[];
@@ -102,6 +104,7 @@ class IntroController extends GetxController{
     sliders = value.slider;
     topCategory = value.topCategories;
     bestSellers = value.bestSellers;
+    marquee = value.marquee;
     return true;
   }
 

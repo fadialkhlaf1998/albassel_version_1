@@ -55,6 +55,7 @@ class HomeController extends GetxController{
   var selected_category=0.obs;
   var bottom_selected=0.obs;
   List<ImageProvider> imageProvider = <ImageProvider>[];
+  String marqueeText = "";
 
   @override
   Future<void> onInit() async {
@@ -329,6 +330,14 @@ class HomeController extends GetxController{
     try{
       MyApi.check_internet().then((internet) {
         if (internet) {
+          marqueeText="";
+          for(int i=0;i<introController.marquee.length;i++){
+            if(i<introController.marquee.length-1){
+              marqueeText+=introController.marquee[i].text+" | ";
+            }else{
+              marqueeText+=introController.marquee[i].text;
+            }
+          }
           if(introController.category.length>0){
             category.clear();
             category.addAll(introController.category);

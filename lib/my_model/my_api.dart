@@ -808,6 +808,8 @@ class MyApi {
     var headers = {
       'Content-Type': 'application/json',
     };
+    print('APIIIIIIIIIIIII');
+    print(shipping);
     var request = http.Request('POST', Uri.parse(url+'api/v2/order'));
     request.body = json.encode({
       "customer_id": Global.customer!.id,

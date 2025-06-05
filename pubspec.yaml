@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.3.3+21
+version: 2.3.4+22
 
 environment:
   sdk: ^3.5.0
@@ -66,6 +66,7 @@ dependencies:
 #  tabby_flutter_inapp_sdk: ^1.2.0
   tabby_flutter_inapp_sdk: ^1.7.0
   upgrader: ^11.3.2
+  marquee: ^2.3.0
 #dependency_overrides:
 #  package_info_plus: any
 dependency_overrides:

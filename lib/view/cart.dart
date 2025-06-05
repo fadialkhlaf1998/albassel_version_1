@@ -13,15 +13,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class Cart extends StatelessWidget {
+class Cart extends StatefulWidget {
+
+  Cart(){
+
+  }
+
+  @override
+  State<Cart> createState() => _CartState();
+}
+
+class _CartState extends State<Cart> {
   CartController cartController = Get.find();
+
   HomeController homeController = Get.find();
-  Cart({Key? key}) : super(key: key){
+
+  _CartState(){
     cartController.get_total();
     if(cartController.discountCode!=null){
       cartController.discountCodeController.text = cartController.discountCode!.code;
     }
   }
+
   TextEditingController controller = TextEditingController();
 
   @override
@@ -94,6 +107,7 @@ class Cart extends StatelessWidget {
      );
    });
   }
+
   _price(BuildContext context , int index){
     return double.parse(cartController.my_order[index].discount.value)>0&&
         cartController.canDiscountCode.value?
@@ -142,6 +156,7 @@ class Cart extends StatelessWidget {
       ),
     );
   }
+
   _autp_discount_list(BuildContext context){
     return ListView.builder(
         shrinkWrap: true,
@@ -242,6 +257,7 @@ class Cart extends StatelessWidget {
           );
         });
   }
+
   _product_list(BuildContext context){
     return ListView.builder(
       shrinkWrap: true,
@@ -348,6 +364,7 @@ class Cart extends StatelessWidget {
       );
     });
   }
+
   _header(BuildContext context){
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
@@ -373,9 +390,10 @@ class Cart extends StatelessWidget {
       ),
     );
   }
+
   _check_out(BuildContext context){
     return cartController.my_order.isEmpty?const Center():Container(
-      
+
 
     width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
@@ -562,7 +580,7 @@ class Cart extends StatelessWidget {
                       }else{
                         App.error_msg(context, App_Localization.of(context).translate("cart_empty"));
                       }
-                      
+
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width*0.7,
@@ -584,6 +602,7 @@ class Cart extends StatelessWidget {
       ),
     );
   }
+
   activateDicountCode(BuildContext context){
     return SizedBox(
       width: MediaQuery.of(context).size.width*0.92,
@@ -617,5 +636,4 @@ class Cart extends StatelessWidget {
       ),
     );
   }
-
 }

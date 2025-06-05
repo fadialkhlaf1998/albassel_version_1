@@ -77,6 +77,9 @@ class CheckoutController extends GetxController{
   }
 
   next(BuildContext context){
+    print('******hhhh*******');
+    print(getMinValueForFree(emirate.value.toString()));
+    print(getShippingAmount(emirate.value.toString()));
     cartController.get_total(min_amount_for_free: getMinValueForFree(emirate.value.toString()),
         shipping_amount: getShippingAmount(emirate.value.toString()));
     if(selected_operation==0){

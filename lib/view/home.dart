@@ -20,9 +20,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:marquee/marquee.dart';
 // import 'package:new_version/new_version.dart';
 
 class Home extends StatelessWidget {
+
+  double size = 5;
 
   HomeController homeController=Get.put(HomeController());
   CartController cartController=Get.find();
@@ -118,24 +121,15 @@ class Home extends StatelessWidget {
                           )
                           : Column(
                         children: [
-                          SizedBox(height: MediaQuery.of(context).size.height*0.35,),
+                          Container(height: MediaQuery.of(context).size.height*0.1+70+50+size+size,),
+                          SizedBox(height: size,),
+                          _marquee(),
+                          SizedBox(height: size,),
                           _body(context)
                         ],
                       ),
                     ),
-                    // Positioned(
-                    //   top: 0,
-                    //   child: homeController.product_loading.value? Container(
-                    //   width: MediaQuery.of(context).size.width,
-                    //   height: MediaQuery.of(context).size.height,
-                    //   color: Colors.grey.withOpacity(0.75),
-                    //   child: Column(
-                    //     mainAxisAlignment: MainAxisAlignment.center,
-                    //     children: [
-                    //       CircularProgressIndicator()
-                    //     ],
-                    //   ),
-                    // ):Center(),)
+
                   ],
                 ),
               ),
@@ -147,18 +141,19 @@ class Home extends StatelessWidget {
     );
   }
   _header(BuildContext context){
-    return SizedBox(
+    return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height*0.35,
+      height: MediaQuery.of(context).size.height*0.1+70+50+size+size,
+      // color: Colors.red,
       child: Stack(
         children: [
-          SizedBox(height: MediaQuery.of(context).size.height*0.35,width: MediaQuery.of(context).size.width,),
+          // SizedBox(height: MediaQuery.of(context).size.height*0.35,width: MediaQuery.of(context).size.width,),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height*0.25,
+                height: MediaQuery.of(context).size.height*0.05+70+50+size+size,
                 decoration: BoxDecoration(
                   gradient: App.orangeGradient()
                 ),
@@ -167,44 +162,49 @@ class Home extends StatelessWidget {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height*0.18,
+                      height: 70+50+size,
                       color: Colors.transparent,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              IconButton(
-                                  onPressed: (){
-                                    homeController.openDrawer();
+                          Container(
+                            height: 70,
+                            // color: Colors.red,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(
+                                    onPressed: (){
+                                      homeController.openDrawer();
+                                    },
+                                    icon: const Icon(Icons.list,size: 35,color: Colors.white,),
+                                ),
+                                GestureDetector(
+                                  onTap: (){
+                                    homeController.loading.value=true;
+                                   homeController.sub_Category.clear();
+                                    homeController.loading.value=false;
                                   },
-                                  icon: const Icon(Icons.list,size: 35,color: Colors.white,),
-                              ),
-                              GestureDetector(
-                                onTap: (){
-                                  homeController.loading.value=true;
-                                 homeController.sub_Category.clear();
-                                  homeController.loading.value=false;
-                                },
-                                child: Container(
-                                  width: 70,
-                                  height: 70,
+                                  child: Container(
+                                    width: 70,
+                                    height: 70,
 
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage("assets/logo/logo.png")
-                                    )
+                                    decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage("assets/logo/logo.png")
+                                      )
+                                    ),
                                   ),
                                 ),
-                              ),
-                              IconButton(
-                                onPressed: (){
-                                },
-                                icon: const Icon(Icons.list,size: 30,color: Colors.transparent,),
-                              ),
-                            ],
+                                IconButton(
+                                  onPressed: (){
+                                  },
+                                  icon: const Icon(Icons.list,size: 30,color: Colors.transparent,),
+                                ),
+                              ],
+                            ),
                           ),
+                          SizedBox(height: size,),
                           _search(context,search_controller)
                         ],
                       ),
@@ -217,16 +217,35 @@ class Home extends StatelessWidget {
             ],
           ),
           Positioned(
-              bottom: MediaQuery.of(context).size.height*0.05,
+              bottom: 0,
               child: _categories_list(context),
-          )
+          ),
+
         ],
       )
     );
   }
+  _marquee(){
+    return homeController.marqueeText.isEmpty?Center():
+    Column(
+      children: [
+        Container(
+          height: 30,
+          width: Get.width,
+          child: Marquee(
+            text: homeController.marqueeText,
+            style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
+          ),
+          color: Colors.black,
+
+        ),
+        // const SizedBox(height: 30,),
+      ],
+    );
+  }
   _search(BuildContext context,TextEditingController controller){
     return Container(
-
+      height: 50,
       width: MediaQuery.of(context).size.width*0.9,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -358,6 +377,8 @@ class Home extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
+
+
           Container(
             width: MediaQuery.of(context).size.width*0.9+1,
             height: MediaQuery.of(context).size.width * 0.45+1,
@@ -378,7 +399,7 @@ class Home extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 15,),
+          const SizedBox(height: 5,),
           _top_category(context),
           // !homeController.product_loading.value&&homeController.sub_Category.isEmpty
           // ?_no_data(context)
@@ -393,25 +414,28 @@ class Home extends StatelessWidget {
   }
   _shop_by_brand(BuildContext context){
     return Padding(
-      padding: EdgeInsets.all( MediaQuery.of(context).size.width*0.05),
+      padding: EdgeInsets.symmetric(horizontal:MediaQuery.of(context).size.width*0.05),
       child: Column(
         children: [
+          SizedBox(height: size,),
           Row(
             children: [
               Text(App_Localization.of(context).translate("shop_brand"),style: App.textBlod(Colors.black, 16),)
             ],
           ),
-          const SizedBox(height: 15,),
+          SizedBox(height: size,),
           GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: size*2,
+                mainAxisSpacing: size*2,
               ),
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: homeController.brands.length,
               itemBuilder: (context,index){
             return Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(0),
               child: GestureDetector(
                 onTap: (){
                   homeController.get_products_by_brand(homeController.brands[index].id, context);
@@ -438,9 +462,10 @@ class Home extends StatelessWidget {
   }
   _best_sellers(BuildContext context){
     return Padding(
-      padding: EdgeInsets.all( MediaQuery.of(context).size.width*0.05),
+      padding: EdgeInsets.symmetric( horizontal:MediaQuery.of(context).size.width*0.05),
       child: Column(
         children: [
+          SizedBox(height: size,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -453,22 +478,24 @@ class Home extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(height: 15,),
+          SizedBox(height: size,),
           Obx((){
 
             return  GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount:  homeController.bestSellers.length<=6?homeController.bestSellers.length:6,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 4/6
+                    childAspectRatio: 4/6,
+                  crossAxisSpacing: size*2,
+                  mainAxisSpacing: size*2,
                 ),
                 itemBuilder: (context,index){
                   // print("view");
                   // print(homeController.bestSellers[3].price);
                   return Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(0),
                     child: GestureDetector(
                       onTap: (){
                         homeController.go_to_product(index);
@@ -642,7 +669,7 @@ class Home extends StatelessWidget {
   }
   _top_category(BuildContext context){
     return Padding(
-      padding: EdgeInsets.all( MediaQuery.of(context).size.width*0.05),
+      padding: EdgeInsets.symmetric( horizontal:  MediaQuery.of(context).size.width*0.05),
       child: Column(
         children: [
           Row(
@@ -657,7 +684,7 @@ class Home extends StatelessWidget {
               itemCount: homeController.topCategory.length,
               itemBuilder: (context,index){
                 return Padding(
-                  padding: const EdgeInsets.only(top: 20),
+                  padding: const EdgeInsets.only(top: 5),
                   child: GestureDetector(
                     onTap: (){
                       homeController.get_sub_categoryPage(homeController.topCategory[index].categoryId,context);
@@ -708,6 +735,7 @@ class Home extends StatelessWidget {
 
           width: MediaQuery.of(context).size.width*0.9,
           height: MediaQuery.of(context).size.width * 0.45,
+
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),

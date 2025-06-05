@@ -197,6 +197,7 @@ class CartController extends GetxController{
     double? shipping_amount,
     double? min_amount_for_free,
 }){
+    print('****8888***');
     autoDiscount();
     double x=0;
     double minAmountForFree=250;
@@ -238,7 +239,9 @@ class CartController extends GetxController{
     coupon.value = (double.parse(coupon.value)+z).toString();
     tax.value = ((x - z)*5/105).toString();
     total.value = (x + y - z).toString();
-
+    print('******** SAVE *********');
+    print(shipping_amount);
+    print(shipping);
     Store.save_order(my_order.value);
   }
 

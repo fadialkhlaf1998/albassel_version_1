@@ -48,7 +48,6 @@ class _MyAppState extends State<MyApp> {
       });
       Get.updateLocale(Locale(language));
     });
-
   }
 
 
