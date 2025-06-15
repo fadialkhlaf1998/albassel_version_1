@@ -276,7 +276,7 @@ class CheckoutController extends GetxController{
   add_order_payment(BuildContext context){
     get_details();
     //todo add order to shpify
-    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value ?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"");
+    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value ?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"",cartController.discountCode == null?null:cartController.discountCode!.id,cartController.discountCode == null?null:cartController.discountCode!.code);
     // cartController.clear_cart();
 
     App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
@@ -288,7 +288,7 @@ class CheckoutController extends GetxController{
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
       Get.offAll(()=>Home());
     }else{
-      add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value ?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"");
+      add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), is_paid.value ?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"",cartController.discountCode == null?null:cartController.discountCode!.id,cartController.discountCode == null?null:cartController.discountCode!.code);
       // cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
       Get.offAll(()=>Home());
@@ -297,7 +297,7 @@ class CheckoutController extends GetxController{
   add_order_tabby(BuildContext context,String reference){
     my_order.addAll(cartController.my_order.value);
     get_details();
-    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), -3,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),reference);
+    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), -3,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),reference,cartController.discountCode == null?null:cartController.discountCode!.id,cartController.discountCode == null?null:cartController.discountCode!.code);
     // cartController.clear_cart();
     App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
     Get.offAll(()=>Home());
@@ -305,22 +305,22 @@ class CheckoutController extends GetxController{
   add_order_cashew(BuildContext context){
     my_order.addAll(cartController.my_order.value);
     get_details();
-    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), -1,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"");
+    add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, "+971"+phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), -1,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"",cartController.discountCode == null?null:cartController.discountCode!.id,cartController.discountCode == null?null:cartController.discountCode!.code);
     // cartController.clear_cart();
     // App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
     Get.offAll(()=>Home());
   }
 
   //todo remove coment
-  add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,int is_paid,List<LineItem> lineItems,String discount,String reference){
-    MyApi.add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,reference).then((succ) {
+  add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,int is_paid,List<LineItem> lineItems,String discount,String reference,int? discount_id,String? dicount_code){
+    MyApi.add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,reference,discount_id,dicount_code).then((succ) {
       if(!succ){
-        add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,reference);
+        add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,reference,discount_id,dicount_code);
       }else{
         cartController.clear_cart();
       }
     }).catchError((err){
-      add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,reference);
+      add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,reference,discount_id,dicount_code);
     });
   }
 

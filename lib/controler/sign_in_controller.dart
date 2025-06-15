@@ -13,6 +13,7 @@ import 'package:albassel_version_1/view/no_internet.dart';
 import 'package:albassel_version_1/view/verification_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class SignInController extends GetxController{
 
@@ -38,10 +39,11 @@ class SignInController extends GetxController{
           pass_vaildate.value=false;
         }
       }else{
-        MyApi.check_internet().then((net) {
+        MyApi.check_internet().then((net) async{
           if(net){
             loading.value=true;
-            MyApi.login(email, pass).then((value) async{
+            final packageInfo = await PackageInfo.fromPlatform();
+            MyApi.login(email, pass,Global.firebase_token,packageInfo.version).then((value) async{
               if(value.state==200){
                 Store.saveLoginInfo(email, pass);
                 App.sucss_msg(context,App_Localization.of(context).translate("login_succ"));

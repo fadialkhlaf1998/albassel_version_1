@@ -31,20 +31,36 @@ class CartController extends GetxController{
       }else{
         MyApi.check_internet().then((net) {
           if(net){
-            loading.value=true;
-            MyApi.discountCode(discountCodeController.text).then((value) {
-              if(value!=null){
-                loading.value=false;
-                discountCode=value;
-                discount = discountCode!.persent.toString().obs;
-                App.sucss_msg(context, App_Localization.of(context).translate("discount_code_succ"));
-                get_total();
-              }else{
-                discountCodeController.clear();
-                loading.value=false;
-                App.error_msg(context, App_Localization.of(context).translate("discount_code_err"));
-              }
-            });
+
+            if(Global.customer != null){
+              loading.value=true;
+              MyApi.discountCode(discountCodeController.text).then((value) {
+                if(value!=null){
+                  loading.value=false;
+                  discountCode=value;
+                  discount = discountCode!.persent.toString().obs;
+
+                  if(value.frequency!= -1 && value.account_activation_time >= value.frequency){
+                    if(value.frequency == 1){
+                      App.error_msg(context, App_Localization.of(context).translate("u_can_activate_discount")+value.frequency.toString()+App_Localization.of(context).translate("time"));
+                    }else{
+                      App.error_msg(context, App_Localization.of(context).translate("u_can_activate_discount")+value.frequency.toString()+App_Localization.of(context).translate("times"));
+                    }
+
+                  }else{
+                    App.sucss_msg(context, App_Localization.of(context).translate("discount_code_succ"));
+                  }
+
+                  get_total();
+                }else{
+                  discountCodeController.clear();
+                  loading.value=false;
+                  App.error_msg(context, App_Localization.of(context).translate("discount_code_err"));
+                }
+              });
+            }else{
+              App.error_msg(context, App_Localization.of(context).translate("login_first"));
+            }
           }else{
             Get.to(()=>NoInternet())!.then((value) {
               apply(context);

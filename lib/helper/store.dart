@@ -189,6 +189,7 @@ class Store{
       prefs.remove("rate");
       prefs.remove("recently");
       prefs.remove("customer_type");
+      prefs.remove("discount_code");
       load_rate();
       load_address();
       load_recently();

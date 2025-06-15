@@ -62,6 +62,7 @@ class Home extends StatelessWidget {
     });
     return UpgradeAlert(
       upgrader: Upgrader(
+        // durationUntilAlertAgain:Duration(hours: 1),
         storeController: UpgraderStoreController(
           onAndroid: () => UpgraderAppcastStore(appcastURL: appcastURL),
           oniOS: () => UpgraderAppcastStore(appcastURL: appcastURL),
@@ -121,9 +122,9 @@ class Home extends StatelessWidget {
                           )
                           : Column(
                         children: [
-                          Container(height: MediaQuery.of(context).size.height*0.1+70+50+size+size,),
+                          Container(height: MediaQuery.of(context).size.height*0.1+70+50+size+size+30,),
                           SizedBox(height: size,),
-                          _marquee(),
+                          //marquee positioned
                           SizedBox(height: size,),
                           _body(context)
                         ],
@@ -134,6 +135,7 @@ class Home extends StatelessWidget {
                 ),
               ),
               Positioned(child: _header(context),),
+              Positioned(top: MediaQuery.of(context).size.height*0.1+70+50+size+size+size,child: _marquee(),),
               Positioned(top: 0,child: homeController.product_loading.value?Container(height:MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,color: Colors.grey.withOpacity(0.4),child: const Center(child: CircularProgressIndicator()),):const Center())
             ],
           ),
@@ -399,7 +401,7 @@ class Home extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 5,),
+          SizedBox(height: size,),
           _top_category(context),
           // !homeController.product_loading.value&&homeController.sub_Category.isEmpty
           // ?_no_data(context)
@@ -677,14 +679,14 @@ class Home extends StatelessWidget {
               Text(App_Localization.of(context).translate("top_category"),style: App.textBlod(Colors.black, 16),)
             ],
           ),
-          const SizedBox(height: 0,),
+          // SizedBox(height: size,),
           ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: homeController.topCategory.length,
               itemBuilder: (context,index){
                 return Padding(
-                  padding: const EdgeInsets.only(top: 5),
+                  padding: EdgeInsets.only(top: size),
                   child: GestureDetector(
                     onTap: (){
                       homeController.get_sub_categoryPage(homeController.topCategory[index].categoryId,context);

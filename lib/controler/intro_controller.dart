@@ -16,6 +16,7 @@ import 'package:albassel_version_1/view/verification_code.dart';
 import 'package:albassel_version_1/view/welcome.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../my_model/top_category.dart';
 
 class IntroController extends GetxController{
@@ -148,11 +149,14 @@ class IntroController extends GetxController{
       if(info.email=="non"){
         Get.offAll(()=>Welcome());
       }else{
-        Store.load_verificat().then((verify){
+        Store.load_verificat().then((verify)async {
           if(verify){
-            MyApi.check_internet().then((internet) {
+            MyApi.check_internet().then((internet) async{
               if(internet){
-                MyApi.login(info.email,info.pass).then((value) {
+
+                final packageInfo = await PackageInfo.fromPlatform();
+
+                MyApi.login(info.email,info.pass,Global.firebase_token,packageInfo.version).then((value) {
                   print(value.message);
                   if(value.state==200){
                     print('home');
@@ -170,7 +174,8 @@ class IntroController extends GetxController{
             });
 
           }else{
-            MyApi.login(info.email,info.pass).then((value) {
+            final packageInfo = await PackageInfo.fromPlatform();
+            MyApi.login(info.email,info.pass,Global.firebase_token,packageInfo.version).then((value) {
               print(value.message);
               if(value.state==200){
                 Store.save_verificat();
@@ -199,7 +204,8 @@ class IntroController extends GetxController{
       // Get.offAll(()=>Welcome());
       return;
     }else{
-      var temp = await MyApi.login(info.email,info.pass);
+      final packageInfo = await PackageInfo.fromPlatform();
+      var temp = await MyApi.login(info.email,info.pass,Global.firebase_token,packageInfo.version);
       return;
     }
   }

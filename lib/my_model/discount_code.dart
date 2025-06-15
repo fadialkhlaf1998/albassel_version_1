@@ -18,7 +18,9 @@ class DiscountCode {
     required this.brands,
     required this.subCategory,
     required this.customer_type,
+    required this.account_activation_time,
     required this.persent,
+    required this.frequency,
   });
 
   int id;
@@ -26,7 +28,9 @@ class DiscountCode {
   int minimumQuantity;
   int isActive;
   int forAll;
+  int account_activation_time;
   int amount;
+  int frequency;
   int persent;
   int customer_type;
   List<DCProduct> products;
@@ -43,8 +47,10 @@ class DiscountCode {
     code: json["code"],
     minimumQuantity: json["minimum_quantity"],
     isActive: json["is_active"],
+    frequency: json["frequency"]==null?0.0:json["frequency"],
     forAll: json["for_all"],
     amount: json["amount"]==null?0.0:json["amount"],
+    account_activation_time: json["account_activation_time"]==null?0.0:json["account_activation_time"],
     customer_type: json["customer_type"],
     persent: json["persent"]==null?0.0:json["persent"],
     products: List<DCProduct>.from(json["products"].map((x) => DCProduct.fromMap(x))),

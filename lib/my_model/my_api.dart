@@ -607,14 +607,16 @@ class MyApi {
     }
 
   }
-  static Future<Result> login(String email,String pass)async{
+  static Future<Result> login(String email,String pass,String firebase_token,String app_version)async{
     var headers = {
       'Content-Type': 'application/json'
     };
     var request = http.Request('POST', Uri.parse(url+'log_in'));
     request.body = json.encode({
       "email": email,
-      "pass": pass
+      "pass": pass,
+      "firebase_token":firebase_token,
+      "app_version":app_version
     });
     request.headers.addAll(headers);
 
@@ -799,7 +801,7 @@ class MyApi {
     }
   }
 
-  static Future<bool> add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,int is_paid,List<LineItem> lineItems,String discount,String reference)async{
+  static Future<bool> add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,int is_paid,List<LineItem> lineItems,String discount,String reference,int? discount_id,String? dicount_code)async{
     print('******** Fadi-Test ********'+lineItems.length.toString());
     lineItems.forEach((element) {
       print('****************');
@@ -828,7 +830,9 @@ class MyApi {
       "address": city+"/"+address,
       "lineItems": List<dynamic>.from(lineItems.map((x) => x.toMap())),
       "discount":discount,
-      "reference":reference
+      "reference":reference,
+      "discount_id":discount_id,
+      "discount_code":dicount_code,
     });
     request.headers.addAll(headers);
 
@@ -874,7 +878,8 @@ class MyApi {
       };
       var request = http.Request('POST', Uri.parse(url+'api/active_discount_code'));
       request.body = json.encode({
-        "code": code
+        "code": code,
+        "account_id":Global.customer==null?null:Global.customer!.id,
       });
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();

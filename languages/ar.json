@@ -200,6 +200,9 @@
   "no_discount_installment_pay": "لا توجد خصومات على أقساط السداد",
   "cashew_description": "أو قسّم مشترياتك إلى أقساط دون أي تكلفة إضافية عليك.",
   "tabby_promotion": "قسّمها على 4. بدون أي فوائد، أو رسوم.",
-  "Shipping_will_be_calculated_at_checkout": "سيتم احتساب الشحن عند السداد"
+  "Shipping_will_be_calculated_at_checkout": "سيتم احتساب الشحن عند السداد",
+  "u_can_activate_discount": "مكنك تفعيل هذا الكود فقط ",
+  "time": " مرة",
+  "times": " مرات"
 
 }

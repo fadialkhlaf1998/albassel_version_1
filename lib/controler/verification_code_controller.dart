@@ -10,6 +10,7 @@ import 'package:albassel_version_1/view/no_internet.dart';
 import 'package:albassel_version_1/view/verification_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class VerificationCodeController extends GetxController{
 
@@ -54,9 +55,10 @@ class VerificationCodeController extends GetxController{
             code_vaildate.value=true;
             loading.value=true;
             Store.loadLogInInfo().then((info) {
-              MyApi.verify_code(info.email,code).then((result) {
+              MyApi.verify_code(info.email,code).then((result) async{
                 loading.value=false;
-                MyApi.login(info.email,info.pass);
+                final packageInfo = await PackageInfo.fromPlatform();
+                MyApi.login(info.email,info.pass,Global.firebase_token,packageInfo.version);
                 if(result.succses){
                   App.sucss_msg(context, App_Localization.of(context).translate("mail_verificated"));
                   Store.save_verificat();

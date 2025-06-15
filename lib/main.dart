@@ -9,11 +9,55 @@ import 'dart:math';
 import 'package:get/get.dart';
 import 'package:tabby_flutter_inapp_sdk/tabby_flutter_inapp_sdk.dart';
 
-void main() {
+import 'firebase_options.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  description:  'This channel is used for important notifications.', // description
+  importance: Importance.max,
+);
+///final from Fadi Alkhlaf
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
+Future<void> _firebaseMessagingBackhroundHadler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('backgrounf message ${message.messageId}');
+}
+
+
+Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   TabbySDK().setup(
     withApiKey: '',
     environment: Environment.production,
+  );
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackhroundHadler);
+  // FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    sound: true,
+    alert: true,
+    badge: true,
   );
 
   runApp(const MyApp());
@@ -47,6 +91,35 @@ class _MyAppState extends State<MyApp> {
         _locale= Locale(language);
       });
       Get.updateLocale(Locale(language));
+    });
+    FirebaseMessaging.instance.getToken().then((value) {
+      setState(() {
+        if(value!=null){
+          Global.firebase_token = value;
+        }
+      });
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message){
+      RemoteNotification notification = message.notification!;
+      AndroidNotification androd = message.notification!.android!;
+
+      if(notification != null && androd !=null){
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+              android: AndroidNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  channelDescription: channel.description,
+                  playSound: true,
+                  icon: "@mipmap/ic_launcher"
+              )
+          ),
+        );
+      }
     });
   }
 

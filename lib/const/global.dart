@@ -12,6 +12,7 @@ import 'package:albassel_version_1/model/customer.dart';
 import '../my_model/address.dart';
 
 class Global{
+  static String firebase_token = '';
   static Shipping shipping = Shipping(amount: 10, minAmountFree: 250,emirate: "");
   static List<Shipping> new_shipping = <Shipping>[];
   static List<MyProduct> suggestion_list = <MyProduct>[];
