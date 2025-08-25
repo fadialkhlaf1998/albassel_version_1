@@ -100,7 +100,17 @@ class _CartState extends State<Cart> {
              ),
            ),
            Positioned(child: _header(context),top: 0,),
-           Positioned(child:  _check_out(context),bottom: 0,)
+           Positioned(child:  _check_out(context),bottom: 0,),
+           cartController.loading.value
+               ?Container(
+             width: Get.width,
+             height: Get.height,
+             color: Colors.white.withOpacity(0.5),
+             child: Center(
+               child: CircularProgressIndicator(),
+             ),
+           )
+               :Center()
            // Positioned(bottom:-1,child:  _check_out(context))
          ],
        ),
@@ -292,7 +302,18 @@ class _CartState extends State<Cart> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Text(cartController.my_order.value[index].product.value.title,style: const TextStyle(color: Colors.black,fontSize: 14,overflow: TextOverflow.clip,),textAlign: TextAlign.left,),
+                      Text(cartController.my_order.value[index].product.value.title,style: const TextStyle(color: Colors.black,fontSize: 14,overflow: TextOverflow.clip,),textAlign: TextAlign.left,),
+                      cartController.discountCode != null&&
+                          cartController.amountOfCanDiscount < cartController.discountCode!.minimumQuantity&&
+                      !cartController.canDicount(cartController.my_order[index])?
+                      Text(App_Localization.of(context).translate("this_product_illegal"),style: const TextStyle(color: Colors.red,fontSize: 12),):Center(),
+
+                      cartController.discountCode != null&&
+                      cartController.amountOfCanDiscount > cartController.discountCode!.minimumQuantity&&
+                          double.parse(cartController.my_order[index].discount.value)> 0?
+                      Text(App_Localization.of(context).translate("you_saved")
+                          +" "+cartController.my_order[index].discount.value+" "+App_Localization.of(context).translate("aed")+" "
+                          +App_Localization.of(context).translate("on_this_item"),style: const TextStyle(color: Colors.green,fontSize: 12),):Center(),
                       cartController.my_order[index].product.value.availability==0?
                       Container(
                         height: 40,
@@ -484,6 +505,8 @@ class _CartState extends State<Cart> {
                 Text(cartController.discount.value+" %")
               ],
             ):const Center(),
+
+
             double.parse(cartController.coupon.value)>0&&cartController.canDiscountCode.value?const SizedBox(height: 5,):const Center(),
             double.parse(cartController.coupon.value)>0&&cartController.canDiscountCode.value?Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -520,6 +543,9 @@ class _CartState extends State<Cart> {
                 Text(App_Localization.of(context).translate("aed")+" "+((double.parse(cartController.total.value)-double.parse(cartController.shipping.value)).toStringAsFixed(2)))
               ],
             ),
+            cartController.discountCode != null&&cartController.amountOfCanDiscount < cartController.discountCode!.minimumQuantity?Text(
+              App_Localization.of(context).translate("you_did_not_reach_min_amount")+" "+
+                  cartController.discountCode!.minimumQuantity.toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: App.textNormal(Colors.red, 14),overflow: TextOverflow.clip,):const Center(),
             activateDicountCode(context),
             const SizedBox(height: 5,),
             // Row(

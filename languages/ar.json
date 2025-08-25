@@ -177,7 +177,7 @@
   "free": "مجاناً",
   "coupon": "Coupon",
   "discount_code": "كود الحسم",
-  "discount_code_succ": "تم تفعيل كود الحسم بنجاح",
+  "discount_code_succ": "تم التفعيل! تحقق من سلة التسوق للمنتجات المؤهلة",
   "discount_code_err": "هذا الكود ليس متاح",
   "salon":"صالون",
   "salon_sub_title": "عروض خاصة وأسعار لا تقبل المنافسة لحاملي تراخيص الصالونات!",
@@ -203,6 +203,10 @@
   "Shipping_will_be_calculated_at_checkout": "سيتم احتساب الشحن عند السداد",
   "u_can_activate_discount": "مكنك تفعيل هذا الكود فقط ",
   "time": " مرة",
-  "times": " مرات"
+  "times": " مرات",
+  "this_product_illegal": "هذا المنتج غير متضمن الخصم",
+  "you_did_not_reach_min_amount": "لم تصل إلى الحد الأدنى من المنتجات المؤهلة للخصم. الحد الأدنى للمبلغ هو",
+  "you_saved": "لقد حفظت",
+  "on_this_item": "على هذا العنصر"
 
 }

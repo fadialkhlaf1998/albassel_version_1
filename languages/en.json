@@ -177,7 +177,7 @@
   "free": "Free",
   "coupon": "Coupon",
   "discount_code": "Discount Code",
-  "discount_code_succ": "Discount Code Activated Successfully",
+  "discount_code_succ": "Applied! Check cart for qualifying products",
   "discount_code_err": "Oops This Code Not Valid",
   "salon":"Salon",
   "salon_sub_title": "Special offers and unbeatable prices for Salons License holders!",
@@ -205,7 +205,11 @@
   "Shipping_will_be_calculated_at_checkout": "Shipping will be calculated at checkout",
   "u_can_activate_discount": "You Can Activate This Discount Just ",
   "time": " Time",
-  "times": " Times"
+  "times": " Times",
+  "this_product_illegal": "This product is not eligible for discount",
+  "you_did_not_reach_min_amount": "You did not reach the minimum amount of legal products for the discount. The minimum amount is",
+  "you_saved": "You Saved",
+  "on_this_item": "On This Item"
 
 }
 

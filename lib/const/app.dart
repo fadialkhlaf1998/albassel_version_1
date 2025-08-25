@@ -308,8 +308,10 @@ class App{
         message:
         msg,
 
-        backgroundColor: Color(0xffC3C7C7),
-        textStyle: TextStyle(color: App.midOrange,fontWeight: FontWeight.bold),
+        // backgroundColor: Color(0xffC3C7C7),
+        backgroundColor: Colors.green,
+        // textStyle: TextStyle(color: App.midOrange,fontWeight: FontWeight.bold),
+        textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
       ),
     );
     // return Get.snackbar("", msg,duration: Duration(milliseconds: 2000),backgroundColor: Color(0xffC3C7C7),colorText: App.midOrange);
