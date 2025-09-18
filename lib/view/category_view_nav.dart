@@ -274,7 +274,7 @@ class CategoryViewnave extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(productsController.categories[index].title,style: App.textNormal(Colors.black, 12),),
+                      Text(productsController.categories[index].getTitle(),style: App.textNormal(Colors.black, 12),),
                       productsController.selected_category.value==index?Container(color: App.midOrange,height: 2,):Container(color: Colors.transparent,height: 2,)
                     ],
                   ),
@@ -304,7 +304,7 @@ class CategoryViewnave extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(productsController.sub_categories[index].title,style: App.textNormal(Colors.black, 12),),
+                      Text(productsController.sub_categories[index].getTitle(),style: App.textNormal(Colors.black, 12),),
                       productsController.selected_sub_category.value==index?Container(color: App.midOrange,height: 2,):Container(color: Colors.transparent,height: 2,)
                     ],
                   ),
@@ -325,7 +325,7 @@ class CategoryViewnave extends StatelessWidget {
             childAspectRatio: 4/6
         ),
         itemBuilder: (context,index){
-          return Padding(
+          return Obx(()=>Padding(
             padding: const EdgeInsets.all(10.0),
             child: GestureDetector(
               onTap: (){
@@ -367,9 +367,9 @@ class CategoryViewnave extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Text(productsController.my_products[index].title,style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
+                                  Text(productsController.my_products[index].getTitle(),style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
                                   // Text(App_Localization.of(context).translate("aed")+" "+productsController.my_products[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
-                                  App.price(context, productsController.my_products[index].price, productsController.my_products[index].offer_price),
+                                  App.price(context, productsController.my_products[index].price, productsController.my_products[index].offerPrice),
                                   productsController.my_products[index].availability==0?
                                   Container(
                                     width: MediaQuery.of(context).size.width*0.4,
@@ -382,12 +382,13 @@ class CategoryViewnave extends StatelessWidget {
                                       child: Text(App_Localization.of(context).translate("out_of_stock"),style: App.textNormal(Colors.red, 12),),
                                     ),
                                   )
-                                  :GestureDetector(
-                                    onTap: (){
-                                      productsController.cartController.add_to_cart(productsController.my_products[index], 1,context);
-                                      // App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
+                                      :GestureDetector(
+                                    onTap: ()async{
+                                      productsController.my_products[index].cartLoading(true);
+                                      await productsController.cartController.addOrUpdateCart(productsController.my_products[index].id, null, 1, context);
+                                      productsController.my_products[index].cartLoading(false);
                                     },
-                                    child: Container(
+                                    child: productsController.my_products[index].cartLoading.value?App.cartBtnLoading():Container(
                                       width: MediaQuery.of(context).size.width*0.4,
                                       height: 30,
                                       decoration: BoxDecoration(
@@ -407,23 +408,26 @@ class CategoryViewnave extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Positioned(child: IconButton(onPressed: (){
+                  Positioned(child: IconButton(onPressed: ()async{
+                    productsController.my_products[index].wishlistLoading(true);
                     productsController.loading.value = !productsController.loading.value;
                     productsController.loading.value = !productsController.loading.value;
                     if(productsController.my_products[index].favorite.value){
                       productsController.my_products[index].favorite.value=false;
-                      productsController.wishListController.delete_from_wishlist(productsController.my_products[index]);
+                      await productsController.wishListController.deleteFromWishlist(productsController.my_products[index].id,context);
                     }else{
                       productsController.my_products[index].favorite.value=true;
-                      productsController.wishListController.add_to_wishlist(productsController.my_products[index],context);
+                      await productsController.wishListController.addToWishlist(productsController.my_products[index].id,context);
                     }
-
-                  }, icon: Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,))),
+                    productsController.my_products[index].wishlistLoading(false);
+                  }, icon: productsController.my_products[index].wishlistLoading.value
+                      ?CircularProgressIndicator()
+                      :Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,))),
                   App.outOfStock(productsController.my_products[index].availability)
                 ],
               ),
             ),
-          );
+          ));
         });
   }
 }

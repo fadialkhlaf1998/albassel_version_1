@@ -31,23 +31,15 @@ class ProfileController extends GetxController{
       }
     }else{
       if(pass==confPass&&pass.length>=6){
-        MyApi.check_internet().then((internet){
-          if(internet){
-            validateConfNewPass.value=true;
-            validateNewPass.value=true;
-            loading.value=true;
-            MyApi.change_password(Global.customer!.email, pass).then((result) {
-              loading.value=false;
-              if(result.succses){
-                App.sucss_msg(context, App_Localization.of(context).translate("pass"));
-              }else{
-                App.error_msg(context, App_Localization.of(context).translate("wrong"));
-              }
-            });
+        validateConfNewPass.value=true;
+        validateNewPass.value=true;
+        loading.value=true;
+        MyApi.change_password(Global.customer!.email, pass).then((result) {
+          loading.value=false;
+          if(result.succses){
+            App.sucss_msg(context, App_Localization.of(context).translate("pass"));
           }else{
-            Get.to(()=>NoInternet())!.then((value) {
-              change_password(context,pass,confPass);
-            });
+            App.error_msg(context, App_Localization.of(context).translate("wrong"));
           }
         });
       }else{
@@ -66,19 +58,11 @@ class ProfileController extends GetxController{
   }
 
   Future <bool> deleteAccount(BuildContext context)async{
-    var internet = await MyApi.check_internet();
-    if(internet){
-      loading.value=true;
+    loading.value=true;
 
-      var result = await MyApi.delete_acount();
-      homeController.nave_to_logout();
-      loading.value=false;
-      return true;
-    }else{
-      Get.to(()=>NoInternet())!.then((value) {
-        return deleteAccount(context);
-      });
-      return false;
-    }
+    var result = await MyApi.delete_acount();
+    homeController.nave_to_logout();
+    loading.value=false;
+    return true;
   }
 }

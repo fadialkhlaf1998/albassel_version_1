@@ -347,7 +347,7 @@ class CategoryView extends StatelessWidget {
                               ),
 
                             ),
-                            Text(homeController.category[index].title,style: App.textNormal(homeController.selected_category.value==index?App.midOrange:Colors.black, 8))
+                            Text(homeController.category[index].getTitle(),style: App.textNormal(homeController.selected_category.value==index?App.midOrange:Colors.black, 8))
                           ],
                         )
                     ),
@@ -414,7 +414,7 @@ class CategoryView extends StatelessWidget {
                   childAspectRatio: 4/6
               ),
               itemBuilder: (context,index){
-                return Padding(
+                return Obx(()=>Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: GestureDetector(
                     onTap: (){
@@ -456,15 +456,19 @@ class CategoryView extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Text(homeController.bestSellers[index].title,style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
+                                        Text(homeController.bestSellers[index].getTitle(),style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
                                         // Text(App_Localization.of(context).translate("aed")+" "+homeController.bestSellers[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
-                                        App.price(context, homeController.bestSellers[index].price, homeController.bestSellers[index].offer_price),
+                                        App.price(context, homeController.bestSellers[index].price, homeController.bestSellers[index].offerPrice),
                                         GestureDetector(
-                                          onTap: (){
-                                            cartController.add_to_cart(homeController.bestSellers[index], 1,context);
-
+                                          onTap: ()async{
+                                            homeController.bestSellers[index].cartLoading(true);
+                                            await cartController.addOrUpdateCart(homeController.bestSellers[index].id, null, 1, context);
+                                            homeController.bestSellers[index].cartLoading(false);
                                           },
-                                          child: Container(
+                                          child:
+                                          homeController.bestSellers[index].cartLoading.value
+                                              ?App.cartBtnLoading()
+                                              :Container(
                                             width: MediaQuery.of(context).size.width*0.4,
                                             height: 30,
                                             decoration: BoxDecoration(
@@ -484,22 +488,25 @@ class CategoryView extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Positioned(child: IconButton(onPressed: (){
+                        Positioned(child: IconButton(onPressed: ()async{
+                          homeController.bestSellers[index].wishlistLoading(true);
                           if(homeController.bestSellers[index].favorite.value){
                             homeController.bestSellers[index].favorite.value=false;
-                            wishListController.delete_from_wishlist(homeController.bestSellers[index]);
+                            await wishListController.deleteFromWishlist(homeController.bestSellers[index].id,context);
                           }else{
                             homeController.bestSellers[index].favorite.value=true;
-                            wishListController.add_to_wishlist(homeController.bestSellers[index],context);
+                            await wishListController.addToWishlist(homeController.bestSellers[index].id,context);
                           }
-
+                          homeController.bestSellers[index].wishlistLoading(false);
                         }, icon: Obx((){
-                          return Icon(homeController.bestSellers[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
+                          return homeController.bestSellers[index].wishlistLoading.value
+                              ?CircularProgressIndicator()
+                              :Icon(homeController.bestSellers[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
                         })))
                       ],
                     ),
                   ),
-                );
+                ));
               }),
           // GridView.builder(
           //     physics: NeverScrollableScrollPhysics(),
@@ -719,7 +726,7 @@ class CategoryView extends StatelessWidget {
             top: 5,
             left: Global.lang_code=="en"?MediaQuery.of(context).size.width*0.5-26:null,
             right: Global.lang_code=="ar"?MediaQuery.of(context).size.width*0.5-26:null,
-            child: CircleAvatar(radius: 8,backgroundColor: cartController.my_order.isEmpty?Colors.transparent:Colors.red,child: Text(cartController.my_order.length.toString(),style: App.textNormal(cartController.my_order.isEmpty?Colors.transparent: Colors.white, 10),)),
+            child: Global.cartCircleCount(),
           )
         ],
       );

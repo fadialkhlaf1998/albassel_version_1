@@ -80,36 +80,27 @@ class SignUpController extends GetxController{
      lname_vaildate.value=true;
     }
    }else{
-    MyApi.check_internet().then((net) {
+    loading.value=true;
+    MyApi.sign_up(email, pass,fname,lname,isoCode.value.dialCode!+phone,country).then((value) async{
+     if(value.state==200){
+      Store.saveLoginInfo(email, pass);
+      if(Global.customer_type!=0){
+       await MyApi.upload_customer_file(path, value.data.first.id);
+      }
 
-     if(net){
-      loading.value=true;
-      MyApi.sign_up(email, pass,fname,lname,isoCode.value.dialCode!+phone,country).then((value) async{
-        if(value.state==200){
-        Store.saveLoginInfo(email, pass);
-        if(Global.customer_type!=0){
-         await MyApi.upload_customer_file(path, value.data.first.id);
-        }
+      loading.value=false;
+      Store.save_customer_type(Global.customer_type);
+      if(Global.customer_type==0){
+       App.sucss_msg(context, App_Localization.of(context).translate("sign_up_succ"));
+       Get.offAll(() => VerificationCode());
+      }else{
+       App.sucss_msg(context, App_Localization.of(context).translate("sign_up_will_replay_mail"));
+       Get.offAll(() => Home());
+      }
 
-         loading.value=false;
-        Store.save_customer_type(Global.customer_type);
-         if(Global.customer_type==0){
-          App.sucss_msg(context, App_Localization.of(context).translate("sign_up_succ"));
-          Get.offAll(() => VerificationCode());
-         }else{
-          App.sucss_msg(context, App_Localization.of(context).translate("sign_up_will_replay_mail"));
-          Get.offAll(() => Home());
-         }
-
-       }else{
-        loading.value=false;
-        App.error_msg(context, App_Localization.of(context).translate("wrong_signup_msg"));
-       }
-      });
      }else{
-      Get.to(()=>NoInternet())!.then((value) {
-       signUp(context,email,pass,fname,lname,phone,country_code.value);
-      });
+      loading.value=false;
+      App.error_msg(context, App_Localization.of(context).translate("wrong_signup_msg"));
      }
     });
    }

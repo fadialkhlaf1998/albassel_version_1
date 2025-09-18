@@ -17,6 +17,21 @@ class App{
   static Color orange = Color(0XFFFA5C00);
   static Color lightOrange = Color(0XFFF6921E);
   static Color midOrange = Color(0XFFF37920);
+
+  static BoxShadow softShadow = BoxShadow(color: Colors.black38.withOpacity(0.1), spreadRadius: 0, blurRadius: 2,offset: const Offset(0,4));
+
+  static getLangText(String en, String ar){
+    if(Global.lang_code == "en"){
+      return en;
+    }else{
+      return ar;
+    }
+  }
+
+  static Widget cartBtnLoading({double height = 30}){
+    return SizedBox(height: height,child: Center(child: LinearProgressIndicator()));
+  }
+
   static textBlod(Color color,double size){
     return TextStyle(color: color,fontWeight: FontWeight.bold,fontSize: size,overflow: TextOverflow.ellipsis);
   }

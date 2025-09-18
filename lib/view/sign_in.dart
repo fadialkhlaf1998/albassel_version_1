@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable, non_constant_identifier_names
 
+import 'dart:io';
+
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/const/global.dart';
@@ -21,9 +23,6 @@ class SignIn extends StatelessWidget {
       email.text=Global.remember_email;
     }
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +166,63 @@ class SignIn extends StatelessWidget {
                                     style: App.textNormal(Colors.white, 16),
                                   ),
                                 ),
+                              ),
+                            ),
+                            Platform.isAndroid?
+                            GestureDetector(
+                              onTap: (){
+                                signInController.signInWithGoogle(context);
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: MediaQuery.of(context).size.height * 0.06 > 70
+                                    ? 70
+                                    : MediaQuery.of(context).size.height * 0.06,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: Border.all(color: Colors.black)
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset("assets/icon/google.png",height: 35,),
+                                    SizedBox(width: 15,),
+                                    Text(
+                                      App_Localization.of(context)
+                                          .translate("signin_google"),
+                                      style: App.textNormal(Colors.black, 16),
+                                    ),
+                                  ],
+                                )
+                              ),
+                            )
+                            :GestureDetector(
+                              onTap: (){
+                                signInController.signInWithApple(context);
+                              },
+                              child: Container(
+                                  width: MediaQuery.of(context).size.width * 0.9,
+                                  height: MediaQuery.of(context).size.height * 0.06 > 70
+                                      ? 70
+                                      : MediaQuery.of(context).size.height * 0.06,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(50),
+                                      border: Border.all(color: Colors.black)
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.apple,size: 40,),
+                                      SizedBox(width: 15,),
+                                      Text(
+                                        App_Localization.of(context)
+                                            .translate("signin_apple"),
+                                        style: App.textNormal(Colors.black, 16),
+                                      ),
+                                    ],
+                                  )
                               ),
                             ),
                           ],

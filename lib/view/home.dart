@@ -7,6 +7,7 @@ import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
+import 'package:albassel_version_1/model_v2/product.dart';
 import 'package:albassel_version_1/my_model/my_product.dart';
 import 'package:albassel_version_1/view/cart.dart';
 import 'package:albassel_version_1/view/category_view_nav.dart';
@@ -25,7 +26,7 @@ import 'package:marquee/marquee.dart';
 
 class Home extends StatelessWidget {
 
-  double size = 5;
+  double size = 10;
 
   HomeController homeController=Get.put(HomeController());
   CartController cartController=Get.find();
@@ -50,7 +51,7 @@ class Home extends StatelessWidget {
   //     newVersion.showUpdateDialog(context: context, versionStatus: state);
   //   }
   // }
-  String appcastURL = "https://app.albaselco.com/appcast.xml";
+  String appcastURL = "https://albaselcosmetics.com/appcast.xml";
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -92,10 +93,11 @@ class Home extends StatelessWidget {
     return SafeArea(
         child: Container(
           decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/background/background.png"),
-                fit: BoxFit.cover
-              )
+            color: Colors.white
+              // image: DecorationImage(
+              //     image: AssetImage("assets/background/background.png"),
+              //   fit: BoxFit.cover
+              // )
           ),
           child: Stack(
             children: [
@@ -364,7 +366,7 @@ class Home extends StatelessWidget {
                         ),
 
                       ),
-                      Text(homeController.category[index].title,style: App.textNormal(Colors.black, 8))
+                      Text(homeController.category[index].getTitle(),style: App.textNormal(Colors.black, 8))
                     ],
                   )
                 ),
@@ -451,7 +453,10 @@ class Home extends StatelessWidget {
                       image: DecorationImage(
                         fit: BoxFit.contain,
                         image: NetworkImage(homeController.brands[index].image.replaceAll("localhost", "10.0.2.2"),),
-                      )
+                      ),
+                    boxShadow: [
+                      App.softShadow
+                    ]
                   ),
                 ),
               ),
@@ -496,7 +501,7 @@ class Home extends StatelessWidget {
                 itemBuilder: (context,index){
                   // print("view");
                   // print(homeController.bestSellers[3].price);
-                  return Padding(
+                  return Obx(()=>Padding(
                     padding: const EdgeInsets.all(0),
                     child: GestureDetector(
                       onTap: (){
@@ -507,7 +512,10 @@ class Home extends StatelessWidget {
                           Container(
                             decoration:BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  App.softShadow
+                                ]
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -538,15 +546,18 @@ class Home extends StatelessWidget {
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Text(homeController.bestSellers[index].title,style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
+                                          Text(homeController.bestSellers[index].getTitle(),style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
                                           // Text(App_Localization.of(context).translate("aed")+" "+homeController.bestSellers[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
-                                          App.price(context, homeController.bestSellers[index].price, homeController.bestSellers[index].offer_price),
+                                          App.price(context, homeController.bestSellers[index].price, homeController.bestSellers[index].offerPrice),
                                           GestureDetector(
-                                            onTap: (){
-                                              cartController.add_to_cart(homeController.bestSellers[index], 1,context);
-
+                                            onTap: ()async{
+                                              homeController.bestSellers[index].cartLoading(true);
+                                              await cartController.addOrUpdateCart(homeController.bestSellers[index].id, null, 1, context);
+                                              homeController.bestSellers[index].cartLoading(false);
                                             },
-                                            child: Container(
+                                            child:  homeController.bestSellers[index].cartLoading.value
+                                                ?App.cartBtnLoading()
+                                                :Container(
                                               width: MediaQuery.of(context).size.width*0.4,
                                               height: 30,
                                               decoration: BoxDecoration(
@@ -554,7 +565,7 @@ class Home extends StatelessWidget {
                                                   border: Border.all(color:App.midOrange)
                                               ),
                                               child: Center(
-                                                child: Text(App_Localization.of(context).translate("add_cart"),style: App.textNormal(App.midOrange, 12),),
+                                                child:Text(App_Localization.of(context).translate("add_cart"),style: App.textNormal(App.midOrange, 12),),
                                               ),
                                             ),
                                           )
@@ -566,23 +577,26 @@ class Home extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Positioned(child: IconButton(onPressed: (){
+                          Positioned(child: IconButton(onPressed: ()async{
+                            homeController.bestSellers[index].wishlistLoading(true);
                             if(homeController.bestSellers[index].favorite.value){
                               homeController.bestSellers[index].favorite.value=false;
-                              wishListController.delete_from_wishlist(homeController.bestSellers[index]);
+                              await wishListController.deleteFromWishlist(homeController.bestSellers[index].id,context);
                             }else{
                               homeController.bestSellers[index].favorite.value=true;
-                              wishListController.add_to_wishlist(homeController.bestSellers[index],context);
+                              await wishListController.addToWishlist(homeController.bestSellers[index].id,context);
                             }
-
+                            homeController.bestSellers[index].wishlistLoading(false);
                           }, icon: Obx((){
-                            return Icon(homeController.bestSellers[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
+                            return homeController.bestSellers[index].wishlistLoading.value
+                                ?CircularProgressIndicator()
+                                :Icon(homeController.bestSellers[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
                           }))),
                           App.outOfStock(homeController.bestSellers[index].availability),
                         ],
                       ),
                     ),
-                  );
+                  ));
                 });
           })
           // GridView.builder(
@@ -846,6 +860,7 @@ class Home extends StatelessWidget {
                       BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
                     ],
                     gradient:App.orangeGradient()
+                  // color: Colors.white
                 ),
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
@@ -901,7 +916,7 @@ class Home extends StatelessWidget {
               top: 5,
               left: Global.lang_code=="en"?MediaQuery.of(context).size.width*0.5-26:null,
               right: Global.lang_code=="ar"?MediaQuery.of(context).size.width*0.5-26:null,
-              child: CircleAvatar(radius: 8,backgroundColor: cartController.my_order.isEmpty?Colors.transparent:Colors.red,child: Text(cartController.my_order.length.toString(),style: App.textNormal(cartController.my_order.isEmpty?Colors.transparent: Colors.white, 10),)),
+              child: Global.cartCircleCount(),
           )
         ],
       );
@@ -912,7 +927,7 @@ class Home extends StatelessWidget {
 
 
 class SearchTextField extends SearchDelegate<String> {
-  final List<MyProduct> suggestion_list;
+  final List<Product> suggestion_list;
   String? result;
   HomeController homeController;
 
@@ -983,7 +998,7 @@ class SearchTextField extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     final suggestions = suggestion_list.where((item) {
-      return item.title.toLowerCase().contains(query.toLowerCase());
+      return item.getTitle().toLowerCase().contains(query.toLowerCase());
     });
     return Container(
       color: Colors.white,
@@ -995,12 +1010,12 @@ class SearchTextField extends SearchDelegate<String> {
               backgroundImage: NetworkImage(suggestions.elementAt(index).image,),
             ),
             title: Text(
-              suggestions.elementAt(index).title,
+              suggestions.elementAt(index).getTitle(),
               style: TextStyle(color: App.orange),
             ),
 
             onTap: () {
-              query = suggestions.elementAt(index).title;
+              query = suggestions.elementAt(index).getTitle();
               close(context, query);
             },
           );

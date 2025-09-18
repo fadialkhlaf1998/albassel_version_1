@@ -6,11 +6,10 @@ import 'package:albassel_version_1/controler/category_view_nav_controller.dart';
 import 'package:albassel_version_1/controler/wish_list_controller.dart';
 import 'package:albassel_version_1/helper/api.dart';
 import 'package:albassel_version_1/controler/intro_controller.dart';
+import 'package:albassel_version_1/helper/api_v2.dart';
 import 'package:albassel_version_1/helper/store.dart';
+import 'package:albassel_version_1/model_v2/product.dart';
 import 'package:albassel_version_1/view/about_us.dart';
-import 'package:albassel_version_1/model/collection.dart';
-import 'package:albassel_version_1/model/product.dart';
-import 'package:albassel_version_1/my_model/best_sellers.dart';
 import 'package:albassel_version_1/my_model/brand.dart';
 import 'package:albassel_version_1/my_model/category.dart';
 import 'package:albassel_version_1/my_model/my_api.dart';
@@ -34,7 +33,7 @@ class HomeController extends GetxController{
   List<Brand> brands=<Brand>[];
   List<MySlider> slider=<MySlider>[];
   List<TopCategory> topCategory=<TopCategory>[];
-  RxList<MyProduct> bestSellers=<MyProduct>[].obs;
+  RxList<Product> bestSellers=<Product>[].obs;
   bool makeup=false;
   CartController cartController = Get.find();
   CategoryViewNavController categoryViewNavController=Get.put(CategoryViewNavController());
@@ -96,7 +95,7 @@ class HomeController extends GetxController{
   }
   void nave_to_logout() {
     Store.logout();
-    cartController.clear_cart();
+    // cartController.clear_cart();
     updateBestSellersSubCategory();
     wishListController.wishlist.clear();
     Get.offAll(()=>Welcome());
@@ -104,7 +103,7 @@ class HomeController extends GetxController{
   updateBestSellersSubCategory()async{
     print(Global.customer_type_decoder);
     print('best sellers');
-    List<MyProduct> list = await MyApi.getBestSellers(wishListController.wishlist);
+    List<Product> list = await ApiV2.getBeastSellersProducts();
     introController.bestSellers = list;
     bestSellers.clear();
     bestSellers.addAll(list);
@@ -119,270 +118,197 @@ class HomeController extends GetxController{
   on_submit(){}
 
   get_sub_category(int category_id,BuildContext context){
-    MyApi.check_internet().then((internet) {
-      if (internet) {
-        product_loading.value=true;
-        if(category_id==5){
-          makeup=true;
-          MyApi.getMakeupSubSubCategory().then((value) {
-            sub_Category.clear();
-            product_loading.value=false;
-            sub_Category.addAll(value);
-            sub_Category_category_view=value;
-          }).catchError((err){
-            product_loading.value=false;
-            // App.error_msg(context, App_Localization.of(context).translate("wrong"));
+    product_loading.value=true;
+    if(category_id==5){
+      makeup=true;
+      MyApi.getMakeupSubSubCategory().then((value) {
+        sub_Category.clear();
+        product_loading.value=false;
+        sub_Category.addAll(value);
+        sub_Category_category_view=value;
+      }).catchError((err){
+        product_loading.value=false;
+        // App.error_msg(context, App_Localization.of(context).translate("wrong"));
 
-          });
-        }else{
-          makeup=false;
-          MyApi.getSubCategory(category_id).then((value) {
-            sub_Category.clear();
-            product_loading.value=false;
-            sub_Category.addAll(value);
-            sub_Category_category_view=value;
-          }).catchError((err){
-            product_loading.value=false;
-            // App.error_msg(context, App_Localization.of(context).translate("wrong"));
+      });
+    }else{
+      makeup=false;
+      MyApi.getSubCategory(category_id).then((value) {
+        sub_Category.clear();
+        product_loading.value=false;
+        sub_Category.addAll(value);
+        sub_Category_category_view=value;
+      }).catchError((err){
+        product_loading.value=false;
+        // App.error_msg(context, App_Localization.of(context).translate("wrong"));
 
-          });
-        }
-
-      }else{
-        Get.to(NoInternet())!.then((value) {
-          get_sub_category(category_id,context);
-        });
-      }
-    });
+      });
+    }
   }
   get_sub_categoryPage(int category_id,BuildContext context){
 
-    MyApi.check_internet().then((internet) {
-      if (internet) {
-        product_loading.value=true;
-        if(category_id==5){
-          makeup=true;
-          MyApi.getMakeupSubSubCategory().then((value) {
-            sub_Category.clear();
-            product_loading.value=false;
-            sub_Category=value;
-            sub_Category_category_view=value;
-            Get.to(()=>CategoryView());
-          }).catchError((err){
-            product_loading.value=false;
-            // App.error_msg(context, App_Localization.of(context).translate("wrong"));
+    product_loading.value=true;
+    if(category_id==5){
+      makeup=true;
+      MyApi.getMakeupSubSubCategory().then((value) {
+        sub_Category.clear();
+        product_loading.value=false;
+        sub_Category=value;
+        sub_Category_category_view=value;
+        Get.to(()=>CategoryView());
+      }).catchError((err){
+        product_loading.value=false;
+        // App.error_msg(context, App_Localization.of(context).translate("wrong"));
 
-          });
-        }else{
-          makeup=false;
-          MyApi.getSubCategory(category_id).then((value) {
-            sub_Category.clear();
-            product_loading.value=false;
-            sub_Category=value;
-            sub_Category_category_view=value;
-            Get.to(()=>CategoryView());
-          }).catchError((err){
-            product_loading.value=false;
-            // App.error_msg(context, App_Localization.of(context).translate("wrong"));
+      });
+    }else{
+      makeup=false;
+      MyApi.getSubCategory(category_id).then((value) {
+        sub_Category.clear();
+        product_loading.value=false;
+        sub_Category=value;
+        sub_Category_category_view=value;
+        Get.to(()=>CategoryView());
+      }).catchError((err){
+        product_loading.value=false;
+        // App.error_msg(context, App_Localization.of(context).translate("wrong"));
 
-          });
-        }
-
-      }else{
-        Get.to(NoInternet())!.then((value) {
-          get_sub_category(category_id,context);
-        });
-      }
-    });
+      });
+    }
   }
 
   get_products(int sub_category,index,BuildContext context){
-    MyApi.check_internet().then((internet) {
-      if (internet) {
-        product_loading.value=true;
-        MyApi.getProducts(wishListController.wishlist,sub_category).then((value) {
+    product_loading.value=true;
+    ApiV2.getProductsBySubCategory(sub_category).then((value) {
+      product_loading.value=false;
+      Get.to(()=>ProductsView(sub_Category, value,index));
+    }).catchError((err){
+      product_loading.value=false;
+      // App.error_msg(context, App_Localization.of(context).translate("wrong"));
+
+    });
+  }
+  get_productsMakeup(int sub_category,index,BuildContext context){
+    product_loading.value=true;
+    MyApi.getMakeupSubCategory(sub_category).then((sub_cat) {
+      if(sub_cat.isNotEmpty){
+        ApiV2.getProductsBySubCategory(sub_cat.first.id).then((value) {
           product_loading.value=false;
-          Get.to(()=>ProductsView(sub_Category, value,index));
+          sub_Category=sub_cat;
+          Get.to(()=>ProductsView(sub_cat, value,index));
         }).catchError((err){
           product_loading.value=false;
           // App.error_msg(context, App_Localization.of(context).translate("wrong"));
 
         });
       }else{
-        Get.to(NoInternet())!.then((value) {
-          get_products(sub_category,index,context);
-        });
+        product_loading.value=false;
+        App.error_msg(context, App_Localization.of(context).translate("fail_search"));
       }
-    });
-  }
-  get_productsMakeup(int sub_category,index,BuildContext context){
-    MyApi.check_internet().then((internet) {
-      if (internet) {
-        product_loading.value=true;
-        MyApi.getMakeupSubCategory(sub_category).then((sub_cat) {
-          if(sub_cat.isNotEmpty){
-            MyApi.getProducts(wishListController.wishlist,sub_cat.first.id).then((value) {
-              product_loading.value=false;
-              sub_Category=sub_cat;
-              Get.to(()=>ProductsView(sub_cat, value,index));
-            }).catchError((err){
-              product_loading.value=false;
-              // App.error_msg(context, App_Localization.of(context).translate("wrong"));
 
-            });
-          }else{
-            product_loading.value=false;
-            App.error_msg(context, App_Localization.of(context).translate("fail_search"));
-          }
-
-        });
-
-      }else{
-        Get.to(NoInternet())!.then((value) {
-          get_products(sub_category,index,context);
-        });
-      }
     });
   }
 
   get_products_by_search(String query,BuildContext context){
-    MyApi.check_internet().then((internet) {
-      if (internet) {
-        product_loading.value=true;
-        MyApi.getProductsSearch(wishListController.wishlist,query).then((value) {
-          product_loading.value=false;
-          if(value.isNotEmpty){
-            Get.to(()=>ProductsSearchView(value,query));
-          }else{
-            App.error_msg(context, App_Localization.of(context).translate("fail_search"));
-          }
-
-        }).catchError((err){
-          product_loading.value=false;
-          // App.error_msg(context, App_Localization.of(context).translate("wrong"));
-
-        });
+    product_loading.value=true;
+    ApiV2.search(query).then((value) {
+      product_loading.value=false;
+      if(value.isNotEmpty){
+        Get.to(()=>ProductsSearchView(value,query));
       }else{
-        Get.to(NoInternet())!.then((value) {
-          get_products_by_search(query,context);
-        });
+        App.error_msg(context, App_Localization.of(context).translate("fail_search"));
       }
+
+    }).catchError((err){
+      product_loading.value=false;
+      // App.error_msg(context, App_Localization.of(context).translate("wrong"));
+
     });
   }
 
   get_products_by_brand(int brand_id,BuildContext context){
-    MyApi.check_internet().then((internet) {
-      if (internet) {
-        product_loading.value=true;
-        MyApi.getProductsByBrand(wishListController.wishlist,brand_id).then((value) {
-          product_loading.value=false;
-          if(value.isNotEmpty){
-            Get.to(()=>ProductsSearchView(value,""));
-          }else{
-            App.error_msg(context, App_Localization.of(context).translate("fail_search"));
-          }
-
-        })
-        .catchError((err){
-          product_loading.value=false;
-          // App.error_msg(context, App_Localization.of(context).translate("wrong"));
-
-        });
+    product_loading.value=true;
+    ApiV2.getProductsByBrand(brand_id).then((value) {
+      product_loading.value=false;
+      if(value.isNotEmpty){
+        Get.to(()=>ProductsSearchView(value,""));
       }else{
-        Get.to(NoInternet())!.then((value) {
-          get_products_by_brand(brand_id,context);
-        });
+        App.error_msg(context, App_Localization.of(context).translate("fail_search"));
       }
+
+    })
+        .catchError((err){
+      product_loading.value=false;
+      // App.error_msg(context, App_Localization.of(context).translate("wrong"));
+
     });
   }
   go_to_product_page(MySlider slid){
-    product_loading.value=true;
-    MyApi.check_internet().then((internet) {
-      if (internet) {
-        if(slid.product_id!=null&&slid.is_product==1){
-          MyApi.getProductsInfo(slid.product_id!).then((value) {
-            product_loading.value=false;
-            //todo add favorite
-            Get.to(()=>ProductView(value!));
-          }).catchError((err){
-            product_loading.value=false;
-          });
-        }else{
-          MyApi.sliderProducts(wishListController.wishlist,slid.id).then((value) {
-            product_loading.value=false;
-            if(value.isNotEmpty){
-              Get.to(()=>ProductsSearchView(value,""));
-            }
-          }).catchError((err){
-            product_loading.value=false;
-          });
-        }
 
-      }else{
-        Get.to(()=>NoInternet())!.then((value) {
-          go_to_product_page(slid);
-        });
-      }
-    });
+    if(slid.product_id!=null&&slid.is_product==1){
+      Get.to(()=>ProductView(slid.product_id!));
+    }else{
+      product_loading.value=true;
+      ApiV2.getProductsBySlider(slid.id).then((value) {
+        product_loading.value=false;
+        if(value.isNotEmpty){
+          Get.to(()=>ProductsSearchView(value,""));
+        }
+      }).catchError((err){
+        product_loading.value=false;
+      });
+    }
   }
 
   get_data(){
     try{
-      MyApi.check_internet().then((internet) {
-        if (internet) {
-          marqueeText="";
-          for(int i=0;i<introController.marquee.length;i++){
-            if(i<introController.marquee.length-1){
-              marqueeText+=introController.marquee[i].text+" | ";
-            }else{
-              marqueeText+=introController.marquee[i].text;
-            }
-          }
-          if(introController.category.length>0){
-            category.clear();
-            category.addAll(introController.category);
-            loading.value=false;
-            if(introController.topCategory.isNotEmpty){
-              topCategory.clear();
-              topCategory.addAll(introController.topCategory);
-              product_loading.value=false;
-            }else{
-              introController.get_data();
-              get_data();
-            }
-            if(introController.bestSellers.isNotEmpty){
-              bestSellers.clear();
-              bestSellers.addAll(introController.bestSellers);
-            }else{
-              introController.get_data();
-              get_data();
-            }
-
-            if(introController.brands.isNotEmpty){
-              brands.clear();
-              brands.addAll(introController.brands);
-            }else{
-              introController.get_data();
-              get_data();
-            }
-            if(introController.sliders.isNotEmpty){
-              slider.clear();
-              slider.addAll(introController.sliders);
-            }else{
-              introController.get_data();
-              get_data();
-            }
-          }else{
-            introController.get_data();
-            get_data();
-          }
-
+      marqueeText="";
+      for(int i=0;i<introController.marquee.length;i++){
+        marqueeText+=introController.marquee[i].getText()+" | ";
+        // if(i<introController.marquee.length-1){
+        //   marqueeText+=introController.marquee[i].getText()+" | ";
+        // }else{
+        //   marqueeText+=introController.marquee[i].getText();
+        // }
+      }
+      if(introController.category.length>0){
+        category.clear();
+        category.addAll(introController.category);
+        loading.value=false;
+        if(introController.topCategory.isNotEmpty){
+          topCategory.clear();
+          topCategory.addAll(introController.topCategory);
+          product_loading.value=false;
         }else{
-          Get.to(NoInternet())!.then((value) {
-            get_data();
-          });
+          introController.get_data();
+          get_data();
         }
-      });
+        if(introController.bestSellers.isNotEmpty){
+          bestSellers.clear();
+          bestSellers.addAll(introController.bestSellers);
+        }else{
+          introController.get_data();
+          get_data();
+        }
+
+        if(introController.brands.isNotEmpty){
+          brands.clear();
+          brands.addAll(introController.brands);
+        }else{
+          introController.get_data();
+          get_data();
+        }
+        if(introController.sliders.isNotEmpty){
+          slider.clear();
+          slider.addAll(introController.sliders);
+        }else{
+          introController.get_data();
+          get_data();
+        }
+      }else{
+        introController.get_data();
+        get_data();
+      }
     }catch (e){
       get_data();
     }
@@ -394,36 +320,10 @@ class HomeController extends GetxController{
   }
 
   go_to_product(int index){
-    product_loading.value=true;
-    MyApi.check_internet().then((internet) {
-      if (internet) {
-        MyApi.getProductsInfo(bestSellers[index].id).then((value) {
-          product_loading.value=false;
-          //todo add favorite
-          Get.to(()=>ProductView(value!));
-        });
-      }else{
-        Get.to(()=>NoInternet())!.then((value) {
-          go_to_product(index);
-        });
-      }
-    });
+    Get.to(()=>ProductView(bestSellers[index].id));
   }
 
   go_to_product_by_id(int id){
-    loading.value=true;
-    MyApi.check_internet().then((internet) {
-      if (internet) {
-        MyApi.getProductsInfo(id).then((value) {
-          loading.value=false;
-          //todo add favorite
-          Get.to(()=>ProductView(value!));
-        });
-      }else{
-        Get.to(()=>NoInternet())!.then((value) {
-          go_to_product_by_id(id);
-        });
-      }
-    });
+    Get.to(()=>ProductView(id));
   }
 }

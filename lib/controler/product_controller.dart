@@ -3,7 +3,9 @@ import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/wish_list_controller.dart';
+import 'package:albassel_version_1/helper/api_v2.dart';
 import 'package:albassel_version_1/model/product.dart';
+import 'package:albassel_version_1/model_v2/product.dart';
 import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:albassel_version_1/my_model/my_product.dart';
 import 'package:albassel_version_1/my_model/product_info.dart';
@@ -17,10 +19,26 @@ class ProductController extends GetxController{
   var cart_count=1.obs;
   CartController cartController = Get.find();
   WishListController wishListController = Get.find();
-  ProductInfo? myProduct;
-  var loading = false.obs;
+  Product? myProduct;
+  double product_rating=0;
+  var loading = true.obs;
+  Option? selectedOptions;
 
-
+  getData(int product_id)async{
+    loading(true);
+    myProduct = await ApiV2.getProductDetails(product_id);
+    if(myProduct == null){
+      Get.back();
+      return;
+    }
+    // for(int i=0;i<wishListController.rate.length;i++){
+    //   if(myProduct!.id==wishListController.rate[i].id){
+    //     product_rating=wishListController.rate[i].rate;
+    //   }
+    // }
+    // wishListController.add_to_recently(myProduct!);
+    loading(false);
+  }
 
 
   increase(){
@@ -33,20 +51,19 @@ class ProductController extends GetxController{
     cart_count.value--;
   }
 
-  bool add_to_cart(BuildContext context){
-    MyProduct myProduct1 = MyProduct(id: myProduct!.id,category: myProduct!.category,brand: myProduct!.brand,sku: myProduct!.sku, subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount,availability: myProduct!.availability,offer_price: myProduct!.offer_price,category_id: myProduct!.categoryId);
-    return cartController.add_to_cart(myProduct1, cart_count.value,context);
+  Future<bool> add_to_cart(BuildContext context)async{
+    return await cartController.addOrUpdateCart(myProduct!.id,selectedOptions?.id, cart_count.value,context);
   }
 
-  favorite(ProductInfo product,BuildContext context){
-    product.is_favoirite.value = !product.is_favoirite.value;
-    if(product.is_favoirite.value){
-      MyProduct myProduct1 = MyProduct(id: myProduct!.id,brand: myProduct!.brand,category: myProduct!.category,sku: myProduct!.sku, subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount,availability: myProduct!.availability,offer_price: myProduct!.offer_price,category_id: myProduct!.categoryId);
-      wishListController.add_to_wishlist(myProduct1,context);
+  Future<void> favorite(Product product,BuildContext context)async{
+    product.wishlistLoading(true);
+    product.favorite.value = !product.favorite.value;
+    if(product.favorite.value){
+      await wishListController.addToWishlist(product.id,context);
     }else{
-      MyProduct myProduct1 = MyProduct(id: myProduct!.id,brand: myProduct!.brand,category: myProduct!.category,sku: myProduct!.sku, subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount,availability: myProduct!.availability,offer_price: myProduct!.offer_price,category_id: myProduct!.categoryId);
-      wishListController.delete_from_wishlist(myProduct1);
+      await wishListController.deleteFromWishlist(product.id,context);
     }
+    product.wishlistLoading(false);
   }
 
   add_review(String text ,int product_id,BuildContext context){

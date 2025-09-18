@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/model/my_order.dart';
+import 'package:albassel_version_1/model_v2/cart.dart';
 import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:albassel_version_1/view/web_view.dart';
 import 'package:http/http.dart' as http;
@@ -45,7 +46,7 @@ class Cashew {
     required String state,
     required String city,
     required String country,
-    required List<MyOrder> cart,
+    required List<CartItem> cart,
     required double shipping,
   })async{
     List<Item> itemsList = <Item>[];
@@ -53,16 +54,16 @@ class Cashew {
     double totalAmount =shipping;
     double taxAmount =0;
     for(int i=0;i<cart.length;i++){
-      totalAmount+= (cart[i].product.value.price * cart[i].quantity.value);
+      totalAmount+= (cart[i].totalPrice * cart[i].count);
       itemsList.add(
           Item(
-              reference: cart[i].product.value.id.toString(),
-              name: cart[i].product.value.title,
+              reference: cart[i].productId.toString(),
+              name: cart[i].title,
               description: "",
               url: "",
-              image: cart[i].product.value.image,
-              unitPrice: cart[i].product.value.price,
-              quantity: cart[i].quantity.value));
+              image: cart[i].image,
+              unitPrice: cart[i].totalPrice,
+              quantity: cart[i].count));
     }
     //Vat = 5 * price / 105
     taxAmount = 5 * (totalAmount - shipping) / 105;

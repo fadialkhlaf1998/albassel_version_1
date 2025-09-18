@@ -209,8 +209,22 @@
   "this_product_illegal": "This product is not eligible for discount",
   "you_did_not_reach_min_amount": "You did not reach the minimum amount of legal products for the discount. The minimum amount is",
   "you_saved": "You Saved",
-  "on_this_item": "On This Item"
-
+  "on_this_item": "On This Item",
+  "delete": "Delete",
+  "there_is_no_address_plz_add_address": "There is no address, Please add your address",
+  "work": "Work",
+  "home0": "Home",
+  "other": "Other",
+  "nickname": "Nick Name",
+  "wishlist_empty": "Your wishlist is empty",
+  "start_adding": "Start adding products you love!",
+  "havent_cart_yet": "Looks like you haven’t added anything yet.",
+  "start_shopping_now": "Start shopping now!",
+  "add_new_address": "Add New Address",
+  "shipping_is": "Shipping is",
+  "kindly_fill_fields": "kindly fill all mandatory fields?",
+  "signin_google": "Sign In With Google",
+  "signin_apple": "Sign In With Apple Id"
 }
 
 

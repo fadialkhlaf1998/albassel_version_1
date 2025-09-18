@@ -5,6 +5,8 @@ import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/checkout_controller.dart';
+import 'package:albassel_version_1/controler/my_address_controller.dart';
+import 'package:albassel_version_1/view/add_edit_address.dart';
 import 'package:albassel_version_1/view/my_fatoraah.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,15 +15,23 @@ import 'package:get/get.dart';
 
 class Checkout extends StatelessWidget {
   CheckoutController checkoutController = Get.put(CheckoutController());
-  CartController cartController = Get.find();
-  String sub_total;
-  String shipping;
-  String total;
 
-  Checkout(this.sub_total, this.shipping, this.total) {
+
+  Checkout() {
     checkoutController.lunch_session();
+    getData();
   }
-
+  getData()async{
+    await checkoutController.myAddressController.getData();
+    getShippingDataForSelectedAddress();
+  }
+  getShippingDataForSelectedAddress(){
+    if(checkoutController.myAddressController.address.length > 0){
+      checkoutController.cartController.getData(checkoutController.myAddressController.address[checkoutController.selectedAddress.value].id);
+    }else{
+      checkoutController.cartController.getData(null);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -36,15 +46,16 @@ class Checkout extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: Obx(()=>SingleChildScrollView(
-            physics: checkoutController.selected_operation.value==1?const NeverScrollableScrollPhysics():null,
-            child: Column(
-              children: [
-                _header(context),
-                checkoutController.selected_operation==0?_address(context):checkoutController.selected_operation==1?_payment(context):_summery(context),
-                _footer(context)
-              ],
-            ),
+          child: Obx(()=>Column(
+            children: [
+              _header(context),
+
+              Expanded(child: checkoutController.selected_operation.value==0
+                  ?_address(context):checkoutController.selected_operation.value==1
+                  ?_payment(context):_summery(context)),
+
+              _footer(context)
+            ],
           ),),
         ),
       ),
@@ -52,7 +63,7 @@ class Checkout extends StatelessWidget {
   }
   _header(BuildContext context){
     return Container(
-      height: MediaQuery.of(context).size.height*0.2,
+      height: 130,
       width: MediaQuery.of(context).size.width,
       color: Colors.white,
       child: Column(
@@ -183,8 +194,6 @@ class Checkout extends StatelessWidget {
           GestureDetector(
             onTap: (){
               checkoutController.next(context);
-              shipping = cartController.shipping.value;
-              total = cartController.total.value;
             },
             child: Container(
               height: MediaQuery.of(context).size.height*0.06,
@@ -202,113 +211,144 @@ class Checkout extends StatelessWidget {
     );
   }
   _address(BuildContext context){
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 30,right: 30),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                App.checkoutTextField(checkoutController.firstName, "first_name", context, MediaQuery.of(context).size.width*0.4, 40,checkoutController.address_err.value),
-                App.checkoutTextField(checkoutController.lastName, "last_name", context, MediaQuery.of(context).size.width*0.4, 40,checkoutController.address_err.value),
-              ],
+    return Obx(()=>checkoutController.myAddressController.loading.value
+        ?Container(
+      child: Center(child: CircularProgressIndicator(),),
+    )
+        : Container(
+      child: Column(
+        children: [
+          Container(
+            width: Get.width,
+            height: 70,
+            child:
+            checkoutController.cartController.loading.value?Center(child: LinearProgressIndicator(),):
+            Center(
+              child:checkoutController.myAddressController.address.isEmpty
+                  ?Text(App_Localization.of(context).translate("there_is_no_address_plz_add_address"))
+                  :(Text(App_Localization.of(context).translate("shipping_is")+" "+
+                  (checkoutController.cartController.cart!.shipping==0?
+                  App_Localization.of(context).translate("free"):
+                  (checkoutController.cartController.cart!.shipping.toStringAsFixed(2)+" AED")),style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),)),
             ),
-            const SizedBox(height: 30,),
-            App.checkoutTextField(checkoutController.address, "address", context, MediaQuery.of(context).size.width-60, 40,checkoutController.address_err.value),
-            const SizedBox(height: 30,),
-            App.checkoutTextField(checkoutController.apartment, "apartment", context, MediaQuery.of(context).size.width-60, 40,checkoutController.address_err.value),
-            const SizedBox(height: 30,),
-            App.checkoutTextField(checkoutController.city, "city", context, MediaQuery.of(context).size.width-60, 40,checkoutController.address_err.value),
-            const SizedBox(height: 30,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-
-                SizedBox(
-                  width: MediaQuery.of(context).size.width*0.35,
-                  height: 80,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(App_Localization.of(context).translate("country_region"),style: App.textNormal(Colors.grey, 12),),
-                      DropdownButton<String>(
-                        isExpanded: true,
-                        value: checkoutController.country.value=="non"?null:checkoutController.country.value,
-                        items: checkoutController.countries.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(App_Localization.of(context).translate(value),style: App.textNormal(Colors.black, 12),),
-                          );
-                        }).toList(),
-                        underline: Container(color: checkoutController.address_err.value&&checkoutController.country.value=="non"?Colors.red:Colors.grey,height: 1),
-                        onChanged: (val) {
-                          checkoutController.country.value=val!.toString();
-                        },
-                      ),
-                    ],
+          ),
+          Expanded(child:  ListView.builder(
+            shrinkWrap: true,
+            itemCount: checkoutController.myAddressController.address.length,
+            itemBuilder: (context,index){
+              var address = checkoutController.myAddressController.address[index];
+              return Obx(()=>GestureDetector(
+                onTap: ()async{
+                  checkoutController.selectedAddress(index);
+                  getShippingDataForSelectedAddress();
+                },
+                child: Card(
+                  elevation: 4, // shadow
+                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width*0.35,
-                  height: 80,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(App_Localization.of(context).translate("emirate"),style: App.textNormal(Colors.grey, 12),),
-                      DropdownButton(
-                        isExpanded: true,
-                        value: checkoutController.emirate.value=="non"?null:checkoutController.emirate.value,
-                        items: Global.new_shipping.map((newvalue) {
-                          return DropdownMenuItem(
-                            value: newvalue.emirate,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width*0.45,
-                              padding: const EdgeInsets.only(left: 3),
-                              child: Text(newvalue.emirate+" Shipping:"+newvalue.amount.toString()+"AED",style: TextStyle(fontSize: 12),),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Container(
+                                  width: 13,
+                                  height: 13,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: checkoutController.selectedAddress.value == index?App.midOrange:Colors.transparent,
+                                  ),
+                                ),
+                              ),
                             ),
-                          );
-                        }).toList(),
-                        underline: Container(color: checkoutController.address_err.value&&checkoutController.emirate.value=="non"?Colors.red:Colors.grey,height: 1,),
-                        onChanged: (val) {
-                          checkoutController.emirate.value=val.toString();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(App_Localization.of(context).translate("phone"),style: App.textNormal(Colors.grey, 12),),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width-60,
-                  height: 60,
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    controller: checkoutController.phone,
-                    maxLength: 9,
-                    decoration: InputDecoration(
-                        prefix: const Text("+971"),
-                        enabledBorder: checkoutController.address_err.value&&checkoutController.phone.value.text.isEmpty?const UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)):const UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: App.midOrange))
+                            SizedBox(width: 8,),
+                            Text(address.nickName,style: TextStyle(fontWeight: FontWeight.bold),),
+                            Spacer(),
+                            GestureDetector(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.edit, color: Colors.grey,size: 20,),
+                                  SizedBox(width: 5,),
+                                  Text(App_Localization.of(context).translate("edit")),
+                                ],
+                              ),
+                              onTap: () {
+                                Get.to(()=> AddEditAddress(address))!.then((val)async {
+                                  await checkoutController.myAddressController.getData();
+                                  getShippingDataForSelectedAddress();
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 12,),
+                        Container(width: Get.width,height: 1,color: Colors.grey,),
+                        SizedBox(height: 12,),
+                        Row(
+                          children: [
+                            Expanded(flex: 1,child: Text(App_Localization.of(context).translate("name"),style: TextStyle(color: Colors.grey),)),
+                            Expanded(flex: 3,child: Text(address.first_name+" "+address.last_name)),
+                          ],
+                        ),
+                        SizedBox(height: 8,),
+                        Row(
+                          children: [
+                            Expanded(flex: 1,child: Text(App_Localization.of(context).translate("address"),style: TextStyle(color: Colors.grey),)),
+                            Expanded(flex: 3,child: Text(address.emirate+" - "+address.city+" - "+address.address+" - "+address.apartment)),
+                          ],
+                        ),
+
+                        SizedBox(height: 8,),
+                        Row(
+                          children: [
+                            Expanded(flex: 1,child: Text(App_Localization.of(context).translate("phone"),style: TextStyle(color: Colors.grey),)),
+                            Expanded(flex: 3,child: Text(address.phone)),
+                          ],
+                        ),
+                        SizedBox(height: 8,),
+                      ],
                     ),
-                    style: App.textNormal(Colors.black, 14),
                   ),
                 ),
-              ],
+              ));
+            },
+          ),),
+          SizedBox(height: 20,),
+          GestureDetector(
+            onTap: (){
+              Get.to(AddEditAddress(null))!.then((val)async{
+                await checkoutController.myAddressController.getData();
+                getShippingDataForSelectedAddress();
+              });
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 15),
+              padding: EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                border: Border.all(color: App.midOrange),
+                borderRadius: BorderRadius.circular(5)
+              ),
+              child: Center(
+                child: Text(App_Localization.of(context).translate("add_new_address"),style: TextStyle(color: App.midOrange),),
+              ),
             ),
-
-
-            const SizedBox(height: 40,)
-          ],
-        ),
+          ),
+        ],
       ),
-    );
+    ));
   }
+
   _payment(BuildContext context){
     return !checkoutController.selected.value?
           SizedBox(
@@ -329,7 +369,6 @@ class Checkout extends StatelessWidget {
                   ),
                   child: ListTile(
                     onTap: (){
-                      checkoutController.my_order.addAll(cartController.my_order.value);
                       checkoutController.selected_operation.value++;
                       checkoutController.selected.value=true;
                       checkoutController.is_paid.value=false;
@@ -365,7 +404,7 @@ class Checkout extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10,),
-                double.parse(cartController.total.value) >= 10 &&double.parse(cartController.total.value) <= 4000
+                checkoutController.cartController.cart!.total >= 10
                     ?Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -401,7 +440,7 @@ class Checkout extends StatelessWidget {
                   ),
                 ):Center(),
                 const SizedBox(height: 10,),
-                double.parse(cartController.total.value) >= 200 &&double.parse(cartController.total.value) <= 2000
+                checkoutController.cartController.cart!.total >= 200
                     ?Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -440,12 +479,12 @@ class Checkout extends StatelessWidget {
         :SizedBox(
       height: MediaQuery.of(context).size.height*0.7-MediaQuery.of(context).padding.top,
       width: MediaQuery.of(context).size.width,
-      child:MyFatoraahPage("title",total.toString()));
+      child:MyFatoraahPage("title",checkoutController.cartController.cart!.total.toString()));
 
     //   MyFatoorah(
     //     onResult:(response){
     //       if(response.status==PaymentStatus.Success){
-    //         checkoutController.my_order.addAll(cartController.my_order);
+    //         checkoutController.my_order.addAll(checkoutController.cartController.my_order);
     //         checkoutController.add_order_payment(context);
     //         checkoutController.selected_operation++;
     //         checkoutController.is_paid.value=true;
@@ -473,7 +512,7 @@ class Checkout extends StatelessWidget {
     //       'https://assets.materialup.com/uploads/473ef52c-8b96-46f7-9771-cac4b112ae28/preview.png',
     //       errorUrl:
     //       'https://www.digitalpaymentguru.com/wp-content/uploads/2019/08/Transaction-Failed.png',
-    //       invoiceAmount: double.parse(cartController.total.value),
+    //       invoiceAmount: double.parse(checkoutController.cartController.total.value),
     //       language: Global.lang_code=="en"?ApiLanguage.English:ApiLanguage.Arabic,
     //
     //
@@ -486,17 +525,18 @@ class Checkout extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: MediaQuery.of(context).size.height*0.3,
+          height: MediaQuery.of(context).size.height*0.25,
           child: ListView.builder(
             // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
               shrinkWrap: true,
-              itemCount: checkoutController.my_order.length,
+              itemCount: checkoutController.cartController.cart!.cartList.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context,index){
+                var item = checkoutController.cartController.cart!.cartList[index];
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.height*0.2,
+                    width: MediaQuery.of(context).size.height*0.15,
                     child: Column(
                       children: [
                         Expanded(flex:3,
@@ -506,7 +546,7 @@ class Checkout extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(color: Colors.grey),
                                   image: DecorationImage(
-                                      image: NetworkImage(checkoutController.my_order[index].product.value.image),
+                                      image: NetworkImage(item.image),
                                       fit: BoxFit.cover
                                   )
                               ),
@@ -517,12 +557,12 @@ class Checkout extends StatelessWidget {
                             margin: const EdgeInsets.only(left: 10,right: 10),
                             child: Column(
                               children: [
-                                Text(checkoutController.my_order[index].product.value.title,style: const TextStyle(fontSize: 8,overflow: TextOverflow.ellipsis),),
+                                Text(item.title,style: const TextStyle(fontSize: 8,overflow: TextOverflow.ellipsis),),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(App_Localization.of(context).translate("aed")+" "+double.parse(checkoutController.my_order[index].price.value).toStringAsFixed(2),style: TextStyle(fontSize: 10,overflow: TextOverflow.ellipsis,color: App.midOrange)),
-                                    Text(App_Localization.of(context).translate("quantity")+": "+checkoutController.my_order[index].quantity.value.toString(),style: const TextStyle(fontSize: 10,overflow: TextOverflow.ellipsis,color: Colors.black)),
+                                    Text(App_Localization.of(context).translate("aed")+" "+item.totalPrice.toStringAsFixed(2),style: TextStyle(fontSize: 10,overflow: TextOverflow.ellipsis,color: App.midOrange)),
+                                    Text(App_Localization.of(context).translate("quantity")+": "+item.count.toString(),style: const TextStyle(fontSize: 10,overflow: TextOverflow.ellipsis,color: Colors.black)),
                                   ],
                                 )
                               ],
@@ -535,6 +575,7 @@ class Checkout extends StatelessWidget {
                 );
               }),
         ),
+        SizedBox(height: 30,),
         SizedBox(
           width: MediaQuery.of(context).size.width*0.8,
 
@@ -580,7 +621,7 @@ class Checkout extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    sub_total.toString() + " "+App_Localization.of(context).translate("aed"),
+                    checkoutController.cartController.cart!.subTotal.toString() + " "+App_Localization.of(context).translate("aed"),
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -630,7 +671,7 @@ class Checkout extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    shipping.toString() + " "+App_Localization.of(context).translate("aed"),
+                    checkoutController.cartController.cart!.shipping.toString() + " "+App_Localization.of(context).translate("aed"),
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -680,7 +721,7 @@ class Checkout extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    total.toString() + " "+App_Localization.of(context).translate("aed"),
+                    checkoutController.cartController.cart!.total.toString() + " "+App_Localization.of(context).translate("aed"),
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,

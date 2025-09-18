@@ -18,7 +18,7 @@ class MySlider {
   String title;
   String image;
   int? product_id;
-  int is_product;
+  int? is_product;
 
 
   factory MySlider.fromJson(String str) => MySlider.fromMap(json.decode(str));

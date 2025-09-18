@@ -45,6 +45,7 @@ class MyCustomer {
     required this.customer_type,
     required this.phone,
     required this.country,
+    required this.token,
   });
 
   int id;
@@ -57,6 +58,7 @@ class MyCustomer {
   String pass;
   String phone;
   String country;
+  String token;
 
   factory MyCustomer.fromJson(String str) => MyCustomer.fromMap(json.decode(str));
 
@@ -73,6 +75,7 @@ class MyCustomer {
     customer_type: json["customer_type"]??0,
     country: json["country"]??"non",
     phone: json["phone"]??"non",
+    token: json["token"],
   );
 
   Map<String, dynamic> toMap() => {

@@ -2,6 +2,7 @@
 
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
+import 'package:albassel_version_1/helper/api_v2.dart';
 import 'package:albassel_version_1/my_model/my_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,7 +53,7 @@ class NoInternet extends StatelessWidget{
               ),
               TextButton(
                 onPressed: (){
-                  MyApi.check_internet().then((value) {
+                  ApiV2.checkInternet().then((value) {
                     if(value){
                       Get.back();
                     }

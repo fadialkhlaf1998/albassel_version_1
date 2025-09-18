@@ -6,7 +6,7 @@ import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
 import 'package:albassel_version_1/controler/products_controller.dart';
-import 'package:albassel_version_1/my_model/my_product.dart';
+import 'package:albassel_version_1/model_v2/product.dart';
 import 'package:albassel_version_1/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 class ProductsSearchView extends StatelessWidget {
   ProductsController productsController = Get.put(ProductsController());
   CartController cartController = Get.find();
-  List<MyProduct> my_products;
+  List<Product> my_products;
   HomeController homeController = Get.find();
   TextEditingController search_controller = TextEditingController();
   ProductsSearchView(this.my_products,String search, {Key? key}) : super(key: key){
@@ -183,7 +183,7 @@ class ProductsSearchView extends StatelessWidget {
             top: 5,
             left: Global.lang_code=="en"?MediaQuery.of(context).size.width*0.5-26:null,
             right: Global.lang_code=="ar"?MediaQuery.of(context).size.width*0.5-26:null,
-            child: CircleAvatar(radius: 8,backgroundColor: cartController.my_order.isEmpty?Colors.transparent:Colors.red,child: Text(cartController.my_order.length.toString(),style: App.textNormal(cartController.my_order.isEmpty?Colors.transparent: Colors.white, 10),)),
+            child: Global.cartCircleCount(),
           )
         ],
       );
@@ -392,7 +392,7 @@ class ProductsSearchView extends StatelessWidget {
             childAspectRatio: 4/6
         ),
         itemBuilder: (context,index){
-          return Padding(
+          return Obx(()=>Padding(
             padding: const EdgeInsets.all(10.0),
             child: GestureDetector(
               onTap: (){
@@ -434,15 +434,19 @@ class ProductsSearchView extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Text(productsController.my_products[index].title,style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
+                                  Text(productsController.my_products[index].getTitle(),style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
                                   // Text(App_Localization.of(context).translate("aed")+" "+productsController.my_products[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
-                                  App.price(context, productsController.my_products[index].price, productsController.my_products[index].offer_price),
+                                  App.price(context, productsController.my_products[index].price, productsController.my_products[index].offerPrice),
                                   GestureDetector(
-                                    onTap: (){
-                                      productsController.cartController.add_to_cart(productsController.my_products[index], 1,context);
+                                    onTap: ()async{
+                                      productsController.my_products[index].cartLoading(true);
+                                      await productsController.cartController.addOrUpdateCart(productsController.my_products[index].id,null, 1,context);
+                                      productsController.my_products[index].cartLoading(false);
                                       // App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
                                     },
-                                    child: Container(
+                                    child: productsController.my_products[index].cartLoading.value
+                                        ?App.cartBtnLoading()
+                                        :Container(
                                       width: MediaQuery.of(context).size.width*0.4,
                                       height: 30,
                                       decoration: BoxDecoration(
@@ -462,23 +466,25 @@ class ProductsSearchView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Positioned(child: IconButton(onPressed: (){
+                  Positioned(child: IconButton(onPressed: ()async{
+                    productsController.my_products[index].wishlistLoading(true);
                     if(productsController.my_products[index].favorite.value){
                       productsController.my_products[index].favorite.value=false;
-                      productsController.wishListController.delete_from_wishlist(productsController.my_products[index]);
+                      await productsController.wishListController.deleteFromWishlist(productsController.my_products[index].id,context);
                     }else{
                       productsController.my_products[index].favorite.value=true;
-                      productsController.wishListController.add_to_wishlist(productsController.my_products[index],context);
+                      await productsController.wishListController.addToWishlist(productsController.my_products[index].id,context);
                     }
-
-                  }, icon: Obx((){
-                    return Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
-                  }))),
+                    productsController.my_products[index].wishlistLoading(false);
+                  }, icon:
+                  productsController.my_products[index].wishlistLoading.value
+                      ?CircularProgressIndicator()
+                      :Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,))),
                   App.outOfStock(productsController.my_products[index].availability),
                 ],
               ),
             ),
-          );
+          ));
         });
   }
 }

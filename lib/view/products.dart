@@ -8,6 +8,7 @@ import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
 import 'package:albassel_version_1/controler/products_controller.dart';
 import 'package:albassel_version_1/controler/wish_list_controller.dart';
+import 'package:albassel_version_1/model_v2/product.dart';
 import 'package:albassel_version_1/my_model/my_product.dart';
 import 'package:albassel_version_1/my_model/sub_category.dart';
 import 'package:albassel_version_1/view/home.dart';
@@ -22,7 +23,7 @@ class ProductsView extends StatelessWidget {
   WishListController wishListController = Get.find();
   CartController cartController = Get.find();
   List<SubCategory> sub_categories;
-  List<MyProduct> my_products;
+  List<Product> my_products;
   int selected_sub_category=0;
   HomeController homeController = Get.find();
   ScrollController scrollController = ScrollController();
@@ -344,7 +345,7 @@ backgroundColor: App.midOrange,
             top: 5,
             left: Global.lang_code=="en"?MediaQuery.of(context).size.width*0.5-26:null,
             right: Global.lang_code=="ar"?MediaQuery.of(context).size.width*0.5-26:null,
-            child: CircleAvatar(radius: 8,backgroundColor: cartController.my_order.isEmpty?Colors.transparent:Colors.red,child: Text(cartController.my_order.length.toString(),style: App.textNormal(cartController.my_order.isEmpty?Colors.transparent: Colors.white, 10),)),
+            child: Global.cartCircleCount(),
           )
         ],
       );
@@ -409,7 +410,7 @@ backgroundColor: App.midOrange,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(homeController.sub_Category[index].title,style: App.textNormal(Colors.black, 12),),
+                  Text(homeController.sub_Category[index].getTitle(),style: App.textNormal(Colors.black, 12),),
                   productsController.selected_sub_category.value==index?Container(color: App.midOrange,height: 2,):Container(color: Colors.transparent,height: 2,)
                 ],
               ),
@@ -429,7 +430,7 @@ backgroundColor: App.midOrange,
           childAspectRatio: 4/6
         ),
         itemBuilder: (context,index){
-          return Padding(
+          return Obx(()=>Padding(
             padding: const EdgeInsets.all(10.0),
             child: GestureDetector(
               onTap: (){
@@ -440,7 +441,7 @@ backgroundColor: App.midOrange,
                   Container(
                     decoration:BoxDecoration(
                         color: Colors.white,
-                      borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(10)
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -450,17 +451,17 @@ backgroundColor: App.midOrange,
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                image: NetworkImage(productsController.my_products[index].image),
-                                fit: BoxFit.contain
-                              )
+                                image: DecorationImage(
+                                    image: NetworkImage(productsController.my_products[index].image),
+                                    fit: BoxFit.contain
+                                )
                             ),
                           ),
                         ),
                         Expanded(
                           flex: 2,
                           child: Container(
-                              width: MediaQuery.of(context).size.width,
+                            width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: const Color(0xffF1F1F1),
@@ -471,20 +472,24 @@ backgroundColor: App.midOrange,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Text(productsController.my_products[index].title,style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
+                                  Text(productsController.my_products[index].getTitle(),style: const TextStyle(color: Colors.black,fontSize: 10,),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
                                   // Text(App_Localization.of(context).translate("aed")+" "+productsController.my_products[index].price.toStringAsFixed(2),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 14,),maxLines: 1,overflow: TextOverflow.ellipsis),
-                                  App.price(context, productsController.my_products[index].price, productsController.my_products[index].offer_price),
+                                  App.price(context, productsController.my_products[index].price, productsController.my_products[index].offerPrice),
                                   GestureDetector(
-                                    onTap: (){
-                                      cartController.add_to_cart(productsController.my_products[index], 1,context);
+                                    onTap: ()async{
+                                      productsController.my_products[index].cartLoading(true);
+                                      await cartController.addOrUpdateCart(productsController.my_products[index].id,null, 1,context);
+                                      productsController.my_products[index].cartLoading(false);
                                       // App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
                                     },
-                                    child: Container(
+                                    child:productsController.my_products[index].cartLoading.value
+                                        ?App.cartBtnLoading()
+                                        :Container(
                                       width: MediaQuery.of(context).size.width*0.4,
                                       height: 30,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        border: Border.all(color:App.midOrange)
+                                          borderRadius: BorderRadius.circular(5),
+                                          border: Border.all(color:App.midOrange)
                                       ),
                                       child: Center(
                                         child: Text(App_Localization.of(context).translate("add_cart"),style: App.textNormal(App.midOrange, 12),),
@@ -499,23 +504,25 @@ backgroundColor: App.midOrange,
                       ],
                     ),
                   ),
-                  Positioned(child: IconButton(onPressed: (){
+                  Positioned(child: IconButton(onPressed: ()async{
+                    productsController.my_products[index].wishlistLoading(true);
                     if(productsController.my_products[index].favorite.value){
                       productsController.my_products[index].favorite.value=false;
-                      wishListController.delete_from_wishlist(productsController.my_products[index]);
+                      await wishListController.deleteFromWishlist(productsController.my_products[index].id,context);
                     }else{
                       productsController.my_products[index].favorite.value=true;
-                      wishListController.add_to_wishlist(productsController.my_products[index],context);
+                      await wishListController.addToWishlist(productsController.my_products[index].id,context);
                     }
-
-                  }, icon: Obx((){
-                    return Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,);
-                  }))),
+                    productsController.my_products[index].wishlistLoading(false);
+                  }, icon: productsController.my_products[index].wishlistLoading.value
+                      ?CircularProgressIndicator()
+                      :Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.midOrange,)
+                  )),
                   App.outOfStock(productsController.my_products[index].availability)
                 ],
               ),
             ),
-          );
+          ));
         });
   }
 }
