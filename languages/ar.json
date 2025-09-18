@@ -222,5 +222,7 @@
   "shipping_is": "وقت الشحن",
   "kindly_fill_fields": "يرجى ملء جميع الحقول الإلزامية؟",
   "signin_google": "تسجيل الدخول باستخدام جوجل",
-  "signin_apple": "تسجيل الدخول باستخدام معرف Apple"
+  "signin_apple": "تسجيل الدخول باستخدام معرف Apple",
+  "notifications": "الاشعارات",
+  "help": "مساعدة"
 }

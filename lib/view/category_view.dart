@@ -45,12 +45,7 @@ class CategoryView extends StatelessWidget {
   _home(BuildContext context){
     return SafeArea(
         child: Container(
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/background/background.png"),
-                  fit: BoxFit.cover
-              )
-          ),
+          color: Colors.white,
           child: Stack(
             children: [
               SingleChildScrollView(
@@ -249,49 +244,7 @@ class CategoryView extends StatelessWidget {
       ),
     );
   }
-  // _search(BuildContext context,TextEditingController controller){
-  //   return Container(
-  //
-  //     width: MediaQuery.of(context).size.width*0.9,
-  //     decoration: BoxDecoration(
-  //         color: Colors.white,
-  //         borderRadius: BorderRadius.circular(5)
-  //     ),
-  //     child: Padding(
-  //       padding: const EdgeInsets.only(left: 8,right: 8),
-  //       child: TextField(
-  //         style: TextStyle(color: Colors.grey,fontSize: 14),
-  //         textAlignVertical: TextAlignVertical.top,
-  //         controller: controller,
-  //         // onChanged: (query){
-  //         //   homeController.search(query);
-  //         // },
-  //         // onSubmitted: homeController.on_submit(),
-  //         onEditingComplete: (){
-  //           print('****************');
-  //         },
-  //         onSubmitted: (query){
-  //           if(query.isNotEmpty){
-  //             search_controller.text="";
-  //             homeController.get_products_by_search(query,context);
-  //           }
-  //         },
-  //         decoration: InputDecoration(
-  //           icon: Icon(Icons.search),
-  //           enabledBorder: const UnderlineInputBorder(
-  //               borderSide: BorderSide(color: Colors.transparent)
-  //           ),
-  //           focusedBorder: const UnderlineInputBorder(
-  //               borderSide: BorderSide(color: Colors.transparent)
-  //           ),
-  //
-  //             hintText: App_Localization.of(context).translate("search"),
-  //             hintStyle: TextStyle(color: Colors.grey,fontSize: 11)
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+
   _categories_list(BuildContext context){
     return Padding(
       padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right:  MediaQuery.of(context).size.width*0.05),
@@ -656,10 +609,6 @@ class CategoryView extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color:  homeController.product_loading.value?Colors.grey.withOpacity(0.4):Colors.transparent,
-              image: const DecorationImage(
-                  image: AssetImage("assets/background/background.png"),
-                  fit: BoxFit.cover
-              ),
             ),
             child: Container(
 

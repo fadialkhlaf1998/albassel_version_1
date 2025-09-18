@@ -43,12 +43,8 @@ class ProductsSearchView extends StatelessWidget {
         return SafeArea(
             child: Container(
               height: MediaQuery.of(context).size.height,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/background/background.png"),
-                      fit: BoxFit.cover
-                  )
-              ),
+
+              color: Colors.white,
               child: Stack(
                 children: [
                   SingleChildScrollView(
@@ -113,10 +109,6 @@ class ProductsSearchView extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color:  homeController.product_loading.value?Colors.grey.withOpacity(0.4):Colors.transparent,
-              image: const DecorationImage(
-                  image: AssetImage("assets/background/background.png"),
-                  fit: BoxFit.cover
-              ),
             ),
             child: Container(
 
@@ -403,7 +395,10 @@ class ProductsSearchView extends StatelessWidget {
                   Container(
                     decoration:BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        App.midShadow
+                      ]
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,

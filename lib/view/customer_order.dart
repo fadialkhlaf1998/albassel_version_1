@@ -4,50 +4,44 @@ import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/controler/my_order_controller.dart';
 import 'package:albassel_version_1/my_model/customer_order.dart';
+import 'package:albassel_version_1/view/order_item.dart';
+import 'package:albassel_version_1/wedgits/internal_header.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 
 class CustomerOrderView extends StatelessWidget {
-   List<CustomerOrder> my_list ;
-   CustomerOrderView(this.my_list, {Key? key}) : super(key: key){
-     myOrderController.my_order.value=my_list;
-   }
-
    MyOrderController myOrderController = Get.put(MyOrderController());
-
-
+   CustomerOrderView({Key? key}) : super(key: key){
+     myOrderController.getData();
+   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
+      backgroundColor: App.midOrange,
+      body: SafeArea(
 
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/background/background.png"),fit: BoxFit.cover
-            )
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                _header(context),
-                Obx((){
-                  return  myOrderController.loading.value?SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.7,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ):ListView.builder(
+          color: Colors.white,
+          child: Column(
+            children: [
+              InternalHeader(),
+              Obx((){
+                return  myOrderController.loading.value?SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height*0.7,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ):Expanded(
+                  child: ListView.builder(
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: my_list.length,
+                    // physics: const NeverScrollableScrollPhysics(),
+                    itemCount: myOrderController.my_order.length,
                     itemBuilder: (context,index){
                       return Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -62,7 +56,7 @@ class CustomerOrderView extends StatelessWidget {
                               width: MediaQuery.of(context).size.width - 50,
                               height: 130,
                               decoration: BoxDecoration(
-                                color: const Color(0xfffff4e6),
+                                color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(
                                       color: Colors.grey.withOpacity(0.5),
@@ -143,7 +137,7 @@ class CustomerOrderView extends StatelessWidget {
                                       children: [
                                         GestureDetector(
                                           onTap: (){
-                                            myOrderController.open_order_item(myOrderController.my_order[index].id,myOrderController.my_order[index].code);
+                                            Get.to(OrderItems(myOrderController.my_order[index].id,myOrderController.my_order[index].code));
                                           },
                                           child: Container(
                                             width: 90,
@@ -181,7 +175,7 @@ class CustomerOrderView extends StatelessWidget {
                                       children: [
                                         GestureDetector(
                                           onTap: (){
-                                            myOrderController.open_order_item(myOrderController.my_order[index].id,myOrderController.my_order[index].code);
+                                            Get.to(OrderItems(myOrderController.my_order[index].id,myOrderController.my_order[index].code));
                                           },
                                           child: Container(
                                             width: 90,
@@ -206,11 +200,11 @@ class CustomerOrderView extends StatelessWidget {
                           ),
                         ),
                       );
-                    },);
-                })
+                    },),
+                );
+              })
 
-              ],
-            ),
+            ],
           ),
         ),
       ),

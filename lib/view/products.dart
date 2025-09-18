@@ -66,10 +66,7 @@ backgroundColor: App.midOrange,
             child: Container(
               height: double.infinity,
               decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/background/background.png"),
-                      fit: BoxFit.cover
-                  )
+                  color: Colors.white
               ),
           child: Stack(
             children: [
@@ -79,6 +76,7 @@ backgroundColor: App.midOrange,
                     // _header(context),
                     SizedBox(height: MediaQuery.of(context).size.height*0.2+40,),
                     // _sub_category(context),
+                    productsController.loading.value?Container(height: 300,child: Center(child: CircularProgressIndicator(),),):
                         productsController.my_products.isEmpty?
                         Container(height:MediaQuery.of(context).size.height*0.8,color: Colors.transparent,child: Center(child: Column(
                           children: [
@@ -106,7 +104,6 @@ backgroundColor: App.midOrange,
                 ],
               )),
 
-              Positioned(top: 0,child: productsController.loading.value?Container(height:MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,color: Colors.grey.withOpacity(0.4),child: const Center(child: CircularProgressIndicator()),):const Center())
             ],
           ),
         ));
@@ -274,10 +271,6 @@ backgroundColor: App.midOrange,
           Container(
             decoration: BoxDecoration(
               color:  homeController.product_loading.value?Colors.grey.withOpacity(0.4):Colors.transparent,
-              image: const DecorationImage(
-                  image: AssetImage("assets/background/background.png"),
-                  fit: BoxFit.cover
-              ),
             ),
             child: Container(
 
@@ -441,7 +434,10 @@ backgroundColor: App.midOrange,
                   Container(
                     decoration:BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        App.midShadow
+                      ]
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,

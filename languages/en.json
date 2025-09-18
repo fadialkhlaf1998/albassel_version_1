@@ -224,7 +224,9 @@
   "shipping_is": "Shipping is",
   "kindly_fill_fields": "kindly fill all mandatory fields?",
   "signin_google": "Sign In With Google",
-  "signin_apple": "Sign In With Apple Id"
+  "signin_apple": "Sign In With Apple Id",
+  "notifications": "Notifications",
+  "help": "Help"
 }
 
 

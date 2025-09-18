@@ -17,8 +17,10 @@ class App{
   static Color orange = Color(0XFFFA5C00);
   static Color lightOrange = Color(0XFFF6921E);
   static Color midOrange = Color(0XFFF37920);
+  static Color grey = Color(0XFFf6f6f6);
 
   static BoxShadow softShadow = BoxShadow(color: Colors.black38.withOpacity(0.1), spreadRadius: 0, blurRadius: 2,offset: const Offset(0,4));
+  static BoxShadow midShadow = BoxShadow(color: Colors.black38.withOpacity(0.1), spreadRadius: 2, blurRadius: 2,offset: const Offset(0,2));
 
   static getLangText(String en, String ar){
     if(Global.lang_code == "en"){

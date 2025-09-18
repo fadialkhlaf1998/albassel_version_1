@@ -34,10 +34,6 @@ class Wishlist extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(
               color: Colors.white
-            // image: DecorationImage(
-            //     image: AssetImage("assets/background/background.png"),
-            //     fit: BoxFit.cover
-            // ),
           ),
           child: Column(
             children: [

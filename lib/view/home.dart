@@ -76,7 +76,7 @@ class Home extends StatelessWidget {
         return Scaffold(
           key: homeController.scaffoldKey,
           drawer: App.get_drawer(context,homeController),
-          floatingActionButton: App.live_chate(),
+          floatingActionButton: homeController.showFloatActionBtn.value?App.live_chate():null,
           backgroundColor: homeController.selected_bottom_nav_bar.value==2?Colors.white:App.midOrange,
           body:
           homeController.selected_bottom_nav_bar.value==0?_home(context)
@@ -94,10 +94,6 @@ class Home extends StatelessWidget {
         child: Container(
           decoration: const BoxDecoration(
             color: Colors.white
-              // image: DecorationImage(
-              //     image: AssetImage("assets/background/background.png"),
-              //   fit: BoxFit.cover
-              // )
           ),
           child: Stack(
             children: [
@@ -846,10 +842,6 @@ class Home extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color:  homeController.product_loading.value?Colors.grey.withOpacity(0.4):Colors.transparent,
-              image: const DecorationImage(
-                  image: AssetImage("assets/background/background.png"),
-                  fit: BoxFit.cover
-              ),
             ),
             child: Container(
 

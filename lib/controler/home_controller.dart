@@ -49,6 +49,7 @@ class HomeController extends GetxController{
   WishListController wishListController = Get.find();
   Product? selected_product;
   var product_loading=true.obs;
+  var showFloatActionBtn=true.obs;
   var loading=true.obs;
   var selder_selected=0.obs;
   var selected_category=0.obs;

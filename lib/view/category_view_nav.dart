@@ -49,12 +49,7 @@ class CategoryViewnave extends StatelessWidget {
           return SafeArea(
               child: Container(
                 height: double.infinity,
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/background/background.png"),
-                        fit: BoxFit.cover
-                    )
-                ),
+                color: Colors.white,
                 child: Stack(
                   children: [
                     SingleChildScrollView(
@@ -65,6 +60,7 @@ class CategoryViewnave extends StatelessWidget {
                           SizedBox(      height: MediaQuery.of(context).size.height*0.2+40+40,),
                           // _category(context),
                           // _sub_category(context),
+                          homeController.product_loading.value || productsController.loading.value?Container(height: 300,child: Center(child: CircularProgressIndicator(),)):
                           productsController.my_products.isEmpty?
                           Container(height:MediaQuery.of(context).size.height*0.8,color: Colors.transparent,child: Center(child: Column(
                             children: [
@@ -93,7 +89,6 @@ class CategoryViewnave extends StatelessWidget {
                       ],
                     ) ),
 
-                    Positioned(top: 0,child: homeController.product_loading.value || productsController.loading.value?Container(height:MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,color: Colors.grey.withOpacity(0.4),child: const Center(child: CircularProgressIndicator()),):const Center())
                   ],
                 ),
               ));
@@ -336,7 +331,10 @@ class CategoryViewnave extends StatelessWidget {
                   Container(
                     decoration:BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        App.midShadow
+                      ]
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
