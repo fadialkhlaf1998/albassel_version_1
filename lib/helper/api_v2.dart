@@ -18,12 +18,11 @@ import 'dart:async';
 class ApiV2 {
 
   static String url = "";
-  // static String url = "http://10.0.2.2:3000";
-  // static String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxNDAsImVtYWlsIjoiZmFkaS5raDM4NjEwMTMwQGdtYWlsLmNvbSIsImZpcnN0bmFtZSI6ImZhZGkiLCJsYXN0bmFtZSI6ImtoIiwiY29kZSI6Ijk0MjU3NyIsImlzX2FjdGl2ZSI6MSwicGFzcyI6InBhc3N3b3JkIiwiY3VzdG9tZXJfdHlwZSI6MCwidXBsb2FkZWRfbGluayI6bnVsbCwicGhvbmUiOiIrOTcxIiwiY291bnRyeSI6IkFFIiwic2VsbHNfaWQiOm51bGwsImZpcmViYXNlX3Rva2VuIjoiZm5uNzdQdGVURjZHYmx1NHJmM0JYVTpBUEE5MWJIczE0UWZxcGM3NjlhOE5acjNveHlIeWJsVE90N0o2YjlwLWV5WnhSamxGZER6R0lybDBEbW9nVlZXaGZjbnZRSkdvNGVXc1lLdWFES2dWNG1FcHY3ZTFkd3QyYUk1MmZsQVFSOUxkTWk1MGhVMUpLTSIsImFwcF92ZXJzaW9uIjoiMi4zLjkifSwiaWF0IjoxNzU3OTIwNDI2fQ.WRGznPloJcs7Yh2CFd3d5Ga2R6W_v_1FUknFZ66HBfA";
   static String token = "";
 
 
   static Future<bool> signUpVerfied(String email,String pass,String fName,String lName)async{
+    await checkInternet();
     var headers = {
       'Content-Type': 'application/json'
     };

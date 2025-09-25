@@ -174,7 +174,7 @@ class _CartState extends State<Cart> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(item.title,style: const TextStyle(color: Colors.black,fontSize: 14,overflow: TextOverflow.clip,),textAlign: TextAlign.left,),
+                    Text(item.getTitle(),style: const TextStyle(color: Colors.black,fontSize: 14,overflow: TextOverflow.clip,),textAlign: TextAlign.left,),
                     item.availability==0?
                     Container(
                       height: 40,
@@ -428,8 +428,8 @@ class _CartState extends State<Cart> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(cartController.cart!.cartList[index].title+
-                          (cartController.cart!.cartList[index].optionTitle.length>0?" | "+cartController.cart!.cartList[index].optionTitle:""),style: const TextStyle(color: Colors.black,fontSize: 14,overflow: TextOverflow.clip,),textAlign: TextAlign.left,),
+                      Text(cartController.cart!.cartList[index].getTitle()+
+                          (cartController.cart!.cartList[index].getOptionTitle().length>0?" | "+cartController.cart!.cartList[index].getOptionTitle():""),style: const TextStyle(color: Colors.black,fontSize: 14,overflow: TextOverflow.clip,),textAlign: TextAlign.left,),
                       cartController.cart!.discountCode != null&&
                       !cartController.cart!.cartList[index].includeDiscount?
                       Text(App_Localization.of(context).translate("this_product_illegal"),style: const TextStyle(color: Colors.red,fontSize: 12),):Center(),
@@ -443,7 +443,8 @@ class _CartState extends State<Cart> {
                       cartController.cart!.cartList[index].availability==0?
                       Container(
                         height: 40,
-                        width: MediaQuery.of(context).size.width*0.3,
+                        // width: MediaQuery.of(context).size.width*0.3,
+                        width: 135,
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.red),
                             color: Colors.grey[300],
@@ -455,7 +456,8 @@ class _CartState extends State<Cart> {
                       )
                       : Container(
                         height: 40,
-                        width: MediaQuery.of(context).size.width*0.3,
+                        // width: MediaQuery.of(context).size.width*0.3,
+                        width: 135,
                         decoration: BoxDecoration(
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(20)

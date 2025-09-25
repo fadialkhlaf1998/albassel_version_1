@@ -1,6 +1,7 @@
 import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
+import 'package:albassel_version_1/controler/home_controller.dart';
 import 'package:albassel_version_1/controler/intro_controller.dart';
 import 'package:albassel_version_1/controler/wish_list_controller.dart';
 import 'package:albassel_version_1/helper/api_v2.dart';
@@ -27,18 +28,22 @@ class CategoryViewNavController extends GetxController{
   WishListController wishListController = Get.find();
   CartController cartController = Get.find();
   var productCountShow = 10.obs;
+  HomeController homeController = Get.find();
 
   @override
   void onInit() {
-    print('new category navigate');
-    categories.addAll(introController.category);
-    if(introController.category.isNotEmpty)
-    MyApi.getSubCategory(introController.category.first.id).then((sub_cat) {
+    loading(true);
+    categories.addAll(homeController.category);
+    if(homeController.category.isNotEmpty)
+    MyApi.getSubCategory(homeController.category.first.id).then((sub_cat) {
       sub_categories=sub_cat;
       if(sub_cat.isNotEmpty){
         ApiV2.getProductsBySubCategory(sub_cat.first.id).then((value) {
           my_products=value;
+          loading(false);
         });
+      }else{
+        loading(false);
       }
     });
 

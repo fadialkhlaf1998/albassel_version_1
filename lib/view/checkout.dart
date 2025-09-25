@@ -18,7 +18,8 @@ class Checkout extends StatelessWidget {
 
 
   Checkout() {
-    checkoutController.lunch_session();
+    //todo check tabby session
+    // checkoutController.lunch_session();
     getData();
   }
   getData()async{
@@ -557,7 +558,7 @@ class Checkout extends StatelessWidget {
                             margin: const EdgeInsets.only(left: 10,right: 10),
                             child: Column(
                               children: [
-                                Text(item.title,style: const TextStyle(fontSize: 8,overflow: TextOverflow.ellipsis),),
+                                Text(item.getTitle()+" "+item.getOptionTitle(),style: const TextStyle(fontSize: 8,overflow: TextOverflow.ellipsis),),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [

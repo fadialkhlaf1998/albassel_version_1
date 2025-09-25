@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class InternalHeader extends StatelessWidget {
-  const InternalHeader({super.key});
+  bool showBackBtn;
+
+  InternalHeader({this.showBackBtn = true});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +21,11 @@ class InternalHeader extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: (){
-              Get.back();
+              if(showBackBtn){
+                Get.back();
+              }
             },
-            child: Icon(Icons.arrow_back_ios,color: Colors.white,size: 30,),
+            child: Icon(Icons.arrow_back_ios,color: !showBackBtn?Colors.transparent:Colors.white,size: 30,),
           ),
           Image.asset("assets/logo/logo.png",height: 50,),
           Icon(Icons.arrow_back_ios,color: Colors.transparent,size: 30,),

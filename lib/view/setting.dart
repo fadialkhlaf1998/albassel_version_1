@@ -59,6 +59,7 @@ class Setting extends StatelessWidget {
                                   lang="en";
                                 }
                                 settingController.change_lang(context, lang);
+
                               },
                               items: view.map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(

@@ -20,6 +20,7 @@ class SignUp extends StatelessWidget{
   TextEditingController email=TextEditingController();
   TextEditingController password=TextEditingController();
   TextEditingController phone=TextEditingController();
+  TextEditingController sealsId=TextEditingController();
 
 
   SignUp({Key? key}) : super(key: key){
@@ -79,10 +80,12 @@ class SignUp extends StatelessWidget{
                         textFieldBlock("first_name",fname,context,signUpController.fname_vaildate.value),
                         textFieldBlock("last_name",lname,context,signUpController.lname_vaildate.value),
                         Global.customer_type==0?const Center():phoneBlock("phone",phone,context,signUpController.phone_vaildate.value),
+
                         textFieldBlock("email",email,context,signUpController.email_vaildate.value),
                         Obx((){
                           return textFieldBlockPassword("password",password,context,signUpController.hide_passeord.value,signUpController.pass_vaildate.value);
                         }),
+                        Global.customer_type==0?const Center():textFieldBlock("seals_id",sealsId,context,true),
                         GestureDetector(
                           onTap: (){
                             openCountryPicker(context);
@@ -110,13 +113,15 @@ class SignUp extends StatelessWidget{
                             ),
                           ),
                         ),
+
                         const SizedBox(height: 20,)
                       ],
                     ),
 
                     GestureDetector(
                       onTap: (){
-                        signUpController.signUp(context,email.value.text,password.value.text,fname.value.text,lname.value.text,phone.text,signUpController.country_code.value);
+                        signUpController.signUp(context,email.value.text,password.value.text,fname.value.text,lname.value.text,phone.text,
+                            signUpController.country_code.value,sealsId.text.isEmpty?null:int.parse(sealsId.text));
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width*0.9,
@@ -383,6 +388,7 @@ class SignUp extends StatelessWidget{
       height: MediaQuery.of(context).size.height*0.8,
       child: Column(
         children: [
+
           const SizedBox(height: 20,),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -390,6 +396,7 @@ class SignUp extends StatelessWidget{
               IconButton(onPressed: (){signUpController.showFileUploader.value = false;}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
             ],
           ),
+
           Container(
             height: MediaQuery.of(context).size.height*0.6,
             child: Column(
@@ -444,6 +451,7 @@ class SignUp extends StatelessWidget{
               ],
             ),
           ),
+
         ],
       ),
     );

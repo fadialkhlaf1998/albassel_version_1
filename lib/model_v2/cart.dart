@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:albassel_version_1/const/global.dart';
 import 'package:albassel_version_1/model_v2/product.dart';
 
 class CartResponse {
@@ -259,6 +260,7 @@ class CartItem {
   final int subCategoryId;
   final int brandId;
   final String title;
+  final String arTitle;
   final String subTitle;
   final String description;
   final String image;
@@ -288,6 +290,7 @@ class CartItem {
     required this.userId,
     required this.productId,
     required this.count,
+    required this.arTitle,
     this.optionId,
     required this.createdAt,
     required this.updatedAt,
@@ -318,6 +321,21 @@ class CartItem {
     required this.includeDiscount,
   });
 
+  getTitle(){
+    if(Global.lang_code == "en"){
+      return title;
+    }else{
+      return arTitle;
+    }
+  }
+  getOptionTitle(){
+    if(Global.lang_code == "en"){
+      return optionTitle;
+    }else{
+      return arOptionTitle;
+    }
+  }
+
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
       cartId: json['cart_id'] as int,
@@ -331,6 +349,7 @@ class CartItem {
       subCategoryId: json['sub_category_id'] as int,
       brandId: json['brand_id'] as int,
       title: json['title'] as String,
+      arTitle: json['ar_title']??"" as String,
       subTitle: json['sub_title'] as String,
       description: json['description'] as String,
       image: json['image'] as String,

@@ -22,14 +22,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../my_model/top_category.dart';
 
 class IntroController extends GetxController{
-  List<Category> category=<Category>[];
-  List<SubCategory> sub_Category=<SubCategory>[];
-  List<Brand> brands=<Brand>[];
-  List<MySlider> sliders=<MySlider>[];
-  List<Marquee> marquee=<Marquee>[];
 
-  List<TopCategory> topCategory=<TopCategory>[];
-  List<Product> bestSellers=<Product>[];
   CartController cartController = Get.put(CartController());
   WishListController wishListController = Get.put(WishListController());
 
@@ -50,73 +43,21 @@ class IntroController extends GetxController{
     Store.load_remember();
     // Store.load_address();
     // var t = await get_customer_type();
-    if(category.isEmpty)
-    {
-      print('*-*Start*-*');
-      String code = await Store.load_discount_code();
-      if(code!="non" && code!=""){
-        var value = await MyApi.discountCode(code);
-        if(value!=null){
-          Global.discountCode = value.code;
-        }
+    print('*-*Start*-*');
+    String code = await Store.load_discount_code();
+    if(code!="non" && code!=""){
+      var value = await MyApi.discountCode(code);
+      if(value!=null){
+        Global.discountCode = value.code;
       }
-      print('*-*End*-*');
-      var val = await getHomeData();
-
-      Future.delayed(Duration(milliseconds: 800),(){
-        get_nav();
-      });
-
     }
+    ApiV2.searchSuggestions();
+    print('*-*End*-*');
+
+    Future.delayed(Duration(milliseconds: 800),(){
+      get_nav();
+    });
   }
-
-
-  Future<bool> getHomeData()async{
-    StartUp? value = await ApiV2.startUp();
-    if(value == null){
-      return await getHomeData();
-    }
-    category = value.category;
-    brands = value.brand;
-    sliders = value.slider;
-    topCategory = value.topCategories;
-    bestSellers = value.bestSellers;
-    marquee = value.marquee;
-    return true;
-  }
-
-  // get_data(){
-  //   Api.check_internet().then((internet) {
-  //     if(internet){
-  //       if(collections.isEmpty)
-  //       {
-  //         Api.get_collections().then((value) {
-  //           if(value.isNotEmpty){
-  //             collections.addAll(value);
-  //             get_nav();
-  //           }else{
-  //             get_nav();
-  //           }
-  //         }).catchError((err){
-  //           collections=<Collection>[];
-  //         });
-  //       }
-  //       Store.load_order().then((my_order) {
-  //         cartController.my_order.value = my_order;
-  //       });
-  //       Store.load_wishlist().then((wishlist) {
-  //         wishListController.wishlist.addAll(wishlist);
-  //       });
-  //     }else{
-  //       Future.delayed(Duration(milliseconds: 1000),(){
-  //         Get.to(()=>NoInternet())!.then((value) {
-  //           get_data();
-  //         });
-  //       });
-  //
-  //     }
-  //   });
-  // }
 
   get_nav(){
     print('get_nave');
@@ -130,14 +71,19 @@ class IntroController extends GetxController{
         MyApi.login(info.email,info.pass,Global.firebase_token,packageInfo.version).then((value) {
           print(value.message);
           if(value.state==200){
-            print('home');
-            wishListController.getData();
-            cartController.getData(null);
+
             if(Global.customer_type==0 && Global.customer!.isActive == 0){
               Get.offAll(()=>VerificationCode());
             }else{
+              if(Global.customer!.isActive == 0){
+                ApiV2.token = "";
+                Global.customer= null;
+              }
               Get.offAll(()=>Home());
             }
+            print('home');
+            wishListController.getData();
+            cartController.getData(null);
           }else{
             Get.offAll(()=>Welcome());
           }

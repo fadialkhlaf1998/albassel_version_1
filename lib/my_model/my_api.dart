@@ -297,7 +297,7 @@ class MyApi {
     }
 
   }
-  static Future<Result> sign_up(String email,String pass,String firstname,String lastname,String phone,String country)async{
+  static Future<Result> sign_up(String email,String pass,String firstname,String lastname,String phone,String country,int? sealsId)async{
     var headers = {
       'Content-Type': 'application/json'
     };
@@ -310,6 +310,7 @@ class MyApi {
       "customer_type":Global.customer_type,
       "phone":phone,
       "country":country,
+      "sells_id": sealsId,
     });
     request.headers.addAll(headers);
 

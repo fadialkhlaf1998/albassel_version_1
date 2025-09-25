@@ -206,6 +206,7 @@ class Store{
       Global.customer_type_decoder = 0;
       print(Global.customer_type);
       Global.customer=null;
+      ApiV2.token = "";
 
     });
   }

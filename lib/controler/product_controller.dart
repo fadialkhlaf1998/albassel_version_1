@@ -67,10 +67,12 @@ class ProductController extends GetxController{
   }
 
   add_review(String text ,int product_id,BuildContext context){
-    print(Global.customer);
     if(Global.customer!=null){
-      //todo change global customer
+      loading(true);
+      myProduct!.reviews.add(Review(id: 100, productId: myProduct!.id,
+          customerId: Global.customer!.id, body: text, customerName: Global.customer!.firstname+" "+Global.customer!.lastname));
       MyApi.add_review(Global.customer!.id, product_id, text);
+      loading(false);
       App.sucss_msg(context, App_Localization.of(context).translate("publish_success"));
     }else{
       App.error_msg(context, App_Localization.of(context).translate("login_first"));

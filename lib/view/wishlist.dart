@@ -38,7 +38,7 @@ class Wishlist extends StatelessWidget {
           child: Column(
             children: [
               // _header(context),
-              InternalHeader(),
+              InternalHeader(showBackBtn: false,),
               Expanded(
                   child: Global.customer==null?
                   PlzSigninSignup() :

@@ -9,6 +9,8 @@ import 'package:albassel_version_1/controler/intro_controller.dart';
 import 'package:albassel_version_1/helper/api_v2.dart';
 import 'package:albassel_version_1/helper/store.dart';
 import 'package:albassel_version_1/model_v2/product.dart';
+import 'package:albassel_version_1/my_model/marquee.dart';
+import 'package:albassel_version_1/my_model/start_up.dart';
 import 'package:albassel_version_1/view/about_us.dart';
 import 'package:albassel_version_1/my_model/brand.dart';
 import 'package:albassel_version_1/my_model/category.dart';
@@ -34,9 +36,10 @@ class HomeController extends GetxController{
   List<MySlider> slider=<MySlider>[];
   List<TopCategory> topCategory=<TopCategory>[];
   RxList<Product> bestSellers=<Product>[].obs;
+  RxList<Marquee> marquee=<Marquee>[].obs;
   bool makeup=false;
   CartController cartController = Get.find();
-  CategoryViewNavController categoryViewNavController=Get.put(CategoryViewNavController());
+
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var selected_bottom_nav_bar = 0.obs;
   ScrollController scrollController = new ScrollController();
@@ -64,7 +67,7 @@ class HomeController extends GetxController{
     //   print(i);
     //   imageProvider.add(NetworkImage(introController.sliders[i].image));
     // }
-    get_data();
+    getHomeData();
   }
 
 
@@ -97,23 +100,22 @@ class HomeController extends GetxController{
   void nave_to_logout() {
     Store.logout();
     // cartController.clear_cart();
-    updateBestSellersSubCategory();
-    wishListController.wishlist.clear();
+    getHomeData();
     Get.offAll(()=>Welcome());
   }
-  updateBestSellersSubCategory()async{
-    print(Global.customer_type_decoder);
-    print('best sellers');
-    List<Product> list = await ApiV2.getBeastSellersProducts();
-    introController.bestSellers = list;
-    bestSellers.clear();
-    bestSellers.addAll(list);
-    for(int i=0;i<bestSellers.length;i++){
-      print(bestSellers[i].price);
-    }
-    // loading.value = true;
-    categoryViewNavController.onInit();
-  }
+  // updateBestSellersSubCategory()async{
+  //   print(Global.customer_type_decoder);
+  //   print('best sellers');
+  //   List<Product> list = await ApiV2.getBeastSellersProducts();
+  //   bestSellers.clear();
+  //   bestSellers.addAll(list);
+  //   for(int i=0;i<bestSellers.length;i++){
+  //     print(bestSellers[i].price);
+  //   }
+  //   // loading.value = true;
+  //   CategoryViewNavController categoryViewNavController=Get.put(CategoryViewNavController());
+  //   categoryViewNavController.onInit();
+  // }
 
   search(String query){}
   on_submit(){}
@@ -261,59 +263,77 @@ class HomeController extends GetxController{
     }
   }
 
-  get_data(){
-    try{
-      marqueeText="";
-      for(int i=0;i<introController.marquee.length;i++){
-        marqueeText+=introController.marquee[i].getText()+" | ";
-        // if(i<introController.marquee.length-1){
-        //   marqueeText+=introController.marquee[i].getText()+" | ";
-        // }else{
-        //   marqueeText+=introController.marquee[i].getText();
-        // }
-      }
-      if(introController.category.length>0){
-        category.clear();
-        category.addAll(introController.category);
-        loading.value=false;
-        if(introController.topCategory.isNotEmpty){
-          topCategory.clear();
-          topCategory.addAll(introController.topCategory);
-          product_loading.value=false;
-        }else{
-          introController.get_data();
-          get_data();
-        }
-        if(introController.bestSellers.isNotEmpty){
-          bestSellers.clear();
-          bestSellers.addAll(introController.bestSellers);
-        }else{
-          introController.get_data();
-          get_data();
-        }
-
-        if(introController.brands.isNotEmpty){
-          brands.clear();
-          brands.addAll(introController.brands);
-        }else{
-          introController.get_data();
-          get_data();
-        }
-        if(introController.sliders.isNotEmpty){
-          slider.clear();
-          slider.addAll(introController.sliders);
-        }else{
-          introController.get_data();
-          get_data();
-        }
-      }else{
-        introController.get_data();
-        get_data();
-      }
-    }catch (e){
-      get_data();
+  addMarqueeText(){
+    loading(true);
+    marqueeText="";
+    for(int i=0;i<marquee.length;i++){
+      marqueeText+=marquee[i].getText()+" | ";
     }
+    loading(false);
   }
+  Future<bool> getHomeData()async{
+    StartUp? value = await ApiV2.startUp();
+    if(value == null){
+      return await getHomeData();
+    }
+    product_loading(true);
+    category = value.category;
+    brands = value.brand;
+    slider = value.slider;
+    topCategory = value.topCategories;
+    bestSellers.value = value.bestSellers;
+    marquee.value = value.marquee;
+    product_loading(false);
+    addMarqueeText();
+    CategoryViewNavController categoryViewNavController=Get.put(CategoryViewNavController());
+    categoryViewNavController.onInit();
+    return true;
+  }
+  // get_data(){
+  //   try{
+  //     addMarqueeText();
+  //     if(introController.category.length>0){
+  //       category.clear();
+  //       category.addAll(introController.category);
+  //       loading.value=false;
+  //       if(introController.topCategory.isNotEmpty){
+  //         topCategory.clear();
+  //         topCategory.addAll(introController.topCategory);
+  //         product_loading.value=false;
+  //       }else{
+  //         introController.get_data();
+  //         get_data();
+  //       }
+  //       if(introController.bestSellers.isNotEmpty){
+  //         bestSellers.clear();
+  //         bestSellers.addAll(introController.bestSellers);
+  //       }else{
+  //         introController.get_data();
+  //         get_data();
+  //       }
+  //
+  //       if(introController.brands.isNotEmpty){
+  //         brands.clear();
+  //         brands.addAll(introController.brands);
+  //       }else{
+  //         introController.get_data();
+  //         get_data();
+  //       }
+  //       if(introController.sliders.isNotEmpty){
+  //         slider.clear();
+  //         slider.addAll(introController.sliders);
+  //       }else{
+  //         introController.get_data();
+  //         get_data();
+  //       }
+  //     }else{
+  //       introController.get_data();
+  //       get_data();
+  //     }
+  //   }catch (e){
+  //     get_data();
+  //   }
+  // }
 
 
   set_bottom_bar(int index){

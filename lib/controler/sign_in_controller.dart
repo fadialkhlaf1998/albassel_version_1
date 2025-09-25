@@ -154,24 +154,26 @@ class SignInController extends GetxController{
             //
             // });
 
-            WishListController wishListController = Get.find();
-            CartController cartController = Get.find();
-            wishListController.getData();
-            cartController.getData(null);
-
-
             Global.customer=value.data.first;
 
-            if(Global.customer_type_decoder != 0){
-              await homeController.updateBestSellersSubCategory();
-            }
+            // if(Global.customer_type_decoder != 0){
+            //   await homeController.updateBestSellersSubCategory();
+            // }
             loading.value=false;
             // Get.offAll(()=>Home());
             if(Global.customer_type==0 && Global.customer!.isActive == 0){
               Get.offAll(()=>VerificationCode());
             }else{
+              if(Global.customer!.isActive == 0){
+                ApiV2.token = "";
+                Global.customer= null;
+              }
               Get.offAll(()=>Home());
             }
+            WishListController wishListController = Get.find();
+            CartController cartController = Get.find();
+            wishListController.getData();
+            cartController.getData(null);
 
           }else{
             loading.value=false;

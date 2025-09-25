@@ -564,10 +564,10 @@ class _MyHomePageState extends State<MyFatoraahPage> {
       children: [
         Text("Select payment method", style: textStyle()),
         SizedBox(
-          height: 85,
+          height: Get.height*0.5,
           child: ListView.builder(
               shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
+              scrollDirection: Axis.vertical,
               itemCount: paymentMethods.length,
               itemBuilder: (BuildContext ctxt, int index) {
                 return paymentMethodsItem(ctxt, index);
@@ -578,45 +578,62 @@ class _MyHomePageState extends State<MyFatoraahPage> {
   }
 
   Widget paymentMethodsItem(BuildContext ctxt, int index) {
-    return SizedBox(
-      width: 70,
-      height: 75,
-      child: Container(
-        decoration: isSelected[index]
-            ? BoxDecoration(
-            border: Border.all(color: Colors.blueAccent, width: 2))
-            : const BoxDecoration(),
-        child: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Column(
-            children: <Widget>[
-              Image.network(
-                paymentMethods[index].imageUrl!,
-                height: 35.0,
-              ),
-              SizedBox(
-                height: 24.0,
-                width: 24.0,
-                child: Checkbox(
-                    checkColor: Colors.blueAccent,
-                    activeColor: const Color(0xFFC9C5C5),
-                    value: isSelected[index],
-                    onChanged: (bool? value) {
-                      setState(() {
-                        setPaymentMethodSelected(index, value!);
-                      });
-                    }),
-              ),
-              Text(
-                paymentMethods[index].paymentMethodEn ?? "",
-                style: TextStyle(
-                  fontSize: 8.0,
-                  fontWeight:
-                  isSelected[index] ? FontWeight.bold : FontWeight.normal,
+    return Container(
+      width: Get.width,
+
+      margin: EdgeInsets.symmetric(vertical: 8,horizontal: 8),
+      child: GestureDetector(
+        onTap: (){
+          setState(() {
+            setPaymentMethodSelected(index, true);
+          });
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 8,horizontal: 8),
+          decoration: isSelected[index]
+              ? BoxDecoration(
+              border: Border.all(color: App.midOrange, width: 2),borderRadius: BorderRadius.circular(4))
+              : const BoxDecoration(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  height: 24.0,
+                  width: 24.0,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    shape: BoxShape.circle
+                  ),
+                  child: Center(
+                    child: Container(
+                      width: 15,
+                      height: 15,
+                      decoration: BoxDecoration(
+                          color: isSelected[index]?App.midOrange:Colors.transparent,
+                          shape: BoxShape.circle,
+
+                      ),
+                    ),
+                  )
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+                SizedBox(width: 10,),
+                Image.network(
+                  paymentMethods[index].imageUrl!,
+                  height: 35.0,
+                ),
+                SizedBox(width: 10,),
+                Text(
+                  paymentMethods[index].paymentMethodEn ?? "",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight:
+                    isSelected[index] ? FontWeight.bold : FontWeight.normal,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         ),
       ),

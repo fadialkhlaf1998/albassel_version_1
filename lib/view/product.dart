@@ -76,7 +76,7 @@ class ProductView extends StatelessWidget {
                               const SizedBox(height: 10,),
                               Container(
                                 width: Get.width*0.9,
-                                height: 100,
+                                height: 110,
                                 child: Container(
                                   width: Get.width,
                                   child: ListView.builder(

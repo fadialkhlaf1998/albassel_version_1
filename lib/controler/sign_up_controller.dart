@@ -42,7 +42,7 @@ class SignUpController extends GetxController{
  void change_visibilty(){
   hide_passeord.value = !hide_passeord.value;
  }
- signUp(BuildContext context,String email,String pass,String fname,String lname,String phone,String country){
+ signUp(BuildContext context,String email,String pass,String fname,String lname,String phone,String country,int? sealsId){
 
     try{
    if(!RegExp(r'\S+@\S+\.\S+').hasMatch(email)||email.isEmpty||pass.isEmpty||fname.isEmpty||lname.isEmpty||pass.length<6||(Global.customer_type !=0 && phone.isEmpty)){
@@ -81,7 +81,7 @@ class SignUpController extends GetxController{
     }
    }else{
     loading.value=true;
-    MyApi.sign_up(email, pass,fname,lname,isoCode.value.dialCode!+phone,country).then((value) async{
+    MyApi.sign_up(email, pass,fname,lname,isoCode.value.dialCode!+phone,country,sealsId).then((value) async{
      if(value.state==200){
       Store.saveLoginInfo(email, pass);
       if(Global.customer_type!=0){

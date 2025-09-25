@@ -14,6 +14,7 @@ import 'package:albassel_version_1/model/customer.dart';
 import 'package:albassel_version_1/model_v2/product.dart' as modelV2;
 
 import '../my_model/address.dart';
+import 'dart:ui' as ui;
 
 class Global{
   static String firebase_token = '';
@@ -55,13 +56,16 @@ class Global{
       if(lang!="def"){
         Global.lang_code=lang;
       }else{
-        Global.lang_code="en";
+        if(ui.PlatformDispatcher.instance.locale.languageCode == 'en' ||
+            ui.PlatformDispatcher.instance.locale.languageCode == 'ar'){
+          Global.lang_code=ui.PlatformDispatcher.instance.locale.languageCode;
+        }else{
+          Global.lang_code="en";
+        }
       }
       return Global.lang_code;
     }catch(e){
-
       return "en";
     }
-
   }
 }

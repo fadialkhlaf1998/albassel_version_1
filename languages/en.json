@@ -207,7 +207,7 @@
   "time": " Time",
   "times": " Times",
   "this_product_illegal": "This product is not eligible for discount",
-  "you_did_not_reach_min_amount": "You did not reach the minimum amount of legal products for the discount. The minimum amount is",
+  "you_did_not_reach_min_amount": "Sorry, you haven’t reached the minimum order amount to use this coupon code –",
   "you_saved": "You Saved",
   "on_this_item": "On This Item",
   "delete": "Delete",
@@ -226,7 +226,8 @@
   "signin_google": "Sign In With Google",
   "signin_apple": "Sign In With Apple Id",
   "notifications": "Notifications",
-  "help": "Help"
+  "help": "Help",
+  "seals_id": "Seals ID (optional)"
 }
 
 

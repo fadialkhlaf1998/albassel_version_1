@@ -7,6 +7,7 @@ import 'package:albassel_version_1/app_localization.dart';
 import 'package:albassel_version_1/const/app.dart';
 import 'package:albassel_version_1/controler/cart_controller.dart';
 import 'package:albassel_version_1/controler/home_controller.dart';
+import 'package:albassel_version_1/helper/api_v2.dart';
 import 'package:albassel_version_1/model_v2/product.dart';
 import 'package:albassel_version_1/my_model/my_product.dart';
 import 'package:albassel_version_1/view/cart.dart';
@@ -97,39 +98,45 @@ class Home extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              SingleChildScrollView(
-                physics: homeController.product_loading.value?const NeverScrollableScrollPhysics():null,
-                child: Stack(
-                  children: [
-                    Container(
-                      color: Colors.transparent,
-                      height: MediaQuery.of(context).size.height,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      color: Colors.transparent,
-                      child:homeController.loading.value?
-
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height,
-                            color: Colors.transparent,
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          )
-                          : Column(
-                        children: [
-                          Container(height: MediaQuery.of(context).size.height*0.1+70+50+size+size+30,),
-                          SizedBox(height: size,),
-                          //marquee positioned
-                          SizedBox(height: size,),
-                          _body(context)
-                        ],
+              RefreshIndicator(
+                onRefresh: ()async{
+                  homeController.getHomeData();
+                  return;
+                },
+                child: SingleChildScrollView(
+                  physics: homeController.product_loading.value?const NeverScrollableScrollPhysics():null,
+                  child: Stack(
+                    children: [
+                      Container(
+                        color: Colors.transparent,
+                        height: MediaQuery.of(context).size.height,
                       ),
-                    ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.transparent,
+                        child:homeController.loading.value?
 
-                  ],
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              color: Colors.transparent,
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                            : Column(
+                          children: [
+                            Container(height: MediaQuery.of(context).size.height*0.1+70+50+size+size+30,),
+                            SizedBox(height: size,),
+                            //marquee positioned
+                            SizedBox(height: size,),
+                            _body(context)
+                          ],
+                        ),
+                      ),
+
+                    ],
+                  ),
                 ),
               ),
               Positioned(child: _header(context),),
@@ -374,42 +381,40 @@ class Home extends StatelessWidget {
     );
   }
   _body(BuildContext context){
-    return SingleChildScrollView(
-      child: Column(
-        children: [
+    return Column(
+      children: [
 
 
-          Container(
-            width: MediaQuery.of(context).size.width*0.9+1,
-            height: MediaQuery.of(context).size.width * 0.45+1,
-            decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.16),
-                      blurRadius: 5,
-                      spreadRadius: 0,
-                      offset: const Offset(0, 3)
-                  )
-                ]
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _slider(context),
-              ],
-            ),
+        Container(
+          width: MediaQuery.of(context).size.width*0.9+1,
+          height: MediaQuery.of(context).size.width * 0.45+1,
+          decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.16),
+                    blurRadius: 5,
+                    spreadRadius: 0,
+                    offset: const Offset(0, 3)
+                )
+              ]
           ),
-          SizedBox(height: size,),
-          _top_category(context),
-          // !homeController.product_loading.value&&homeController.sub_Category.isEmpty
-          // ?_no_data(context)
-          // :_product_list(context),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _slider(context),
+            ],
+          ),
+        ),
+        SizedBox(height: size,),
+        _top_category(context),
+        // !homeController.product_loading.value&&homeController.sub_Category.isEmpty
+        // ?_no_data(context)
+        // :_product_list(context),
 
-          _shop_by_brand(context),
-          _best_sellers(context),
-          const SizedBox(height: 30,)
-        ],
-      ),
+        _shop_by_brand(context),
+        _best_sellers(context),
+        const SizedBox(height: 30,)
+      ],
     );
   }
   _shop_by_brand(BuildContext context){
@@ -501,7 +506,7 @@ class Home extends StatelessWidget {
                     padding: const EdgeInsets.all(0),
                     child: GestureDetector(
                       onTap: (){
-                        homeController.go_to_product(index);
+                            homeController.go_to_product(index);
                       },
                       child: Stack(
                         children: [
