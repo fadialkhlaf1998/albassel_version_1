@@ -333,7 +333,7 @@ class ProductView extends StatelessWidget {
                         Positioned(
                             top: 5,
                             right: 5,
-                            child:  cartController.cart!.cartList.isEmpty?Center():Container(
+                            child:  cartController.cart==null||cartController.cart!.cartList.isEmpty?Center():Container(
                           width: 15,
                           height: 15,
                           decoration: BoxDecoration(
