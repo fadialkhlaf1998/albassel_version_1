@@ -93,7 +93,7 @@ class _MyHomePageState extends State<MyFatoraahPage> {
   log(Object object) {
     print('**** HERE ****');
     print(object);
-    showObjectDialog(object);
+    // showObjectDialog(object);
     // ApiV2.log(object);
     if(object is MFGetPaymentStatusResponse){
       print('*****');
@@ -115,7 +115,7 @@ class _MyHomePageState extends State<MyFatoraahPage> {
     setState(() {
       debugPrint(json);
       _response = json;
-      showObjectDialog(_response);
+      // showObjectDialog(_response);
     });
   }
 
