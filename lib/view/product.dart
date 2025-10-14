@@ -70,6 +70,40 @@ class ProductView extends StatelessWidget {
                           _title(context),
                           const SizedBox(height: 10,),
                           _price_avalibilty(context),
+                          if (productController.myProduct!.promotionalText.isNotEmpty) ...[
+                            SizedBox(height: 10),
+                            Column(
+                              children: productController.myProduct!.promotionalText.map((textItem) {
+                                final title = textItem.getTitle();
+                                return Container(
+                                  width: Get.width * 0.9,
+                                  margin: const EdgeInsets.symmetric(vertical: 5),
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.campaign, color: App.midOrange, size: 18),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          title,
+                                          overflow: TextOverflow.clip,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ],
                           productController.myProduct!.options.isEmpty?Center():
                           Column(
                             children: [

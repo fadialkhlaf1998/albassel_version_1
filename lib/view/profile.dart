@@ -159,20 +159,20 @@ class Profile extends StatelessWidget {
                                             ),
                                           ),
                                           Divider(color: Colors.black,height: 30,),
-                                          GestureDetector(
-                                            onTap: (){
-                                              //todo notifications
-                                            },
-                                            child: myCardItem(
-                                                context,
-                                                firstIcon: Icon(Icons.notifications_active_outlined,color: App.midOrange,),
-                                                title: "notifications",
-                                                lastIcon: Switch(value: true, onChanged: (val){
-
-                                                })
-                                            ),
-                                          ),
-                                          Divider(color: Colors.black,height: 30,),
+                                          // GestureDetector(
+                                          //   onTap: (){
+                                          //     //todo notifications
+                                          //   },
+                                          //   child: myCardItem(
+                                          //       context,
+                                          //       firstIcon: Icon(Icons.notifications_active_outlined,color: App.midOrange,),
+                                          //       title: "notifications",
+                                          //       lastIcon: Switch(value: true, onChanged: (val){
+                                          //
+                                          //       })
+                                          //   ),
+                                          // ),
+                                          // Divider(color: Colors.black,height: 30,),
                                           AnimatedContainer(
                                             duration:
                                             const Duration(milliseconds: 300),

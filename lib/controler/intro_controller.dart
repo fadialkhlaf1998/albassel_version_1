@@ -43,18 +43,11 @@ class IntroController extends GetxController{
     Store.load_remember();
     // Store.load_address();
     // var t = await get_customer_type();
-    print('*-*Start*-*');
-    String code = await Store.load_discount_code();
-    if(code!="non" && code!=""){
-      var value = await MyApi.discountCode(code);
-      if(value!=null){
-        Global.discountCode = value.code;
-      }
-    }
+    
     ApiV2.searchSuggestions();
     print('*-*End*-*');
 
-    Future.delayed(Duration(milliseconds: 800),(){
+    Future.delayed(Duration(milliseconds: 1500),(){
       get_nav();
     });
   }
@@ -68,7 +61,7 @@ class IntroController extends GetxController{
       }else{
         final packageInfo = await PackageInfo.fromPlatform();
 
-        MyApi.login(info.email,info.pass,Global.firebase_token,packageInfo.version).then((value) {
+        MyApi.login(info.email,info.pass,Global.firebase_token,packageInfo.version).then((value) async{
           print(value.message);
           if(value.state==200){
 
@@ -81,7 +74,14 @@ class IntroController extends GetxController{
               }
               Get.offAll(()=>Home());
             }
-            print('home');
+
+            String code = await Store.load_discount_code();
+            if(code!="non" && code!=""){
+              var value = await MyApi.discountCode(code);
+              if(value!=null){
+                Global.discountCode = value.code;
+              }
+            }
             wishListController.getData();
             cartController.getData(null);
           }else{
