@@ -63,6 +63,9 @@ class Home extends StatelessWidget {
       // _checkVersion(context);
     });
     return UpgradeAlert(
+      barrierDismissible: false,
+      showLater: false,
+      showIgnore: false,
       upgrader: Upgrader(
         // durationUntilAlertAgain:Duration(hours: 1),
         storeController: UpgraderStoreController(
